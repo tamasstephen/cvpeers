@@ -1,0 +1,44 @@
+.dialog-content {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 3fr 1fr 1fr;
+}
+
+fieldset {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e0e0e0;
+
+  div {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 0.5rem;
+    padding-top: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      p {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+
+        a {
+          text-decoration: none;
+          color: #000;
+        }
+      }
+    }
+    li + li {
+      margin-top: 0.5rem;
+    }
+  }
+}

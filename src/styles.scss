@@ -1,1 +1,61 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+@font-face {
+  font-family: "Geist";
+  src: url("./app/assets/fonts/Geist.ttf") format("truetype");
+}
+
+body {
+  font-family: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+}
+
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Geist";
+}
+
+.p-button-label {
+  font-weight: 400;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+input.ng-invalid.ng-touched {
+  color: red;
+  border: 1px solid red;
+}
+
+label:has(+ input.ng-invalid.ng-touched) {
+  color: red;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}

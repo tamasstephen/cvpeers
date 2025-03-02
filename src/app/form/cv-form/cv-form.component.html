@@ -1,0 +1,7 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <app-personal-details [parentForm]="form" />
+    <app-social [parentForm]="form" />
+    <p-button size="small" type="submit" label="Submit" />
+  </form>
+</div>

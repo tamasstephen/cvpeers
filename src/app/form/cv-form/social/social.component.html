@@ -1,0 +1,51 @@
+<fieldset>
+  <h2>Social Links</h2>
+  <div>
+    <p-select [options]="socialOptions" #type />
+    <p-button variant="outlined" fluid (click)="openDialog()" label="Add" />
+  </div>
+  <section>
+    <ul>
+      @for (social of socialForm.controls.social.controls; track $index) {
+      <li>
+        <p>
+          <span class="pi pi-{{ social.value.type }}"></span>
+          <a
+            [href]="social.value.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ social.value.type }}</a
+          >
+        </p>
+        <p-button icon="pi pi-trash" (click)="removeSocial($index)" />
+      </li>
+      }
+    </ul>
+  </section>
+</fieldset>
+
+<p-dialog
+  class="dialog"
+  [modal]="true"
+  [visible]="isDialogOpen()"
+  (onHide)="closeDialog()"
+  [closable]="false"
+  header="Add Social Link"
+>
+  <div class="dialog-content">
+    <input pInputText id="url" #url type="url" />
+    <p-button
+      class="save-button"
+      [disabled]="!url"
+      (click)="addSocial(url.value, type.value)"
+      label="Save"
+      fluid="true"
+    />
+    <p-button
+      fluid="true"
+      variant="outlined"
+      (click)="closeDialog()"
+      label="Cancel"
+    />
+  </div>
+</p-dialog>

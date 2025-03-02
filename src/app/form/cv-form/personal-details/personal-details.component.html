@@ -1,0 +1,32 @@
+<fieldset [formGroup]="personalDetailsForm">
+  <div>
+    <p-iftalabel>
+      <label for="fullName">Full Name</label>
+      <input pInputText id="fullName" formControlName="fullName" required />
+    </p-iftalabel>
+  </div>
+  <div>
+    <p-iftalabel>
+      <label for="email">Email</label>
+      <input pInputText id="email" formControlName="email" required />
+    </p-iftalabel>
+  </div>
+  <div>
+    <p-iftalabel>
+      <label for="phone">Phone</label>
+      <input pInputText id="phone" formControlName="phone" required />
+    </p-iftalabel>
+  </div>
+  <div>
+    <p-iftalabel>
+      <label for="website">Website</label>
+      <input pInputText id="website" formControlName="website" />
+    </p-iftalabel>
+  </div>
+  <div>
+    <p-iftalabel>
+      <label for="headline">Headline</label>
+      <input pInputText id="headline" formControlName="headline" />
+    </p-iftalabel>
+  </div>
+</fieldset>
