@@ -2,6 +2,9 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <app-personal-details [parentForm]="form" />
     <app-social [parentForm]="form" />
+    <div>
+      <app-rich-text [parentForm]="form" />
+    </div>
     <p-button size="small" type="submit" label="Submit" />
   </form>
 </div>

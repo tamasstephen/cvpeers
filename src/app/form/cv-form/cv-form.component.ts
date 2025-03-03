@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { ButtonModule } from 'primeng/button';
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 import { SocialComponent } from './social/social.component';
+import { TextareaModule } from 'primeng/textarea';
+import { RichTextComponent } from '../rich-text/rich-text.component';
 
 @Component({
   selector: 'app-cv-form',
@@ -15,6 +22,8 @@ import { SocialComponent } from './social/social.component';
     IftaLabelModule,
     PersonalDetailsComponent,
     SocialComponent,
+    TextareaModule,
+    RichTextComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',

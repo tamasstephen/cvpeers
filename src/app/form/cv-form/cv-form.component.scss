@@ -2,3 +2,13 @@ form {
   display: grid;
   gap: 1rem;
 }
+
+.summary-container {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+
+  textarea {
+    width: 100%;
+  }
+}

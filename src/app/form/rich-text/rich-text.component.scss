@@ -1,0 +1,14 @@
+.rich-text-container {
+  display: flex;
+  flex-direction: column;
+
+  .rich-text-container__header {
+    display: flex;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .ql-editor {
+    min-height: 250px;
+  }
+}
