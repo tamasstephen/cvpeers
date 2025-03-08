@@ -1,11 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Location } from '@angular/common';
 import { LoginComponent } from './login.component';
 import { By } from '@angular/platform-browser';
 import { AuthService } from './auth.service';
 import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-reg',
+  template: '<div>Mock Registration Component</div>',
+})
+class MockRegistrationComponent {}
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -16,7 +23,9 @@ describe('LoginComponent', () => {
       imports: [LoginComponent],
       providers: [
         provideHttpClient(),
-        provideRouter([]),
+        provideRouter([
+          { path: 'registration', component: MockRegistrationComponent },
+        ]),
         provideHttpClientTesting(),
         AuthService,
       ],
@@ -139,5 +148,15 @@ describe('LoginComponent', () => {
     submitButton.nativeElement.click();
     fixture.detectChanges();
     expect(loginSpy).not.toHaveBeenCalled();
+  });
+
+  it('should navigate to registration when router link is clicked', async () => {
+    const router = TestBed.inject(Router);
+    const location = TestBed.inject(Location);
+    const routerLink = fixture.debugElement.query(By.css('a'));
+    routerLink.nativeElement.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(location.path()).toBe('/registration');
   });
 });

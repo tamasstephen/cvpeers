@@ -7,12 +7,12 @@ import {
 } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, InputTextModule, ButtonModule],
+  imports: [ReactiveFormsModule, InputTextModule, ButtonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
