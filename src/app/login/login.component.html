@@ -1,0 +1,6 @@
+<form [formGroup]="form" (ngSubmit)="login()">
+  <input pInputText formControlName="email" placeholder="Email" />
+  <input pInputText formControlName="password" placeholder="Password" />
+  <p-button type="submit" label="Login" />
+  <a routerLink="/registration">Register</a>
+</form>

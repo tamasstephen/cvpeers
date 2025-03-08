@@ -1,7 +1,6 @@
 import { Component, input, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Quill, { Delta, QuillOptions } from 'quill';
-import 'quill/dist/quill.snow.css';
 
 const quillOptions: QuillOptions = {
   theme: 'snow',

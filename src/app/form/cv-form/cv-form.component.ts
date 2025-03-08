@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -12,6 +12,7 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { SocialComponent } from './social/social.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cv-form',
@@ -28,9 +29,16 @@ import { RichTextComponent } from '../rich-text/rich-text.component';
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',
 })
-export class CvFormComponent {
+export class CvFormComponent implements OnInit {
   image: File | null = null;
   form = new FormGroup({});
+  activatedRoute = inject(ActivatedRoute);
+  cvData = signal<any>(null);
+
+  ngOnInit(): void {
+    this.cvData.set(this.activatedRoute.snapshot.data['cvData']);
+    console.log('cvData', this.cvData()?.cv);
+  }
 
   onSubmit() {
     console.log(this.form);

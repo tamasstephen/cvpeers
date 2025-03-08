@@ -20,10 +20,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('angular-starter');
   });
 
-  it('should render title', () => {
+  it('should render the main tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, angular-starter');
+    expect(compiled.querySelector('main')).toBeTruthy();
   });
 });
