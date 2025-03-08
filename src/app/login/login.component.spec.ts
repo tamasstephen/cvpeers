@@ -43,11 +43,55 @@ describe('LoginComponent', () => {
     expect(emailInput).toBeTruthy();
   });
 
+  it('should allow user inputs', () => {
+    const emailInput = fixture.debugElement.query(
+      By.css('input[formControlName="email"]')
+    );
+    emailInput.nativeElement.value = 'test@test.com';
+    emailInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(emailInput.nativeElement.value).toBe('test@test.com');
+  });
+
+  it('should show error message when email is invalid', () => {
+    const emailInput = fixture.debugElement.query(
+      By.css('input[formControlName="email"]')
+    );
+    emailInput.nativeElement.value = 'invalid-email';
+    emailInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(emailInput.nativeElement.classList.contains('ng-invalid')).toBe(
+      true
+    );
+  });
+
   it('should have a password input', () => {
     const passwordInput = fixture.debugElement.query(
       By.css('input[formControlName="password"]')
     );
     expect(passwordInput).toBeTruthy();
+  });
+
+  it('should allow user inputs', () => {
+    const passwordInput = fixture.debugElement.query(
+      By.css('input[formControlName="password"]')
+    );
+    passwordInput.nativeElement.value = 'password';
+    passwordInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(passwordInput.nativeElement.value).toBe('password');
+  });
+
+  it('should show error message when password is invalid', () => {
+    const passwordInput = fixture.debugElement.query(
+      By.css('input[formControlName="password"]')
+    );
+    passwordInput.nativeElement.value = '';
+    passwordInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(passwordInput.nativeElement.classList.contains('ng-invalid')).toBe(
+      true
+    );
   });
 
   it('should have a submit button', () => {
@@ -61,5 +105,39 @@ describe('LoginComponent', () => {
     const routerLink = fixture.debugElement.query(By.css('a'));
     expect(routerLink).toBeTruthy();
     expect(routerLink.attributes['routerLink']).toBe('/registration');
+  });
+
+  it('should call authService.login when form is submitted', () => {
+    const authService = fixture.debugElement.injector.get(AuthService);
+    const loginSpy = spyOn(authService, 'login');
+    const emailInput = fixture.debugElement.query(
+      By.css('input[formControlName="email"]')
+    );
+    emailInput.nativeElement.value = 'test@test.com';
+    emailInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    const passwordInput = fixture.debugElement.query(
+      By.css('input[formControlName="password"]')
+    );
+    passwordInput.nativeElement.value = 'password';
+    passwordInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    const submitButton = fixture.debugElement.query(
+      By.css('button[type="submit"]')
+    );
+    submitButton.nativeElement.click();
+    fixture.detectChanges();
+    expect(loginSpy).toHaveBeenCalled();
+  });
+
+  it('should not call authService.login when form is invalid', () => {
+    const authService = fixture.debugElement.injector.get(AuthService);
+    const loginSpy = spyOn(authService, 'login');
+    const submitButton = fixture.debugElement.query(
+      By.css('button[type="submit"]')
+    );
+    submitButton.nativeElement.click();
+    fixture.detectChanges();
+    expect(loginSpy).not.toHaveBeenCalled();
   });
 });
