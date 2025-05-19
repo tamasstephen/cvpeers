@@ -1,4 +1,12 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  signal,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import {
   FormArray,
@@ -16,6 +24,7 @@ import {
   SocialItem,
 } from '../../../types/social';
 import { DialogModule } from 'primeng/dialog';
+import { hasChangedFromInitial } from '../../validators/initial-value.validator';
 
 @Component({
   selector: 'app-social',
@@ -31,8 +40,9 @@ import { DialogModule } from 'primeng/dialog';
   styleUrl: './social.component.scss',
   providers: [SOCIAL_OPTIONS_PROVIDER],
 })
-export class SocialComponent implements OnInit {
+export class SocialComponent implements OnInit, OnChanges {
   parentForm = input<FormGroup>();
+  initialValues = input<any>(null);
   socialOptions = inject(SOCIAL_OPTIONS_TOKEN);
   isDialogOpen = signal(false);
 
@@ -42,6 +52,31 @@ export class SocialComponent implements OnInit {
 
   ngOnInit(): void {
     this.parentForm()?.addControl('socialForm', this.socialForm);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialValues'] && changes['initialValues'].currentValue) {
+      this.applyInitialValues(changes['initialValues'].currentValue);
+    }
+  }
+
+  private applyInitialValues(initialData: any) {
+    if (initialData.social) {
+      const socialArray = this.socialForm.get('social') as FormArray;
+      // Clear existing controls
+      while (socialArray.length) {
+        socialArray.removeAt(0);
+      }
+      // Add new controls with initial values
+      initialData.social.forEach((item: SocialItem) => {
+        const control = new FormControl<SocialItem>(item, {
+          nonNullable: true,
+        });
+        control.addValidators(hasChangedFromInitial(item));
+        control.updateValueAndValidity();
+        socialArray.push(control);
+      });
+    }
   }
 
   addSocial(url: string, type: Social) {

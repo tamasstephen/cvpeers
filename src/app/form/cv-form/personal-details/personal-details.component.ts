@@ -1,4 +1,10 @@
-import { Component, input, OnInit } from '@angular/core';
+import {
+  Component,
+  input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import {
   FormControl,
@@ -7,6 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { hasChangedFromInitial } from '../../validators/initial-value.validator';
 
 @Component({
   selector: 'app-personal-details',
@@ -14,8 +21,9 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './personal-details.component.html',
   styleUrl: './personal-details.component.scss',
 })
-export class PersonalDetailsComponent implements OnInit {
+export class PersonalDetailsComponent implements OnInit, OnChanges {
   parentForm = input<FormGroup>();
+  initialValues = input<any>(null);
 
   personalDetailsForm = new FormGroup({
     fullName: new FormControl('', [Validators.required]),
@@ -30,5 +38,26 @@ export class PersonalDetailsComponent implements OnInit {
       'personalDetailsForm',
       this.personalDetailsForm
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialValues'] && changes['initialValues'].currentValue) {
+      this.applyInitialValues(changes['initialValues'].currentValue);
+    }
+  }
+
+  private applyInitialValues(initialData: any) {
+    if (initialData.personalDetails) {
+      Object.keys(initialData.personalDetails).forEach((key) => {
+        const control = this.personalDetailsForm.get(key);
+        if (control) {
+          control.setValue(initialData.personalDetails[key]);
+          control.addValidators(
+            hasChangedFromInitial(initialData.personalDetails[key])
+          );
+          control.updateValueAndValidity();
+        }
+      });
+    }
   }
 }

@@ -38,9 +38,9 @@ export const routes: Routes = [
   {
     path: 'cv',
     component: CvFormComponent,
-    resolve: {
+    /*     resolve: {
       cvData: resolveCvData,
-    },
+    }, */
     canMatch: [canMatch],
   },
   {

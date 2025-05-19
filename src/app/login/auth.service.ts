@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   http = inject(HttpClient);
-  private isLoggedIn = signal(false);
+  // TODO: update with real data
+  private isLoggedIn = signal(true);
   private router = inject(Router);
 
   login(email: string, password: string) {
