@@ -23,10 +23,6 @@ const quillOptions: QuillOptions = {
   },
 };
 
-function convertDeltaToString(delta: Delta) {
-  return JSON.stringify({ delta });
-}
-
 @Component({
   selector: 'app-rich-text',
   imports: [],

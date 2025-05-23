@@ -69,17 +69,11 @@
       <!-- Summary/Bio Section -->
       <section class="summary-section" *ngIf="summary">
         <h3
-          style="
-            font-family: 'GeistMono-SemiBold', monospace;
-            font-weight: bold;
-          "
+          style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
         >
           BIO —
         </h3>
-        <section
-          style="font-family: 'Geist', sans-serif"
-          [innerHTML]="summary"
-        ></section>
+        <div [innerHTML]="parseSummary(summary)"></div>
       </section>
 
       <!-- Experience Section -->

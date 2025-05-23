@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
+import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 interface PersonalDetails {
   fullName: string;
@@ -69,7 +71,17 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   designSkills: string[] = [];
   softSkills: string[] = [];
 
+  pdfGeneratorService = inject(PdfGeneratorService);
+
+  sanitizer = inject(DomSanitizer);
+
   @Input() cvForm!: FormGroup;
+
+  parseSummary(summary: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(
+      this.pdfGeneratorService.addGeistFontToHtml(summary)
+    );
+  }
 
   constructor() {
     super();
