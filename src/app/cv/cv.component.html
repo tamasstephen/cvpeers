@@ -10,13 +10,17 @@
       </h2>
     </div>
     <div class="contact-links">
-      <!--       <a
+      <a
         *ngIf="personalDetails?.website"
         [href]="personalDetails?.website"
         class="contact-item"
         style="font-family: 'Geist', sans-serif"
       >
-        <img src="assets/icons/globe.jpg" alt="Website" class="contact-icon" />
+        <img
+          src="assets/images/global-line.png"
+          alt="Website"
+          class="contact-icon"
+        />
         {{ personalDetails?.website }}
       </a>
       <a
@@ -25,22 +29,26 @@
         class="contact-item"
         style="font-family: 'Geist', sans-serif"
       >
-        <img src="assets/icons/email.jpg" alt="Email" class="contact-icon" />
+        <img
+          src="assets/images/mail-fill.png"
+          alt="Email"
+          class="contact-icon"
+        />
         {{ personalDetails?.email }}
-      </a> -->
-      <!--       <a
+      </a>
+      <a
         *ngIf="personalDetails?.linkedin"
         [href]="personalDetails?.linkedin"
         class="contact-item"
         style="font-family: 'Geist', sans-serif"
       >
         <img
-          src="assets/icons/linkedin.jpg"
+          src="assets/images/linkedin-box-fill.png"
           alt="LinkedIn"
           class="contact-icon"
         />
         {{ personalDetails?.linkedin }}
-      </a> -->
+      </a>
     </div>
   </header>
 
@@ -117,8 +125,8 @@
         </h3>
         <ul class="skills-list">
           <li
-            *ngFor="let skill of designSkills"
-            style="font-family: 'Geist', sans-serif"
+            *ngFor="let skill of expertise"
+            style="font-family: 'Geist', sans-serif; font-size: 0.875rem"
           >
             {{ skill }}
           </li>

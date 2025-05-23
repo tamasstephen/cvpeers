@@ -68,7 +68,18 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   education: Education[] = [];
   skills: Skill[] = [];
   languages: Language[] = [];
-  designSkills: string[] = [];
+  expertise: string[] = [
+    'JavaScript',
+    'TypeScript',
+    'Angular',
+    'React',
+    'Node.js',
+    'Express',
+    'MongoDB',
+    'PostgreSQL',
+    'Docker',
+    'Kubernetes',
+  ];
   softSkills: string[] = [];
 
   pdfGeneratorService = inject(PdfGeneratorService);

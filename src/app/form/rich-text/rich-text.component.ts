@@ -16,8 +16,7 @@ const quillOptions: QuillOptions = {
   theme: 'snow',
   modules: {
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ header: [1, 2, 3, 4, false] }],
+      ['bold', 'italic', 'strike'],
       [{ list: 'ordered' }, { list: 'bullet' }],
     ],
   },

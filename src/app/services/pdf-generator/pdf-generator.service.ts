@@ -38,7 +38,7 @@ export class PdfGeneratorService {
       if (!currentStyle.includes('font-family')) {
         element.setAttribute(
           'style',
-          `font-family: 'Geist', sans-serif; ${currentStyle}`
+          `font-family: 'Geist', sans-serif; font-size: 0.875rem; ${currentStyle}`
         );
       }
 
@@ -59,6 +59,7 @@ export class PdfGeneratorService {
   }
 
   createPdfFromHtml(html: HTMLElement) {
+    this.#pdfGenerator.setFillColor(255, 253, 248);
     this.#pdfGenerator.setFont('Geist');
     this.#pdfGenerator.setFont('GeistMono-SemiBold');
     this.#pdfGenerator.setCharSpace(0);
