@@ -1,11 +1,12 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 interface PersonalDetails {
   fullName: string;
@@ -64,6 +65,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   };
   socialLinks: SocialLink[] = [];
   summary: string = '';
+  parsedSummary = signal<SafeHtml>('');
   experience: Experience[] = [];
   education: Education[] = [];
   skills: Skill[] = [];
@@ -83,36 +85,34 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   softSkills: string[] = [];
 
   pdfGeneratorService = inject(PdfGeneratorService);
-
   sanitizer = inject(DomSanitizer);
-
   @Input() cvForm!: FormGroup;
-
-  parseSummary(summary: string) {
-    return this.sanitizer.bypassSecurityTrustHtml(
-      this.pdfGeneratorService.addGeistFontToHtml(summary)
-    );
-  }
 
   constructor() {
     super();
   }
 
   ngOnInit() {
-    // TODO: Subscribe to form data changes
+    // Subscribe to form data changes
     this.addSubscription(
-      this.cvForm.valueChanges.subscribe((value) => {
-        console.log(value);
-        this.personalDetails = value?.personalDetailsForm;
-        this.socialLinks = value?.socialForm.social;
-        this.summary = value?.summary;
-        this.experience = value?.experienceForm;
-        this.education = value?.educationForm;
-        this.skills = value?.skillsForm;
-        this.languages = value?.languagesForm;
-        console.log(this.personalDetails);
-      })
+      this.cvForm.valueChanges
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe((value) => {
+          this.personalDetails = value?.personalDetailsForm;
+          this.socialLinks = value?.socialForm?.social;
+          if (value?.summary !== this.summary) {
+            this.summary = value?.summary;
+            this.parsedSummary.set(
+              this.sanitizer.bypassSecurityTrustHtml(
+                this.pdfGeneratorService.addGeistFontToHtml(this.summary)
+              )
+            );
+          }
+          this.experience = value?.experienceForm;
+          this.education = value?.educationForm;
+          this.skills = value?.skillsForm;
+          this.languages = value?.languagesForm;
+        })
     );
-    // This will be implemented when we connect it to the form
   }
 }

@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { IftaLabelModule } from 'primeng/iftalabel';
@@ -33,7 +39,7 @@ import { CvComponent } from '../../cv/cv.component';
   styleUrl: './cv-form.component.scss',
   providers: [DatePipe],
 })
-export class CvFormComponent implements AfterViewInit {
+export class CvFormComponent implements OnInit, AfterViewInit {
   image: File | null = null;
 
   form = new FormGroup({});
@@ -52,6 +58,22 @@ export class CvFormComponent implements AfterViewInit {
     private readonly _sidepanelProvider: SidepanelProviderService
   ) {}
 
+  ngOnInit() {
+    // Initialize sidepanel
+    this._sidepanelProvider.setSidepanelConfig({
+      component: CvComponent,
+      data: {
+        cvForm: this.form,
+      },
+    });
+    this._sidepanelProvider.openSidepanel({
+      component: CvComponent,
+      data: {
+        cvForm: this.form,
+      },
+    });
+  }
+
   ngAfterViewInit() {
     if (this.portrait?.nativeElement) {
       // Crop the image to keep the aspect ratio on the pdf
@@ -59,12 +81,6 @@ export class CvFormComponent implements AfterViewInit {
         this.cropImage();
       };
     }
-    this._sidepanelProvider.setSidepanelConfig({
-      component: CvComponent,
-      data: {
-        cvForm: this.form,
-      },
-    });
   }
 
   onSubmit() {

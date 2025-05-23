@@ -1,13 +1,17 @@
 import { Component, ViewChild, ViewContainerRef, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SidepanelConfig } from '../services/sidepanel-provider/sidepanel-provider.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidepanel',
   standalone: true,
-  imports: [ButtonModule],
+  imports: [ButtonModule, CommonModule],
   templateUrl: './sidepanel.component.html',
   styleUrl: './sidepanel.component.scss',
+  host: {
+    class: 'sidepanel-host',
+  },
 })
 export class SidepanelComponent {
   isOpen = signal(false);

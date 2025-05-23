@@ -2,31 +2,40 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 50%;
+  width: 60%;
   height: 100vh;
   background-color: white;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  z-index: 50;
+  z-index: 1000;
   transition: transform 0.3s ease-in-out;
+  transform: translateX(0);
 
   &.closed {
-    transform: translateX(90%);
+    transform: translateX(100%);
   }
 
   .sidepanel-arrow {
     position: absolute;
     top: 50%;
     left: 0;
-    transform: translate(-50%, -100%);
-    background-color: var(--p-yellow-400);
+    transform: translate(-50%, -50%);
+    background-color: white;
     padding: 0.5rem;
     border-radius: 8px;
-    border: none;
+    border: 1px solid #e0e0e0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &.close {
-      transform: translate(-50%, -100%) rotate(180deg);
+      transform: translate(-50%, -50%) rotate(180deg);
+    }
+
+    i {
+      font-size: 1rem;
+      color: #333;
     }
   }
 
@@ -38,5 +47,7 @@
 
   &-content {
     padding: 20px;
+    height: 100%;
+    overflow-y: auto;
   }
 }

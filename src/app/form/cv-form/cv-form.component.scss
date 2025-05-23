@@ -1,7 +1,9 @@
 .cv-form {
   display: grid;
-  max-width: 25%;
-  padding: 2rem 1rem;
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  margin: 0 auto;
 }
 
 form {
@@ -31,4 +33,9 @@ form {
   textarea {
     width: 100%;
   }
+}
+
+// Hide print-only content
+.print-only {
+  display: none;
 }
