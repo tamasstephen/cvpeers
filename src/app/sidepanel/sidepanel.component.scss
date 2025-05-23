@@ -1,0 +1,42 @@
+.sidepanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  transition: transform 0.3s ease-in-out;
+
+  &.closed {
+    transform: translateX(90%);
+  }
+
+  .sidepanel-arrow {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -100%);
+    background-color: var(--p-yellow-400);
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+
+    &.close {
+      transform: translate(-50%, -100%) rotate(180deg);
+    }
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  &-content {
+    padding: 20px;
+  }
+}

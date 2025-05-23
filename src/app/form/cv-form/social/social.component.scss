@@ -5,10 +5,6 @@
 }
 
 fieldset {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e0e0e0;
-
   div {
     display: grid;
     grid-template-columns: 3fr 1fr;
@@ -24,6 +20,12 @@ fieldset {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+
+      &.social-item {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--p-slate-200);
+      }
 
       p {
         display: flex;

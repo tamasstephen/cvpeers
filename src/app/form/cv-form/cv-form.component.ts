@@ -7,11 +7,13 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { SocialComponent } from './social/social.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
-import { hasChangedFromInitial } from '../validators/initial-value.validator';
 import { BehaviorSubject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { DatePipe } from '@angular/common';
+import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
+import { ExampleSidepanelComponent } from '../../example-sidepanel/example-sidepanel.component';
+import { CvComponent } from '../../cv/cv.component';
 
 @Component({
   selector: 'app-cv-form',
@@ -45,7 +47,10 @@ export class CvFormComponent implements AfterViewInit {
 
   currentDate = new Date();
 
-  constructor(private readonly _pdfService: PdfGeneratorService) {}
+  constructor(
+    private readonly _pdfService: PdfGeneratorService,
+    private readonly _sidepanelProvider: SidepanelProviderService
+  ) {}
 
   ngAfterViewInit() {
     if (this.portrait?.nativeElement) {
@@ -54,6 +59,12 @@ export class CvFormComponent implements AfterViewInit {
         this.cropImage();
       };
     }
+    this._sidepanelProvider.setSidepanelConfig({
+      component: CvComponent,
+      data: {
+        cvForm: this.form,
+      },
+    });
   }
 
   onSubmit() {
@@ -63,7 +74,7 @@ export class CvFormComponent implements AfterViewInit {
   }
 
   downloadPdf() {
-    const element = document.querySelector('.print-only')! as HTMLElement;
+    const element = document.querySelector('#cv')! as HTMLElement;
     this._pdfService.createPdfFromHtml(element);
   }
 

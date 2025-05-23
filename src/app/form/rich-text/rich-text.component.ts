@@ -60,7 +60,7 @@ export class RichTextComponent implements OnInit, AfterViewInit {
       () => {
         const currentDelta = this.quill()?.getContents();
         if (currentDelta) {
-          const quillHTML = this.quill()?.root.innerHTML;
+          const quillHTML = this.quill()!.root.innerHTML;
           const cleanHTML = DOMPurify.sanitize(quillHTML!);
           this.summary.setValue(cleanHTML);
           console.log('summary', this.summary.value);

@@ -1,11 +1,26 @@
 .cv-form {
   display: grid;
   max-width: 25%;
+  padding: 2rem 1rem;
 }
 
 form {
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
+
+  .divider {
+    height: 1px;
+    background-color: #e0e0e0;
+  }
+
+  p-button {
+    width: 100%;
+
+    // Override the button width
+    ::ng-deep button {
+      width: 100%;
+    }
+  }
 }
 
 .summary-container {

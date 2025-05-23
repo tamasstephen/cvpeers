@@ -1,0 +1,170 @@
+<div style="font-family: 'Geist', sans-serif" class="cv-container" id="cv">
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="name-title">
+      <h1 style="font-family: 'Geist-SemiBold', serif; letter-spacing: -0.1px">
+        {{ personalDetails?.fullName }}
+      </h1>
+      <h2 style="font-family: 'Geist', sans-serif">
+        {{ personalDetails?.headline }}
+      </h2>
+    </div>
+    <div class="contact-links">
+      <!--       <a
+        *ngIf="personalDetails?.website"
+        [href]="personalDetails?.website"
+        class="contact-item"
+        style="font-family: 'Geist', sans-serif"
+      >
+        <img src="assets/icons/globe.jpg" alt="Website" class="contact-icon" />
+        {{ personalDetails?.website }}
+      </a>
+      <a
+        *ngIf="personalDetails?.email"
+        [href]="'mailto:' + personalDetails?.email"
+        class="contact-item"
+        style="font-family: 'Geist', sans-serif"
+      >
+        <img src="assets/icons/email.jpg" alt="Email" class="contact-icon" />
+        {{ personalDetails?.email }}
+      </a> -->
+      <!--       <a
+        *ngIf="personalDetails?.linkedin"
+        [href]="personalDetails?.linkedin"
+        class="contact-item"
+        style="font-family: 'Geist', sans-serif"
+      >
+        <img
+          src="assets/icons/linkedin.jpg"
+          alt="LinkedIn"
+          class="contact-icon"
+        />
+        {{ personalDetails?.linkedin }}
+      </a> -->
+    </div>
+  </header>
+
+  <!-- Social Links -->
+  <div class="social-links" *ngIf="socialLinks?.length">
+    <a
+      *ngFor="let social of socialLinks"
+      [href]="social.url"
+      target="_blank"
+      class="social-link"
+      style="font-family: 'Geist', sans-serif"
+    >
+      <img
+        [src]="'assets/icons/' + social.type + '.jpg'"
+        [alt]="social.type"
+        class="social-icon"
+      />
+      {{ social.type }}
+    </a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Left Column -->
+    <div class="left-column">
+      <!-- Summary/Bio Section -->
+      <section class="summary-section" *ngIf="summary">
+        <h3
+          style="
+            font-family: 'GeistMono-SemiBold', monospace;
+            font-weight: bold;
+          "
+        >
+          BIO —
+        </h3>
+        <section
+          style="font-family: 'Geist', sans-serif"
+          [innerHTML]="summary"
+        ></section>
+      </section>
+
+      <!-- Experience Section -->
+      <section class="experience-section">
+        <h3
+          style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
+        >
+          EXPERIENCE —
+        </h3>
+        <div *ngFor="let job of experience" class="experience-item">
+          <div class="job-header">
+            <h4 style="font-family: 'Geist', sans-serif">{{ job.title }}</h4>
+            <span class="company" style="font-family: 'Geist', sans-serif">{{
+              job.company
+            }}</span>
+            <div class="job-period" style="font-family: 'Geist', sans-serif">
+              <span>{{ job.startDate }} - {{ job.endDate || "Current" }}</span>
+              <span class="location">{{ job.location }}</span>
+            </div>
+          </div>
+          <ul class="job-description">
+            <li
+              *ngFor="let point of job.description"
+              style="font-family: 'Geist', sans-serif"
+            >
+              {{ point }}
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <!-- Design Skills Section -->
+      <section class="skills-section">
+        <h3
+          style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
+        >
+          DESIGN SKILLS —
+        </h3>
+        <ul class="skills-list">
+          <li
+            *ngFor="let skill of designSkills"
+            style="font-family: 'Geist', sans-serif"
+          >
+            {{ skill }}
+          </li>
+        </ul>
+      </section>
+
+      <!-- Education Section -->
+      <section class="education-section">
+        <h3
+          style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
+        >
+          EDUCATION —
+        </h3>
+        <div *ngFor="let edu of education" class="education-item">
+          <h4 style="font-family: 'Geist', sans-serif">{{ edu.degree }}</h4>
+          <p style="font-family: 'Geist', sans-serif">
+            {{ edu.graduationDate }}, {{ edu.institution }}
+          </p>
+          <p class="location" style="font-family: 'Geist', sans-serif">
+            {{ edu.location }}
+          </p>
+        </div>
+      </section>
+
+      <!-- Soft Skills Section -->
+      <section class="soft-skills-section">
+        <h3
+          style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
+        >
+          SOFT SKILLS —
+        </h3>
+        <ul class="skills-list">
+          <li
+            *ngFor="let skill of softSkills"
+            style="font-family: 'Geist', sans-serif"
+          >
+            {{ skill }}
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>

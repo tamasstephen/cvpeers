@@ -13,6 +13,7 @@ export class ComponentBaseComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log('ngOnDestroy');
     this.#subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
