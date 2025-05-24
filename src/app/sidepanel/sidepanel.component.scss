@@ -2,13 +2,17 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 60%;
+  width: 700px;
   height: 100vh;
   background-color: white;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
   transform: translateX(0);
+
+  &.hidden {
+    display: none;
+  }
 
   &.closed {
     transform: translateX(100%);
@@ -17,7 +21,7 @@
   .sidepanel-arrow {
     position: absolute;
     top: 50%;
-    left: 0;
+    left: -20px;
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 0.5rem;

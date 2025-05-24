@@ -48,7 +48,7 @@
     <p-button
       class="save-button"
       [disabled]="!url"
-      (click)="addSocial(url.value, type.value)"
+      (click)="addSocial(url.value, type.value, getSocialOptionSrc(type.value))"
       label="Save"
       fluid="true"
     />

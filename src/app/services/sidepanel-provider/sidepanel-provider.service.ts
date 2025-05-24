@@ -1,5 +1,7 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, OnDestroy, inject } from '@angular/core';
 import { SidepanelComponent } from '../../sidepanel/sidepanel.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ComponentBaseComponent } from '../../shared/core/component-base/component-base.component';
 
 export interface SidepanelConfig<T = any> {
   component: Type<T>;
@@ -9,11 +11,19 @@ export interface SidepanelConfig<T = any> {
 @Injectable({
   providedIn: 'root',
 })
-export class SidepanelProviderService {
-  constructor() {}
+export class SidepanelProviderService
+  extends ComponentBaseComponent
+  implements OnDestroy
+{
+  constructor() {
+    super();
+  }
 
   #sidepanelComponent?: SidepanelComponent;
+
   #currentConfig?: SidepanelConfig;
+
+  #router = inject(Router);
 
   public openSidepanel<T>(config: SidepanelConfig<T>) {
     if (!this.#sidepanelComponent) {
@@ -53,6 +63,11 @@ export class SidepanelProviderService {
 
   public setSidepanelComponent(component: SidepanelComponent) {
     this.#sidepanelComponent = component;
+    /*     this.addSubscription(
+      this.#router.events.subscribe((value) => {
+        console.log('url', value);
+      })
+    ); */
   }
 
   public getCurrentConfig() {

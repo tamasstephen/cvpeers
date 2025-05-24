@@ -79,15 +79,17 @@ export class SocialComponent implements OnInit, OnChanges {
     }
   }
 
-  addSocial(url: string, type: Social) {
-    if (!url || !type) {
+  addSocial(url: string, type: Social, src: string) {
+    if (!url || !type || !src) {
       return;
     }
+    console.log('addSocial', url, type, src);
     this.socialForm.controls.social.push(
       new FormControl<SocialItem>(
         {
           url,
           type,
+          src,
         },
         { nonNullable: true }
       )
@@ -102,6 +104,12 @@ export class SocialComponent implements OnInit, OnChanges {
   closeDialog() {
     console.log('closeDialog');
     this.isDialogOpen.set(false);
+  }
+
+  getSocialOptionSrc(type: Social): string {
+    return (
+      this.socialOptions.find((option) => option.value === type)?.src ?? ''
+    );
   }
 
   removeSocial(index: number) {

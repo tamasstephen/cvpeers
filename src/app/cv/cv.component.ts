@@ -7,6 +7,7 @@ import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { SocialItem } from '../types/social';
 
 interface PersonalDetails {
   fullName: string;
@@ -63,7 +64,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
     website: 'www.yourwebsite.com',
     linkedin: 'linkedin.com/in/yourprofile',
   };
-  socialLinks: SocialLink[] = [];
+  socialLinks: SocialItem[] = [];
   summary: string = '';
   parsedSummary = signal<SafeHtml>('');
   experience: Experience[] = [];

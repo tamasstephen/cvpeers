@@ -49,26 +49,19 @@
         />
         {{ personalDetails?.linkedin }}
       </a>
+      <!-- Social Links -->
+      <a
+        *ngFor="let social of socialLinks"
+        [href]="social.url"
+        target="_blank"
+        class="contact-item"
+        style="font-family: 'Geist', sans-serif"
+      >
+        <img [src]="social.src" [alt]="social.type" class="contact-icon" />
+        {{ social.url }}
+      </a>
     </div>
   </header>
-
-  <!-- Social Links -->
-  <div class="social-links" *ngIf="socialLinks?.length">
-    <a
-      *ngFor="let social of socialLinks"
-      [href]="social.url"
-      target="_blank"
-      class="social-link"
-      style="font-family: 'Geist', sans-serif"
-    >
-      <img
-        [src]="'assets/icons/' + social.type + '.jpg'"
-        [alt]="social.type"
-        class="social-icon"
-      />
-      {{ social.type }}
-    </a>
-  </div>
 
   <!-- Main Content -->
   <div class="main-content">
@@ -121,7 +114,7 @@
         <h3
           style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
         >
-          DESIGN SKILLS —
+          SKILLS —
         </h3>
         <ul class="skills-list">
           <li

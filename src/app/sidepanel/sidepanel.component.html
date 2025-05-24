@@ -1,11 +1,4 @@
-<div class="sidepanel" [class.closed]="!isOpen()">
-  <!--   <p-button
-    icon="pi pi-times"
-    aria-label="close"
-    variant="outlined"
-    (click)="close()"
-    class="close-button"
-  /> -->
+<div [class.hidden]="isHidden()" class="sidepanel" [class.closed]="!isOpen()">
   <button
     aria-label="open"
     (click)="isOpen() ? close() : open()"

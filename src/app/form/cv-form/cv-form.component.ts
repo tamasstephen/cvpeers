@@ -18,7 +18,6 @@ import { AsyncPipe } from '@angular/common';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { DatePipe } from '@angular/common';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
-import { ExampleSidepanelComponent } from '../../example-sidepanel/example-sidepanel.component';
 import { CvComponent } from '../../cv/cv.component';
 
 @Component({
@@ -61,12 +60,6 @@ export class CvFormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // Initialize sidepanel
     this._sidepanelProvider.setSidepanelConfig({
-      component: CvComponent,
-      data: {
-        cvForm: this.form,
-      },
-    });
-    this._sidepanelProvider.openSidepanel({
       component: CvComponent,
       data: {
         cvForm: this.form,

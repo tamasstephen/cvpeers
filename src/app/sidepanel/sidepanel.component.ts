@@ -1,8 +1,20 @@
-import { Component, ViewChild, ViewContainerRef, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  inject,
+  signal,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SidepanelConfig } from '../services/sidepanel-provider/sidepanel-provider.service';
 import { CommonModule } from '@angular/common';
+import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
+import { NavigationEnd, Router } from '@angular/router';
 
+/**
+ * A component that displays a drawer-like sidepanel.
+ */
 @Component({
   selector: 'app-sidepanel',
   standalone: true,
@@ -13,11 +25,25 @@ import { CommonModule } from '@angular/common';
     class: 'sidepanel-host',
   },
 })
-export class SidepanelComponent {
+export class SidepanelComponent
+  extends ComponentBaseComponent
+  implements OnInit
+{
+  /**
+   * A signal that determines if the sidepanel is open.
+   */
   isOpen = signal(false);
 
+  /**
+   * A view container reference to the dynamic content.
+   */
   @ViewChild('dynamicContent', { read: ViewContainerRef, static: true })
   private dynamicContentContainer!: ViewContainerRef;
+
+  /**
+   * A router instance.
+   */
+  #router = inject(Router);
 
   /**
    * A custom function that opens the sidepanel.
@@ -26,10 +52,20 @@ export class SidepanelComponent {
    */
   #openPanel?: (open: () => void) => void;
 
+  /**
+   * A signal that determines if the sidepanel is hidden.
+   */
+  protected isHidden = signal(true);
+
+  /**
+   * A function that opens the sidepanel.
+   */
   public open() {
+    // If a custom function is provided, use it to open the sidepanel.
     if (this.#openPanel) {
       this.#openPanel(() => this.isOpen.set(true));
     } else {
+      // Otherwise, just set the sidepanel to open.
       this.isOpen.set(true);
     }
   }
@@ -41,6 +77,9 @@ export class SidepanelComponent {
     this.isOpen.set(false);
   }
 
+  /**
+   * A function that clears the sidepanel.
+   */
   public clearSidepanel() {
     this.dynamicContentContainer.clear();
     this.#openPanel = undefined;
@@ -66,5 +105,15 @@ export class SidepanelComponent {
         config.data as Record<string, unknown>
       );
     }
+  }
+
+  ngOnInit() {
+    this.addSubscription(
+      this.#router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.isHidden.set(!event.url.includes('/cv'));
+        }
+      })
+    );
   }
 }

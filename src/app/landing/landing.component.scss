@@ -94,9 +94,9 @@
       position: relative;
       border-radius: 8px;
       overflow: hidden;
-      border: 1px solid var(--zinc-200);
       background: white;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.08);
 
       .preview-image {
         width: 100%;
