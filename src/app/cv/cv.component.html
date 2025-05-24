@@ -86,19 +86,31 @@
         </h3>
         <div *ngFor="let job of experience" class="experience-item">
           <div class="job-header">
-            <h4 style="font-family: 'Geist', sans-serif">{{ job.title }}</h4>
+            <h4
+              style="
+                font-family: 'Geist-SemiBold', sans-serif;
+                font-weight: bold;
+              "
+            >
+              {{ job.title }}
+            </h4>
             <span class="company" style="font-family: 'Geist', sans-serif">{{
               job.company
             }}</span>
             <div class="job-period" style="font-family: 'Geist', sans-serif">
-              <span>{{ job.startDate }} - {{ job.endDate || "Current" }}</span>
-              <span class="location">{{ job.location }}</span>
+              <span style="font-family: 'Geist', sans-serif"
+                >{{ job.startDate | date : "shortDate" }} -
+                {{ (job.endDate | date : "shortDate") || "Current" }}</span
+              >
+              <span class="location" style="font-family: 'Geist', sans-serif">{{
+                job.location
+              }}</span>
             </div>
           </div>
           <ul class="job-description">
             <li
               *ngFor="let point of job.description"
-              style="font-family: 'Geist', sans-serif"
+              style="font-family: 'Geist', sans-serif; font-size: 0.875rem"
             >
               {{ point }}
             </li>

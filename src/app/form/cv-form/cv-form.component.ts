@@ -11,6 +11,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { ButtonModule } from 'primeng/button';
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 import { SocialComponent } from './social/social.component';
+import { ExperienceComponent } from './experience/experience.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
 import { BehaviorSubject } from 'rxjs';
@@ -29,6 +30,7 @@ import { CvComponent } from '../../cv/cv.component';
     IftaLabelModule,
     PersonalDetailsComponent,
     SocialComponent,
+    ExperienceComponent,
     TextareaModule,
     RichTextComponent,
     AsyncPipe,

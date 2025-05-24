@@ -7,6 +7,11 @@
     <div class="divider"></div>
     <app-social [parentForm]="form" [initialValues]="initialValues | async" />
     <div class="divider"></div>
+    <app-experience
+      [parentForm]="form"
+      [initialValues]="initialValues | async"
+    />
+    <div class="divider"></div>
     <div>
       <app-rich-text
         [parentForm]="form"

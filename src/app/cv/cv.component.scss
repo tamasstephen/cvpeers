@@ -22,6 +22,9 @@
   gap: 24px;
   margin-bottom: 40px;
   width: 100%;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  page-break-after: avoid;
 
   .name-title {
     h1 {
@@ -106,6 +109,15 @@
   grid-template-columns: 65% 35%;
   gap: 24px;
   width: 100%;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+
+  .left-column,
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 
   .right-column {
     justify-self: start;
@@ -120,7 +132,12 @@
 
 // Common section styles
 section {
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  page-break-after: auto;
   margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
 
   h3 {
     font-size: 14px;
@@ -132,6 +149,8 @@ section {
 // Summary section
 .summary-section {
   margin-bottom: 24px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 
   p {
     font-size: 12px;
@@ -144,7 +163,12 @@ section {
 // Experience section
 .experience-section {
   .experience-item {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+    page-break-after: auto;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 
     .job-header {
       margin-bottom: 12px;
@@ -209,6 +233,8 @@ section {
 .education-section {
   .education-item {
     margin-bottom: 20px;
+    page-break-inside: avoid;
+    break-inside: avoid;
 
     h4 {
       font-size: 14px;

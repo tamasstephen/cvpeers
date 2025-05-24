@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
@@ -52,11 +52,14 @@ interface Language {
 @Component({
   selector: 'app-cv',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './cv.component.html',
   styleUrl: './cv.component.scss',
 })
 export class CvComponent extends ComponentBaseComponent implements OnInit {
+  /**
+   * The personal details of the CV
+   */
   personalDetails: PersonalDetails = {
     fullName: 'Your Name',
     headline: 'Your Title - Years of Experience',
@@ -64,13 +67,31 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
     website: 'www.yourwebsite.com',
     linkedin: 'linkedin.com/in/yourprofile',
   };
+
+  /**
+   * The social links of the CV
+   */
   socialLinks: SocialItem[] = [];
+
+  /**
+   * The summary of the CV
+   */
   summary: string = '';
   parsedSummary = signal<SafeHtml>('');
+
+  /**
+   * The experience of the CV
+   */
   experience: Experience[] = [];
+
+  /**
+   * The education of the CV
+   */
   education: Education[] = [];
-  skills: Skill[] = [];
-  languages: Language[] = [];
+
+  /**
+   * The expertise of the CV
+   */
   expertise: string[] = [
     'JavaScript',
     'TypeScript',
@@ -83,10 +104,30 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
     'Docker',
     'Kubernetes',
   ];
+
+  /**
+   * The soft skills of the CV
+   */
   softSkills: string[] = [];
 
+  /**
+   * The languages of the CV
+   */
+  languages: Language[] = [];
+
+  /**
+   * The PDF generator service
+   */
   pdfGeneratorService = inject(PdfGeneratorService);
+
+  /**
+   * The sanitizer service
+   */
   sanitizer = inject(DomSanitizer);
+
+  /**
+   * The form group of the CV
+   */
   @Input() cvForm!: FormGroup;
 
   constructor() {
@@ -111,7 +152,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           }
           this.experience = value?.experienceForm;
           this.education = value?.educationForm;
-          this.skills = value?.skillsForm;
+          this.expertise = value?.expertiseForm;
+          this.softSkills = value?.softSkillsForm;
           this.languages = value?.languagesForm;
         })
     );

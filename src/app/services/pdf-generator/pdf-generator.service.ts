@@ -10,6 +10,9 @@ import '../../assets/fonts/Geist-SemiBold-normal.js';
 export class PdfGeneratorService {
   constructor() {}
 
+  /**
+   * The jsPDF instance used to generate the PDF
+   */
   #pdfGenerator: jsPDF = new jsPDF();
 
   /**
@@ -18,14 +21,10 @@ export class PdfGeneratorService {
    * @returns Processed HTML string with Geist font added to all tags
    */
   addGeistFontToHtml(htmlString: string): string {
-    console.log('htmlString input', htmlString);
     // If the string is empty or not HTML, return as is
     if (!htmlString || !htmlString.includes('<')) {
-      console.log('htmlString', htmlString);
       return htmlString;
     }
-
-    console.log('parsing...');
 
     // Create a temporary div to parse the HTML
     const tempDiv = document.createElement('div');
@@ -53,11 +52,13 @@ export class PdfGeneratorService {
       processElement(element);
     });
 
-    console.log('parsed', tempDiv.innerHTML);
-
     return tempDiv.innerHTML;
   }
 
+  /**
+   * Creates a PDF from an HTML string
+   * @param html The HTML element to create a PDF from
+   */
   createPdfFromHtml(html: HTMLElement) {
     this.#pdfGenerator.setFillColor(255, 253, 248);
     this.#pdfGenerator.setFont('Geist');
@@ -72,6 +73,7 @@ export class PdfGeneratorService {
       html2canvas: {
         letterRendering: true,
       },
+      autoPaging: 'text',
       width: 180,
       windowWidth: 650,
     });
