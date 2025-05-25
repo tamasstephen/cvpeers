@@ -3,9 +3,9 @@ import {
   inject,
   input,
   OnInit,
-  OnChanges,
-  SimpleChanges,
   signal,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import {
@@ -24,7 +24,6 @@ import {
   SocialItem,
 } from '../../../types/social';
 import { DialogModule } from 'primeng/dialog';
-import { hasChangedFromInitial } from '../../validators/initial-value.validator';
 
 @Component({
   selector: 'app-social',
@@ -46,12 +45,6 @@ export class SocialComponent implements OnInit {
    */
   parentForm = input<FormGroup>();
 
-  //TODO: add proper typing
-  /**
-   * The initial values
-   */
-  initialValues = input<any>(null);
-
   /**
    * The injected social options
    */
@@ -61,6 +54,11 @@ export class SocialComponent implements OnInit {
    * The dialog open state
    */
   isDialogOpen = signal(false);
+
+  /**
+   * The url input element
+   */
+  @ViewChild('url') protected urlInput!: ElementRef<HTMLInputElement>;
 
   /**
    * The social form array
@@ -93,6 +91,7 @@ export class SocialComponent implements OnInit {
         { nonNullable: true }
       )
     );
+    this.urlInput.nativeElement.value = '';
     this.closeDialog();
   }
 

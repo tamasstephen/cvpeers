@@ -45,9 +45,6 @@ export class CvFormComponent implements OnInit, AfterViewInit {
 
   form = new FormGroup({});
 
-  // TODO: use if backend is implemented
-  initialValues = new BehaviorSubject<any>(null);
-
   @ViewChild('cvForm') cvForm!: ElementRef<HTMLDivElement>;
 
   @ViewChild('portrait') portrait!: ElementRef<HTMLImageElement>;
