@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 import { SocialComponent } from './social/social.component';
 import { ExperienceComponent } from './experience/experience.component';
+import { ExpertiseComponent } from './expertise/expertise.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
 import { BehaviorSubject } from 'rxjs';
@@ -23,6 +24,7 @@ import { CvComponent } from '../../cv/cv.component';
 
 @Component({
   selector: 'app-cv-form',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     InputTextModule,
@@ -31,6 +33,7 @@ import { CvComponent } from '../../cv/cv.component';
     PersonalDetailsComponent,
     SocialComponent,
     ExperienceComponent,
+    ExpertiseComponent,
     TextareaModule,
     RichTextComponent,
     AsyncPipe,

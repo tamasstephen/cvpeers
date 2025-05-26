@@ -67,12 +67,6 @@
         <input pInputText id="company" formControlName="company" required />
       </p-iftalabel>
     </div>
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="location">Location</label>
-        <input pInputText id="location" formControlName="location" required />
-      </p-iftalabel>
-    </div>
     <div class="form-row dates">
       <p-iftalabel>
         <label for="startDate">Start Date</label>
@@ -100,6 +94,12 @@
           [yearNavigator]="true"
           [yearRange]="yearRange"
         />
+      </p-iftalabel>
+    </div>
+    <div class="form-row">
+      <p-iftalabel>
+        <label for="location">Location</label>
+        <input pInputText id="location" formControlName="location" required />
       </p-iftalabel>
     </div>
     <div class="form-row" formArrayName="description">

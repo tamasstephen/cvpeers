@@ -92,18 +92,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
    * The expertise of the CV
    */
-  expertise: string[] = [
-    'JavaScript',
-    'TypeScript',
-    'Angular',
-    'React',
-    'Node.js',
-    'Express',
-    'MongoDB',
-    'PostgreSQL',
-    'Docker',
-    'Kubernetes',
-  ];
+  expertise: string[] = [];
 
   /**
    * The soft skills of the CV
