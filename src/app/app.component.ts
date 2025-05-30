@@ -9,31 +9,8 @@ import { HeaderComponent } from './shared/header/header.component';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, SidepanelComponent, HeaderComponent],
-  template: `
-    <div class="app-container">
-      <app-header></app-header>
-      <main>
-        <router-outlet></router-outlet>
-      </main>
-      <app-sidepanel></app-sidepanel>
-    </div>
-  `,
-  styles: [
-    `
-      .app-container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-      }
-
-      main {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-      }
-    `,
-  ],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild(SidepanelComponent) sidepanel!: SidepanelComponent;

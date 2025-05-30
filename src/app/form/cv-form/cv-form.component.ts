@@ -15,8 +15,6 @@ import { ExperienceComponent } from './experience/experience.component';
 import { ExpertiseComponent } from './expertise/expertise.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
-import { BehaviorSubject } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { DatePipe } from '@angular/common';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
@@ -36,8 +34,6 @@ import { CvComponent } from '../../cv/cv.component';
     ExpertiseComponent,
     TextareaModule,
     RichTextComponent,
-    AsyncPipe,
-    DatePipe,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',
@@ -88,6 +84,8 @@ export class CvFormComponent implements OnInit, AfterViewInit {
     const element = document.querySelector('#cv')! as HTMLElement;
     this._pdfService.createPdfFromHtml(element);
   }
+
+  public testFn() {}
 
   // Workaround for keeping the image aspect ratio on the pdf
   protected cropImage() {

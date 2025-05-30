@@ -3,16 +3,16 @@
   <header class="header-section">
     <div class="name-title">
       <h1 style="font-family: 'Geist-SemiBold', serif; letter-spacing: -0.1px">
-        {{ personalDetails?.fullName }}
+        {{ personalDetails.fullName }}
       </h1>
       <h2 style="font-family: 'Geist', sans-serif">
-        {{ personalDetails?.headline }}
+        {{ personalDetails.headline }}
       </h2>
     </div>
     <div class="contact-links">
       <a
         *ngIf="personalDetails?.website"
-        [href]="personalDetails?.website"
+        [href]="personalDetails.website"
         class="contact-item"
         style="font-family: 'Geist', sans-serif"
       >
@@ -21,11 +21,11 @@
           alt="Website"
           class="contact-icon"
         />
-        {{ personalDetails?.website }}
+        {{ personalDetails.website }}
       </a>
       <a
         *ngIf="personalDetails?.email"
-        [href]="'mailto:' + personalDetails?.email"
+        [href]="'mailto:' + personalDetails.email"
         class="contact-item"
         style="font-family: 'Geist', sans-serif"
       >
@@ -34,11 +34,11 @@
           alt="Email"
           class="contact-icon"
         />
-        {{ personalDetails?.email }}
+        {{ personalDetails.email }}
       </a>
       <a
         *ngIf="personalDetails?.linkedin"
-        [href]="personalDetails?.linkedin"
+        [href]="personalDetails.linkedin"
         class="contact-item"
         style="font-family: 'Geist', sans-serif"
       >
@@ -47,7 +47,7 @@
           alt="LinkedIn"
           class="contact-icon"
         />
-        {{ personalDetails?.linkedin }}
+        {{ personalDetails.linkedin }}
       </a>
       <!-- Social Links -->
       <a
