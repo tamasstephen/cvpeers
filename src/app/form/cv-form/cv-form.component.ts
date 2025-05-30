@@ -19,6 +19,7 @@ import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.
 import { DatePipe } from '@angular/common';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
 import { CvComponent } from '../../cv/cv.component';
+import { EducationComponent } from './education/education.component';
 
 @Component({
   selector: 'app-cv-form',
@@ -34,6 +35,7 @@ import { CvComponent } from '../../cv/cv.component';
     ExpertiseComponent,
     TextareaModule,
     RichTextComponent,
+    EducationComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',
