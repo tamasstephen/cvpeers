@@ -1,4 +1,10 @@
-import { Component, input, OnInit } from '@angular/core';
+import {
+  Component,
+  input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import {
   FormControl,
@@ -7,6 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { hasChangedFromInitial } from '../../validators/initial-value.validator';
 
 @Component({
   selector: 'app-personal-details',
@@ -16,6 +23,7 @@ import { InputTextModule } from 'primeng/inputtext';
 })
 export class PersonalDetailsComponent implements OnInit {
   parentForm = input<FormGroup>();
+  initialValues = input<any>(null);
 
   personalDetailsForm = new FormGroup({
     fullName: new FormControl('', [Validators.required]),

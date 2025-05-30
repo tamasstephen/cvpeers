@@ -1,0 +1,13 @@
+<div [class.hidden]="isHidden()" class="sidepanel" [class.closed]="!isOpen()">
+  <button
+    aria-label="open"
+    (click)="isOpen() ? close() : open()"
+    class="sidepanel-arrow"
+    [class.close]="isOpen()"
+  >
+    <i class="pi pi-chevron-left"></i>
+  </button>
+  <div class="sidepanel-content">
+    <ng-container #dynamicContent></ng-container>
+  </div>
+</div>

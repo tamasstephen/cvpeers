@@ -1,25 +1,26 @@
-import { Component, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  input,
+  OnInit,
+  signal,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Quill, { Delta, QuillOptions } from 'quill';
+import 'quill/dist/quill.snow.css';
+import DOMPurify from 'dompurify';
 
 const quillOptions: QuillOptions = {
   theme: 'snow',
   modules: {
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ header: [1, 2, 3, 4, false] }],
+      ['bold', 'italic', 'strike'],
       [{ list: 'ordered' }, { list: 'bullet' }],
     ],
   },
 };
-
-function convertDeltaToString(delta: Delta) {
-  return JSON.stringify({ delta });
-}
-
-function convertStringToDelta(string: string) {
-  return JSON.parse(string);
-}
 
 @Component({
   selector: 'app-rich-text',
@@ -27,24 +28,36 @@ function convertStringToDelta(string: string) {
   templateUrl: './rich-text.component.html',
   styleUrl: './rich-text.component.scss',
 })
-export class RichTextComponent implements OnInit {
+export class RichTextComponent implements OnInit, AfterViewInit {
   parentForm = input.required<FormGroup>();
+
+  initialValues = input<any>(null);
+
   quill = signal<Quill | null>(null);
+
   controller = new AbortController();
+
   summary = new FormControl('', {
     validators: [Validators.required],
   });
 
+  @ViewChild('editor') editor!: ElementRef;
+
   ngOnInit() {
-    this.quill.set(new Quill('#editor', quillOptions));
+    console.log('Editor: ', this.editor);
     this.parentForm()?.addControl('summary', this.summary);
+  }
+
+  ngAfterViewInit() {
+    this.quill.set(new Quill(this.editor.nativeElement, quillOptions));
     this.quill()?.on(
       'text-change',
       () => {
-        // Get data in html format:  console.log('html', this.quill()?.container.innerHTML);
         const currentDelta = this.quill()?.getContents();
         if (currentDelta) {
-          this.summary.setValue(convertDeltaToString(currentDelta));
+          const quillHTML = this.quill()!.root.innerHTML;
+          const cleanHTML = DOMPurify.sanitize(quillHTML!);
+          this.summary.setValue(cleanHTML);
           console.log('summary', this.summary.value);
         } else {
           this.summary.setValue('');

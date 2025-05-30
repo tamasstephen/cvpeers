@@ -1,0 +1,2038 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "User",
+            "id": "interface-User-d4821beac0e4a852e513391b7470981c4353fdd95a18628bb68136c8695b489ee15b926e2e5031bc26cf30e1508e0a362c3ee13a06734702b4d15af140e485d5",
+            "file": "src/stories/user.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface User {\n  name: string;\n}\n",
+            "properties": [
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 171,
+            "methods": [],
+            "extends": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "AuthService",
+            "id": "injectable-AuthService-abaed4670669b70265430a227edf1d51567674f773d944218bef25116d7b94a4aa2b55f6df9138415408fa8e581a56f986a99d34a7f7504e46a8b30396a40879",
+            "file": "src/app/login/auth.service.ts",
+            "properties": [
+                {
+                    "name": "http",
+                    "defaultValue": "inject(HttpClient)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "isLoggedIn",
+                    "defaultValue": "signal(false)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "router",
+                    "defaultValue": "inject(Router)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "geIstLoggedIn",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 32,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "login",
+                    "args": [
+                        {
+                            "name": "email",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "password",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 13,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "email",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "password",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "register",
+                    "args": [
+                        {
+                            "name": "email",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "password",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 20,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "email",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "password",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setLoggedIn",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 28,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { inject, Injectable, signal } from '@angular/core';\nimport { Router } from '@angular/router';\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AuthService {\n  http = inject(HttpClient);\n  private isLoggedIn = signal(false);\n  private router = inject(Router);\n\n  login(email: string, password: string) {\n    return this.http.post('http://localhost:3000/api/v1/login', {\n      email,\n      password,\n    });\n  }\n\n  register(email: string, password: string, name: string) {\n    return this.http.post('http://localhost:3000/api/v1/users', {\n      email,\n      password,\n      name,\n    });\n  }\n\n  setLoggedIn(value: boolean) {\n    this.isLoggedIn.set(value);\n  }\n\n  geIstLoggedIn() {\n    return this.isLoggedIn();\n  }\n\n  constructor() {}\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 34
+            },
+            "extends": [],
+            "type": "injectable"
+        }
+    ],
+    "guards": [],
+    "interceptors": [],
+    "classes": [],
+    "directives": [],
+    "components": [
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-c97ee009497049cfba3d3ba8f9396b5bf8d75650b93a82d0a376adfdb85f9b67a4e0e6feb2ee294ddaf50937d22912be65d5ffcfb0e6499cf5d7617065a6211b",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "title",
+                    "defaultValue": "'angular-starter'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 16,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "RouterOutlet"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { RouterOutlet } from '@angular/router';\nimport { PrimeNG } from 'primeng/config';\n\n@Component({\n  selector: 'app-root',\n  imports: [RouterOutlet],\n  templateUrl: './app.component.html',\n  styleUrl: './app.component.scss',\n})\nexport class AppComponent implements OnInit {\n  title = 'angular-starter';\n\n  constructor(private primeng: PrimeNG) {}\n\n  ngOnInit(): void {\n    this.primeng.ripple.set(true);\n  }\n}\n",
+            "styleUrl": "./app.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "primeng",
+                        "type": "PrimeNG",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "primeng",
+                        "type": "PrimeNG",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "extends": [],
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<main>\n  <router-outlet />\n</main>\n"
+        },
+        {
+            "name": "ButtonComponent",
+            "id": "component-ButtonComponent-d7bf0323e6da130e2609e2af0117b4a8d7cd874132206af50bf43dfc37044485fe50f2867ea76525730dd195b9b95a43802a12dadc6ad5cd7bf2faa07f19f0da",
+            "file": "src/stories/button.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-button",
+            "styleUrls": [
+                "./button.css"
+            ],
+            "styles": [],
+            "template": " <button  type=\"button\"\n  (click)=\"onClick.emit($event)\"\n  [ngClass]=\"classes\"\n  [ngStyle]=\"{ 'background-color': backgroundColor }\"\n>\n  {{ label }}\n</button>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "backgroundColor",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "rawdescription": "\nWhat background color to use",
+                    "description": "<p>What background color to use</p>\n",
+                    "line": 25,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "label",
+                    "defaultValue": "'Button'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "pos": 760,
+                            "end": 773,
+                            "kind": 327,
+                            "id": 0,
+                            "flags": 16842752,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "tagName": {
+                                "pos": 761,
+                                "end": 769,
+                                "kind": 80,
+                                "id": 0,
+                                "flags": 16842752,
+                                "transformFlags": 0,
+                                "escapedText": "required"
+                            },
+                            "comment": ""
+                        }
+                    ],
+                    "rawdescription": "\n\nButton contents\n\n",
+                    "description": "<p>Button contents</p>\n",
+                    "line": 37,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "primary",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "rawdescription": "\nIs this the principal call to action on the page?",
+                    "description": "<p>Is this the principal call to action on the page?</p>\n",
+                    "line": 21,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "size",
+                    "defaultValue": "'medium'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "rawdescription": "\nHow large should the button be?",
+                    "description": "<p>How large should the button be?</p>\n",
+                    "line": 29,
+                    "type": "\"small\" | \"medium\" | \"large\"",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onClick",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "rawdescription": "\nOptional click handler",
+                    "description": "<p>Optional click handler</p>\n",
+                    "line": 41,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'storybook-button',\n  standalone: true,\n  imports: [CommonModule],\n  template: ` <button\n  type=\"button\"\n  (click)=\"onClick.emit($event)\"\n  [ngClass]=\"classes\"\n  [ngStyle]=\"{ 'background-color': backgroundColor }\"\n>\n  {{ label }}\n</button>`,\n  styleUrls: ['./button.css'],\n})\nexport class ButtonComponent {\n  /** Is this the principal call to action on the page? */\n  @Input()\n  primary = false;\n\n  /** What background color to use */\n  @Input()\n  backgroundColor?: string;\n\n  /** How large should the button be? */\n  @Input()\n  size: 'small' | 'medium' | 'large' = 'medium';\n\n  /**\n   * Button contents\n   *\n   * @required\n   */\n  @Input()\n  label = 'Button';\n\n  /** Optional click handler */\n  @Output()\n  onClick = new EventEmitter<Event>();\n\n  public get classes(): string[] {\n    const mode = this.primary ? 'storybook-button--primary' : 'storybook-button--secondary';\n\n    return ['storybook-button', `storybook-button--${this.size}`, mode];\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".storybook-button {\n  display: inline-block;\n  cursor: pointer;\n  border: 0;\n  border-radius: 3em;\n  font-weight: 700;\n  line-height: 1;\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n.storybook-button--primary {\n  background-color: #555ab9;\n  color: white;\n}\n.storybook-button--secondary {\n  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;\n  background-color: transparent;\n  color: #333;\n}\n.storybook-button--small {\n  padding: 10px 16px;\n  font-size: 12px;\n}\n.storybook-button--medium {\n  padding: 11px 20px;\n  font-size: 14px;\n}\n.storybook-button--large {\n  padding: 12px 24px;\n  font-size: 16px;\n}\n",
+                    "styleUrl": "./button.css"
+                }
+            ],
+            "stylesData": "",
+            "extends": [],
+            "accessors": {
+                "classes": {
+                    "name": "classes",
+                    "getSignature": {
+                        "name": "classes",
+                        "type": "[]",
+                        "returnType": "string[]",
+                        "line": 43
+                    }
+                }
+            }
+        },
+        {
+            "name": "CvFormComponent",
+            "id": "component-CvFormComponent-a5b3069a4883bea3fd59f6d428d93d903069413e9e0e040d01ead37f0bebedc29ca19c51ef23a347d5467d732d51b19d2c7d55d9470bd87a60cdfbe31ac46d0e",
+            "file": "src/app/form/cv-form/cv-form.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-cv-form",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./cv-form.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "activatedRoute",
+                    "defaultValue": "inject(ActivatedRoute)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 35
+                },
+                {
+                    "name": "cvData",
+                    "defaultValue": "signal<any>(null)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 36
+                },
+                {
+                    "name": "form",
+                    "defaultValue": "new FormGroup({})",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 34
+                },
+                {
+                    "name": "image",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "File | null",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 33
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 38,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 43,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "InputTextModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ButtonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "IftaLabelModule",
+                    "type": "module"
+                },
+                {
+                    "name": "PersonalDetailsComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "SocialComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "TextareaModule",
+                    "type": "module"
+                },
+                {
+                    "name": "RichTextComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, inject, OnInit, signal } from '@angular/core';\nimport {\n  FormControl,\n  FormGroup,\n  ReactiveFormsModule,\n  Validators,\n} from '@angular/forms';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { IftaLabelModule } from 'primeng/iftalabel';\nimport { ButtonModule } from 'primeng/button';\nimport { PersonalDetailsComponent } from './personal-details/personal-details.component';\nimport { SocialComponent } from './social/social.component';\nimport { TextareaModule } from 'primeng/textarea';\nimport { RichTextComponent } from '../rich-text/rich-text.component';\nimport { ActivatedRoute } from '@angular/router';\n\n@Component({\n  selector: 'app-cv-form',\n  imports: [\n    ReactiveFormsModule,\n    InputTextModule,\n    ButtonModule,\n    IftaLabelModule,\n    PersonalDetailsComponent,\n    SocialComponent,\n    TextareaModule,\n    RichTextComponent,\n  ],\n  templateUrl: './cv-form.component.html',\n  styleUrl: './cv-form.component.scss',\n})\nexport class CvFormComponent implements OnInit {\n  image: File | null = null;\n  form = new FormGroup({});\n  activatedRoute = inject(ActivatedRoute);\n  cvData = signal<any>(null);\n\n  ngOnInit(): void {\n    this.cvData.set(this.activatedRoute.snapshot.data['cvData']);\n    console.log('cvData', this.cvData()?.cv);\n  }\n\n  onSubmit() {\n    console.log(this.form);\n  }\n}\n",
+            "styleUrl": "./cv-form.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div>\n  <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n    <app-personal-details [parentForm]=\"form\" />\n    <app-social [parentForm]=\"form\" />\n    <div>\n      <app-rich-text [parentForm]=\"form\" />\n    </div>\n    <p-button size=\"small\" type=\"submit\" label=\"Submit\" />\n  </form>\n</div>\n"
+        },
+        {
+            "name": "HeaderComponent",
+            "id": "component-HeaderComponent-48b9abe37706bc42f20cfa97ed9f943678344ea7d254c0c82183c657750c2191b43486fe730c778627b2ea6aa0e2f33a7abcf3ce08b68ad18b062ad99ea97acb",
+            "file": "src/stories/header.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-header",
+            "styleUrls": [
+                "./header.css"
+            ],
+            "styles": [],
+            "template": "<header>  <div class=\"storybook-header\">\n    <div>\n      <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\">\n        <g fill=\"none\" fillRule=\"evenodd\">\n          <path\n            d=\"M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z\"\n            fill=\"#FFF\"\n          />\n          <path\n            d=\"M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z\"\n            fill=\"#555AB9\"\n          />\n          <path d=\"M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z\" fill=\"#91BAF8\" />\n        </g>\n      </svg>\n      <h1>Acme</h1>\n    </div>\n    <div>\n      <div *ngIf=\"user\">\n        <span class=\"welcome\">\n          Welcome, <b>{{ user.name }}</b\n          >!\n        </span>\n        <storybook-button\n          *ngIf=\"user\"\n          size=\"small\"\n          (onClick)=\"onLogout.emit($event)\"\n          label=\"Log out\"\n        ></storybook-button>\n      </div>\n      <div *ngIf=\"!user\">\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          class=\"margin-left\"\n          (onClick)=\"onLogin.emit($event)\"\n          label=\"Log in\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          [primary]=\"true\"\n          class=\"margin-left\"\n          (onClick)=\"onCreateAccount.emit($event)\"\n          label=\"Sign up\"\n        ></storybook-button>\n      </div>\n    </div>\n  </div>\n</header>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "user",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 66,
+                    "type": "User | null",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onCreateAccount",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 75,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogin",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 69,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogout",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 72,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ButtonComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\nimport { ButtonComponent } from './button.component';\nimport type { User } from './user';\n\n@Component({\n  selector: 'storybook-header',\n  standalone: true,\n  imports: [CommonModule, ButtonComponent],\n  template: `<header>\n  <div class=\"storybook-header\">\n    <div>\n      <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\">\n        <g fill=\"none\" fillRule=\"evenodd\">\n          <path\n            d=\"M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z\"\n            fill=\"#FFF\"\n          />\n          <path\n            d=\"M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z\"\n            fill=\"#555AB9\"\n          />\n          <path d=\"M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z\" fill=\"#91BAF8\" />\n        </g>\n      </svg>\n      <h1>Acme</h1>\n    </div>\n    <div>\n      <div *ngIf=\"user\">\n        <span class=\"welcome\">\n          Welcome, <b>{{ user.name }}</b\n          >!\n        </span>\n        <storybook-button\n          *ngIf=\"user\"\n          size=\"small\"\n          (onClick)=\"onLogout.emit($event)\"\n          label=\"Log out\"\n        ></storybook-button>\n      </div>\n      <div *ngIf=\"!user\">\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          class=\"margin-left\"\n          (onClick)=\"onLogin.emit($event)\"\n          label=\"Log in\"\n        ></storybook-button>\n        <storybook-button\n          *ngIf=\"!user\"\n          size=\"small\"\n          [primary]=\"true\"\n          class=\"margin-left\"\n          (onClick)=\"onCreateAccount.emit($event)\"\n          label=\"Sign up\"\n        ></storybook-button>\n      </div>\n    </div>\n  </div>\n</header>`,\n  styleUrls: ['./header.css'],\n})\nexport class HeaderComponent {\n  @Input()\n  user: User | null = null;\n\n  @Output()\n  onLogin = new EventEmitter<Event>();\n\n  @Output()\n  onLogout = new EventEmitter<Event>();\n\n  @Output()\n  onCreateAccount = new EventEmitter<Event>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".storybook-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  padding: 15px 20px;\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\n.storybook-header svg {\n  display: inline-block;\n  vertical-align: top;\n}\n\n.storybook-header h1 {\n  display: inline-block;\n  vertical-align: top;\n  margin: 6px 0 6px 10px;\n  font-weight: 700;\n  font-size: 20px;\n  line-height: 1;\n}\n\n.storybook-header button + button {\n  margin-left: 10px;\n}\n\n.storybook-header .welcome {\n  margin-right: 10px;\n  color: #333;\n  font-size: 14px;\n}\n",
+                    "styleUrl": "./header.css"
+                }
+            ],
+            "stylesData": "",
+            "extends": []
+        },
+        {
+            "name": "LoginComponent",
+            "id": "component-LoginComponent-640bcd21b7559916620144dfbc7461061c34f630a7cc6c371e3fda60929a007aab8957620f33d5d5938343abe44f8ab6edd39db772bb5734a0b52137c3999da1",
+            "file": "src/app/login/login.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-login",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./login.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "authService",
+                    "defaultValue": "inject(AuthService)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 26
+                },
+                {
+                    "name": "destroyRef",
+                    "defaultValue": "inject(DestroyRef)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                },
+                {
+                    "name": "form",
+                    "defaultValue": "new FormGroup({\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required]),\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "router",
+                    "defaultValue": "inject(Router)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 25
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "login",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 28,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "InputTextModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ButtonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "RouterLink"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, DestroyRef, inject } from '@angular/core';\nimport {\n  FormControl,\n  FormGroup,\n  ReactiveFormsModule,\n  Validators,\n} from '@angular/forms';\nimport { ButtonModule } from 'primeng/button';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { Router, RouterLink } from '@angular/router';\nimport { AuthService } from './auth.service';\n\n@Component({\n  selector: 'app-login',\n  imports: [ReactiveFormsModule, InputTextModule, ButtonModule, RouterLink],\n  templateUrl: './login.component.html',\n  styleUrl: './login.component.scss',\n})\nexport class LoginComponent {\n  form = new FormGroup({\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required]),\n  });\n  destroyRef = inject(DestroyRef);\n  router = inject(Router);\n  authService = inject(AuthService);\n\n  login() {\n    if (!this.form.value.email || !this.form.value.password) {\n      return;\n    }\n    const req = this.authService\n      .login(this.form.value.email, this.form.value.password)\n      .subscribe({\n        next: (res) => {\n          console.log('Successfully logged in', res);\n          this.authService.setLoggedIn(true);\n          this.router.navigate(['cv']);\n        },\n        error: (err) => {\n          console.log('Error logging in', err);\n        },\n      });\n    this.destroyRef.onDestroy(() => {\n      req.unsubscribe();\n    });\n  }\n}\n",
+            "styleUrl": "./login.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<form [formGroup]=\"form\" (ngSubmit)=\"login()\">\n  <input pInputText formControlName=\"email\" placeholder=\"Email\" />\n  <input pInputText formControlName=\"password\" placeholder=\"Password\" />\n  <p-button type=\"submit\" label=\"Login\" />\n  <a routerLink=\"/registration\">Register</a>\n</form>\n"
+        },
+        {
+            "name": "PageComponent",
+            "id": "component-PageComponent-21dd6eb370b4983b5c21c84d40e6f54d266a9d9af9889e6e76b35c43058bd53b3e451bad089d5adf4bea46647ba10265a2fa8cb15630398e75636307d4817fc6",
+            "file": "src/stories/page.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-page",
+            "styleUrls": [
+                "./page.css"
+            ],
+            "styles": [],
+            "template": "<article>  <storybook-header\n    [user]=\"user\"\n    (onLogout)=\"doLogout()\"\n    (onLogin)=\"doLogin()\"\n    (onCreateAccount)=\"doCreateAccount()\"\n  ></storybook-header>\n  <section class=\"storybook-page\">\n    <h2>Pages in Storybook</h2>\n    <p>\n      We recommend building UIs with a\n      <a href=\"https://componentdriven.org\" target=\"_blank\" rel=\"noopener noreferrer\">\n        <strong>component-driven</strong>\n      </a>\n      process starting with atomic components and ending with pages.\n    </p>\n    <p>\n      Render pages with mock data. This makes it easy to build and review page states without\n      needing to navigate to them in your app. Here are some handy patterns for managing page data\n      in Storybook:\n    </p>\n    <ul>\n      <li>\n        Use a higher-level connected component. Storybook helps you compose such data from the\n        \"args\" of child component stories\n      </li>\n      <li>\n        Assemble data in the page component from your services. You can mock these services out\n        using Storybook.\n      </li>\n    </ul>\n    <p>\n      Get a guided tutorial on component-driven development at\n      <a href=\"https://storybook.js.org/tutorials/\" target=\"_blank\" rel=\"noopener noreferrer\">\n        Storybook tutorials\n      </a>\n      . Read more in the\n      <a href=\"https://storybook.js.org/docs\" target=\"_blank\" rel=\"noopener noreferrer\"> docs </a>\n      .\n    </p>\n    <div class=\"tip-wrapper\">\n      <span class=\"tip\">Tip</span> Adjust the width of the canvas with the\n      <svg width=\"10\" height=\"10\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\">\n        <g fill=\"none\" fillRule=\"evenodd\">\n          <path\n            d=\"M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z\"\n            id=\"a\"\n            fill=\"#999\"\n          />\n        </g>\n      </svg>\n      Viewports addon in the toolbar\n    </div>\n  </section>\n</article>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "user",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "User | null",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 69
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "doCreateAccount",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 79,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "doLogin",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 75,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "doLogout",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 71,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "HeaderComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\nimport { HeaderComponent } from './header.component';\nimport type { User } from './user';\n\n@Component({\n  selector: 'storybook-page',\n  standalone: true,\n  imports: [CommonModule, HeaderComponent],\n  template: `<article>\n  <storybook-header\n    [user]=\"user\"\n    (onLogout)=\"doLogout()\"\n    (onLogin)=\"doLogin()\"\n    (onCreateAccount)=\"doCreateAccount()\"\n  ></storybook-header>\n  <section class=\"storybook-page\">\n    <h2>Pages in Storybook</h2>\n    <p>\n      We recommend building UIs with a\n      <a href=\"https://componentdriven.org\" target=\"_blank\" rel=\"noopener noreferrer\">\n        <strong>component-driven</strong>\n      </a>\n      process starting with atomic components and ending with pages.\n    </p>\n    <p>\n      Render pages with mock data. This makes it easy to build and review page states without\n      needing to navigate to them in your app. Here are some handy patterns for managing page data\n      in Storybook:\n    </p>\n    <ul>\n      <li>\n        Use a higher-level connected component. Storybook helps you compose such data from the\n        \"args\" of child component stories\n      </li>\n      <li>\n        Assemble data in the page component from your services. You can mock these services out\n        using Storybook.\n      </li>\n    </ul>\n    <p>\n      Get a guided tutorial on component-driven development at\n      <a href=\"https://storybook.js.org/tutorials/\" target=\"_blank\" rel=\"noopener noreferrer\">\n        Storybook tutorials\n      </a>\n      . Read more in the\n      <a href=\"https://storybook.js.org/docs\" target=\"_blank\" rel=\"noopener noreferrer\"> docs </a>\n      .\n    </p>\n    <div class=\"tip-wrapper\">\n      <span class=\"tip\">Tip</span> Adjust the width of the canvas with the\n      <svg width=\"10\" height=\"10\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\">\n        <g fill=\"none\" fillRule=\"evenodd\">\n          <path\n            d=\"M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z\"\n            id=\"a\"\n            fill=\"#999\"\n          />\n        </g>\n      </svg>\n      Viewports addon in the toolbar\n    </div>\n  </section>\n</article>`,\n  styleUrls: ['./page.css'],\n})\nexport class PageComponent {\n  user: User | null = null;\n\n  doLogout() {\n    this.user = null;\n  }\n\n  doLogin() {\n    this.user = { name: 'Jane Doe' };\n  }\n\n  doCreateAccount() {\n    this.user = { name: 'Jane Doe' };\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".storybook-page {\n  margin: 0 auto;\n  padding: 48px 20px;\n  max-width: 600px;\n  color: #333;\n  font-size: 14px;\n  line-height: 24px;\n  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\n.storybook-page h2 {\n  display: inline-block;\n  vertical-align: top;\n  margin: 0 0 4px;\n  font-weight: 700;\n  font-size: 32px;\n  line-height: 1;\n}\n\n.storybook-page p {\n  margin: 1em 0;\n}\n\n.storybook-page a {\n  color: inherit;\n}\n\n.storybook-page ul {\n  margin: 1em 0;\n  padding-left: 30px;\n}\n\n.storybook-page li {\n  margin-bottom: 8px;\n}\n\n.storybook-page .tip {\n  display: inline-block;\n  vertical-align: top;\n  margin-right: 10px;\n  border-radius: 1em;\n  background: #e7fdd8;\n  padding: 4px 12px;\n  color: #357a14;\n  font-weight: 700;\n  font-size: 11px;\n  line-height: 12px;\n}\n\n.storybook-page .tip-wrapper {\n  margin-top: 40px;\n  margin-bottom: 40px;\n  font-size: 13px;\n  line-height: 20px;\n}\n\n.storybook-page .tip-wrapper svg {\n  display: inline-block;\n  vertical-align: top;\n  margin-top: 3px;\n  margin-right: 4px;\n  width: 12px;\n  height: 12px;\n}\n\n.storybook-page .tip-wrapper svg path {\n  fill: #1ea7fd;\n}\n",
+                    "styleUrl": "./page.css"
+                }
+            ],
+            "stylesData": "",
+            "extends": []
+        },
+        {
+            "name": "PersonalDetailsComponent",
+            "id": "component-PersonalDetailsComponent-ddc0b8c707f47716e2f2944092bb3e761c1fc46aa9c33f09318830b0eea0b6723af908820d1adc33ac36c10997b7f33bb6b4d244cd6a05804b8605791afb5441",
+            "file": "src/app/form/cv-form/personal-details/personal-details.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-personal-details",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./personal-details.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "parentForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "required": false
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "parentForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "required": false
+                },
+                {
+                    "name": "personalDetailsForm",
+                    "defaultValue": "new FormGroup({\n    fullName: new FormControl('', [Validators.required]),\n    email: new FormControl('', [Validators.required, Validators.email]),\n    phone: new FormControl('', [Validators.required]),\n    website: new FormControl(''),\n    headline: new FormControl('', [Validators.required]),\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 28,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "IftaLabelModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "InputTextModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, OnInit } from '@angular/core';\nimport { IftaLabelModule } from 'primeng/iftalabel';\nimport {\n  FormControl,\n  FormGroup,\n  ReactiveFormsModule,\n  Validators,\n} from '@angular/forms';\nimport { InputTextModule } from 'primeng/inputtext';\n\n@Component({\n  selector: 'app-personal-details',\n  imports: [IftaLabelModule, ReactiveFormsModule, InputTextModule],\n  templateUrl: './personal-details.component.html',\n  styleUrl: './personal-details.component.scss',\n})\nexport class PersonalDetailsComponent implements OnInit {\n  parentForm = input<FormGroup>();\n\n  personalDetailsForm = new FormGroup({\n    fullName: new FormControl('', [Validators.required]),\n    email: new FormControl('', [Validators.required, Validators.email]),\n    phone: new FormControl('', [Validators.required]),\n    website: new FormControl(''),\n    headline: new FormControl('', [Validators.required]),\n  });\n\n  ngOnInit(): void {\n    this.parentForm()?.addControl(\n      'personalDetailsForm',\n      this.personalDetailsForm\n    );\n  }\n}\n",
+            "styleUrl": "./personal-details.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<fieldset [formGroup]=\"personalDetailsForm\">\n  <div>\n    <p-iftalabel>\n      <label for=\"fullName\">Full Name</label>\n      <input pInputText id=\"fullName\" formControlName=\"fullName\" required />\n    </p-iftalabel>\n  </div>\n  <div>\n    <p-iftalabel>\n      <label for=\"email\">Email</label>\n      <input pInputText id=\"email\" formControlName=\"email\" required />\n    </p-iftalabel>\n  </div>\n  <div>\n    <p-iftalabel>\n      <label for=\"phone\">Phone</label>\n      <input pInputText id=\"phone\" formControlName=\"phone\" required />\n    </p-iftalabel>\n  </div>\n  <div>\n    <p-iftalabel>\n      <label for=\"website\">Website</label>\n      <input pInputText id=\"website\" formControlName=\"website\" />\n    </p-iftalabel>\n  </div>\n  <div>\n    <p-iftalabel>\n      <label for=\"headline\">Headline</label>\n      <input pInputText id=\"headline\" formControlName=\"headline\" />\n    </p-iftalabel>\n  </div>\n</fieldset>\n"
+        },
+        {
+            "name": "RegComponent",
+            "id": "component-RegComponent-830f2a76f8f3cc8c224ca020b60f378935c076ad7de579f1badb1c0224f9ed4ec7177569b574c22d7e5e3de7850f24b86475db31d0d001fcf032b6b55c878ced",
+            "file": "src/app/reg/reg.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-reg",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./reg.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "form",
+                    "defaultValue": "new FormGroup({\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required]),\n    name: new FormControl('', [Validators.required]),\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "register",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 30,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ButtonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "InputTextModule",
+                    "type": "module"
+                },
+                {
+                    "name": "IftaLabelModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport {\n  FormControl,\n  FormGroup,\n  ReactiveFormsModule,\n  Validators,\n} from '@angular/forms';\nimport { ButtonModule } from 'primeng/button';\nimport { IftaLabelModule } from 'primeng/iftalabel';\nimport { InputTextModule } from 'primeng/inputtext';\n\n@Component({\n  selector: 'app-reg',\n  imports: [\n    ReactiveFormsModule,\n    ButtonModule,\n    InputTextModule,\n    IftaLabelModule,\n  ],\n  templateUrl: './reg.component.html',\n  styleUrl: './reg.component.scss',\n})\nexport class RegComponent {\n  form = new FormGroup({\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required]),\n    name: new FormControl('', [Validators.required]),\n  });\n\n  register() {\n    console.log(this.form.value);\n  }\n}\n",
+            "styleUrl": "./reg.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<form [formGroup]=\"form\" (ngSubmit)=\"register()\">\n  <input pInputText formControlName=\"email\" />\n  <input pInputText formControlName=\"password\" />\n  <input pInputText formControlName=\"name\" />\n  <p-button type=\"submit\" label=\"Register\" />\n</form>\n"
+        },
+        {
+            "name": "RichTextComponent",
+            "id": "component-RichTextComponent-0bc8758e1d77a48883a5536978f426cf7183be2e6cc0315103e444c43d0cac70f3055829a366d82f3a0881f05ce021485edfa91562732ffd60edf47f528ffbfc",
+            "file": "src/app/form/rich-text/rich-text.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-rich-text",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./rich-text.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "parentForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "required": true
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "controller",
+                    "defaultValue": "new AbortController()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 33
+                },
+                {
+                    "name": "parentForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "required": true
+                },
+                {
+                    "name": "quill",
+                    "defaultValue": "signal<Quill | null>(null)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 32
+                },
+                {
+                    "name": "summary",
+                    "defaultValue": "new FormControl('', {\n    validators: [Validators.required],\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 34
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnDestroy",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 57,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 38,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, OnInit, signal } from '@angular/core';\nimport { FormControl, FormGroup, Validators } from '@angular/forms';\nimport Quill, { Delta, QuillOptions } from 'quill';\n\nconst quillOptions: QuillOptions = {\n  theme: 'snow',\n  modules: {\n    toolbar: [\n      ['bold', 'italic', 'underline', 'strike'],\n      [{ header: [1, 2, 3, 4, false] }],\n      [{ list: 'ordered' }, { list: 'bullet' }],\n    ],\n  },\n};\n\nfunction convertDeltaToString(delta: Delta) {\n  return JSON.stringify({ delta });\n}\n\nfunction convertStringToDelta(string: string) {\n  return JSON.parse(string);\n}\n\n@Component({\n  selector: 'app-rich-text',\n  imports: [],\n  templateUrl: './rich-text.component.html',\n  styleUrl: './rich-text.component.scss',\n})\nexport class RichTextComponent implements OnInit {\n  parentForm = input.required<FormGroup>();\n  quill = signal<Quill | null>(null);\n  controller = new AbortController();\n  summary = new FormControl('', {\n    validators: [Validators.required],\n  });\n\n  ngOnInit() {\n    this.quill.set(new Quill('#editor', quillOptions));\n    this.parentForm()?.addControl('summary', this.summary);\n    this.quill()?.on(\n      'text-change',\n      () => {\n        // Get data in html format:  console.log('html', this.quill()?.container.innerHTML);\n        const currentDelta = this.quill()?.getContents();\n        if (currentDelta) {\n          this.summary.setValue(convertDeltaToString(currentDelta));\n          console.log('summary', this.summary.value);\n        } else {\n          this.summary.setValue('');\n        }\n      },\n      { signal: this.controller.signal }\n    );\n  }\n\n  ngOnDestroy() {\n    this.controller.abort();\n  }\n}\n",
+            "styleUrl": "./rich-text.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"rich-text-container\">\n  <div class=\"rich-text-container__header\">\n    <h2>Summary</h2>\n  </div>\n  <div id=\"editor\"></div>\n</div>\n"
+        },
+        {
+            "name": "SocialComponent",
+            "id": "component-SocialComponent-d4c815c31666a10abc837a5d977aa4d7d71e1eb532b45f8f1b944aaabf0fa49d39da38b39e5f660cd9f5c22317a4ba8e58562c62ee8133309fb3fe731180f025",
+            "file": "src/app/form/cv-form/social/social.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": "SOCIAL_OPTIONS_PROVIDER"
+                }
+            ],
+            "selector": "app-social",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./social.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "parentForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 35,
+                    "required": false
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "isDialogOpen",
+                    "defaultValue": "signal(false)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 37
+                },
+                {
+                    "name": "parentForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 35,
+                    "required": false
+                },
+                {
+                    "name": "socialForm",
+                    "defaultValue": "new FormGroup({\n    social: new FormArray<FormControl<SocialItem>>([]),\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 39
+                },
+                {
+                    "name": "socialOptions",
+                    "defaultValue": "inject(SOCIAL_OPTIONS_TOKEN)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 36
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "addSocial",
+                    "args": [
+                        {
+                            "name": "url",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "type",
+                            "type": "Social",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 47,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "url",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "type",
+                            "type": "Social",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "closeDialog",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 67,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 43,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "openDialog",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 63,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "removeSocial",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 72,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "ButtonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "InputTextModule",
+                    "type": "module"
+                },
+                {
+                    "name": "IftaLabelModule",
+                    "type": "module"
+                },
+                {
+                    "name": "SelectModule",
+                    "type": "module"
+                },
+                {
+                    "name": "DialogModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, inject, input, OnInit, signal } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\nimport {\n  FormArray,\n  FormControl,\n  FormGroup,\n  ReactiveFormsModule,\n} from '@angular/forms';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { IftaLabelModule } from 'primeng/iftalabel';\nimport { SelectModule } from 'primeng/select';\nimport {\n  Social,\n  SOCIAL_OPTIONS_PROVIDER,\n  SOCIAL_OPTIONS_TOKEN,\n  SocialItem,\n} from '../../../types/social';\nimport { DialogModule } from 'primeng/dialog';\n\n@Component({\n  selector: 'app-social',\n  imports: [\n    ButtonModule,\n    ReactiveFormsModule,\n    InputTextModule,\n    IftaLabelModule,\n    SelectModule,\n    DialogModule,\n  ],\n  templateUrl: './social.component.html',\n  styleUrl: './social.component.scss',\n  providers: [SOCIAL_OPTIONS_PROVIDER],\n})\nexport class SocialComponent implements OnInit {\n  parentForm = input<FormGroup>();\n  socialOptions = inject(SOCIAL_OPTIONS_TOKEN);\n  isDialogOpen = signal(false);\n\n  socialForm = new FormGroup({\n    social: new FormArray<FormControl<SocialItem>>([]),\n  });\n\n  ngOnInit(): void {\n    this.parentForm()?.addControl('socialForm', this.socialForm);\n  }\n\n  addSocial(url: string, type: Social) {\n    if (!url || !type) {\n      return;\n    }\n    this.socialForm.controls.social.push(\n      new FormControl<SocialItem>(\n        {\n          url,\n          type,\n        },\n        { nonNullable: true }\n      )\n    );\n    this.closeDialog();\n  }\n\n  openDialog() {\n    this.isDialogOpen.set(true);\n  }\n\n  closeDialog() {\n    console.log('closeDialog');\n    this.isDialogOpen.set(false);\n  }\n\n  removeSocial(index: number) {\n    this.socialForm.controls.social.removeAt(index);\n  }\n}\n",
+            "styleUrl": "./social.component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<fieldset>\n  <h2>Social Links</h2>\n  <div>\n    <p-select [options]=\"socialOptions\" #type />\n    <p-button variant=\"outlined\" fluid (click)=\"openDialog()\" label=\"Add\" />\n  </div>\n  <section>\n    <ul>\n      @for (social of socialForm.controls.social.controls; track $index) {\n      <li>\n        <p>\n          <span class=\"pi pi-{{ social.value.type }}\"></span>\n          <a\n            [href]=\"social.value.url\"\n            target=\"_blank\"\n            rel=\"noopener noreferrer\"\n            >{{ social.value.url }}</a\n          >\n        </p>\n        <p-button icon=\"pi pi-trash\" (click)=\"removeSocial($index)\" />\n      </li>\n      }\n    </ul>\n  </section>\n</fieldset>\n\n<p-dialog\n  class=\"dialog\"\n  [modal]=\"true\"\n  [visible]=\"isDialogOpen()\"\n  (onHide)=\"closeDialog()\"\n  [closable]=\"false\"\n  header=\"Add Social Link\"\n>\n  <div class=\"dialog-content\">\n    <input pInputText id=\"url\" #url type=\"url\" />\n    <p-button\n      class=\"save-button\"\n      [disabled]=\"!url\"\n      (click)=\"addSocial(url.value, type.value)\"\n      label=\"Save\"\n      fluid=\"true\"\n    />\n    <p-button\n      fluid=\"true\"\n      variant=\"outlined\"\n      (click)=\"closeDialog()\"\n      label=\"Cancel\"\n    />\n  </div>\n</p-dialog>\n"
+        }
+    ],
+    "modules": [],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "appConfig",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.config.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ApplicationConfig",
+                "defaultValue": "{\n  providers: [\n    provideHttpClient(),\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideRouter(\n      routes,\n      withComponentInputBinding(),\n      withRouterConfig({\n        paramsInheritanceStrategy: 'always',\n      })\n    ),\n    provideAnimationsAsync(),\n    providePrimeNG({\n      theme: {\n        preset: Noir,\n      },\n    }),\n  ],\n}"
+            },
+            {
+                "name": "canMatch",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.routes.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "CanMatchFn",
+                "defaultValue": "(route: Route, segments: UrlSegment[]) => {\n  const authService = inject(AuthService);\n  const router = inject(Router);\n  const isLoggedIn = authService.geIstLoggedIn();\n  if (!isLoggedIn) {\n    return new RedirectCommand(router.parseUrl('/'));\n  }\n  return true;\n}"
+            },
+            {
+                "name": "Noir",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/ui/extend.style.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "definePreset(Aura, {\r\n  semantic: {\r\n    primary: {\r\n      50: '{zinc.50}',\r\n      100: '{zinc.100}',\r\n      200: '{zinc.200}',\r\n      300: '{zinc.300}',\r\n      400: '{zinc.400}',\r\n      500: '{zinc.500}',\r\n      600: '{zinc.600}',\r\n      700: '{zinc.700}',\r\n      800: '{zinc.800}',\r\n      900: '{zinc.900}',\r\n      950: '{zinc.950}',\r\n    },\r\n    colorScheme: {\r\n      light: {\r\n        primary: {\r\n          color: '{zinc.950}',\r\n          inverseColor: '#ffffff',\r\n          hoverColor: '{zinc.900}',\r\n          activeColor: '{zinc.800}',\r\n        },\r\n        highlight: {\r\n          background: '{zinc.950}',\r\n          focusBackground: '{zinc.700}',\r\n          color: '#ffffff',\r\n          focusColor: '#ffffff',\r\n        },\r\n      },\r\n      dark: {\r\n        primary: {\r\n          color: '{zinc.50}',\r\n          inverseColor: '{zinc.950}',\r\n          hoverColor: '{zinc.100}',\r\n          activeColor: '{zinc.200}',\r\n        },\r\n        highlight: {\r\n          background: 'rgba(250, 250, 250, .16)',\r\n          focusBackground: 'rgba(250, 250, 250, .24)',\r\n          color: 'rgba(255,255,255,.87)',\r\n          focusColor: 'rgba(255,255,255,.87)',\r\n        },\r\n      },\r\n    },\r\n  },\r\n})"
+            },
+            {
+                "name": "quillOptions",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/form/rich-text/rich-text.component.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "QuillOptions",
+                "defaultValue": "{\n  theme: 'snow',\n  modules: {\n    toolbar: [\n      ['bold', 'italic', 'underline', 'strike'],\n      [{ header: [1, 2, 3, 4, false] }],\n      [{ list: 'ordered' }, { list: 'bullet' }],\n    ],\n  },\n}"
+            },
+            {
+                "name": "resolveCvData",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.routes.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ResolveFn<any>",
+                "defaultValue": "() => {\n  const httpClient = inject(HttpClient);\n  const res = httpClient.get('http://localhost:3000/api/v1/cv/usr1');\n  return res;\n}"
+            },
+            {
+                "name": "SOCIAL_OPTIONS",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/types/social.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "SocialOption[]",
+                "defaultValue": "[\r\n  { label: 'Github', value: 'github' },\r\n  { label: 'LinkedIn', value: 'linkedin' },\r\n]"
+            },
+            {
+                "name": "SOCIAL_OPTIONS_PROVIDER",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/types/social.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\r\n  provide: SOCIAL_OPTIONS_TOKEN,\r\n  useValue: SOCIAL_OPTIONS,\r\n}"
+            },
+            {
+                "name": "SOCIAL_OPTIONS_TOKEN",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/types/social.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "new InjectionToken<SocialOption[]>(\r\n  'SOCIAL_OPTIONS'\r\n)"
+            }
+        ],
+        "functions": [
+            {
+                "name": "convertDeltaToString",
+                "file": "src/app/form/rich-text/rich-text.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "args": [
+                    {
+                        "name": "delta",
+                        "type": "Delta",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "delta",
+                        "type": "Delta",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "convertStringToDelta",
+                "file": "src/app/form/rich-text/rich-text.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "args": [
+                    {
+                        "name": "string",
+                        "type": "string",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "string",
+                        "type": "string",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [
+            {
+                "name": "Social",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"github\" | \"linkedin\"",
+                "file": "src/app/types/social.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 192
+            },
+            {
+                "name": "SocialItem",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "literal type",
+                "file": "src/app/types/social.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 187
+            },
+            {
+                "name": "SocialOption",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "literal type",
+                "file": "src/app/types/social.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 187
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/app.config.ts": [
+                {
+                    "name": "appConfig",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.config.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ApplicationConfig",
+                    "defaultValue": "{\n  providers: [\n    provideHttpClient(),\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideRouter(\n      routes,\n      withComponentInputBinding(),\n      withRouterConfig({\n        paramsInheritanceStrategy: 'always',\n      })\n    ),\n    provideAnimationsAsync(),\n    providePrimeNG({\n      theme: {\n        preset: Noir,\n      },\n    }),\n  ],\n}"
+                }
+            ],
+            "src/app/app.routes.ts": [
+                {
+                    "name": "canMatch",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.routes.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "CanMatchFn",
+                    "defaultValue": "(route: Route, segments: UrlSegment[]) => {\n  const authService = inject(AuthService);\n  const router = inject(Router);\n  const isLoggedIn = authService.geIstLoggedIn();\n  if (!isLoggedIn) {\n    return new RedirectCommand(router.parseUrl('/'));\n  }\n  return true;\n}"
+                },
+                {
+                    "name": "resolveCvData",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.routes.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ResolveFn<any>",
+                    "defaultValue": "() => {\n  const httpClient = inject(HttpClient);\n  const res = httpClient.get('http://localhost:3000/api/v1/cv/usr1');\n  return res;\n}"
+                }
+            ],
+            "src/app/shared/ui/extend.style.ts": [
+                {
+                    "name": "Noir",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/ui/extend.style.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "definePreset(Aura, {\r\n  semantic: {\r\n    primary: {\r\n      50: '{zinc.50}',\r\n      100: '{zinc.100}',\r\n      200: '{zinc.200}',\r\n      300: '{zinc.300}',\r\n      400: '{zinc.400}',\r\n      500: '{zinc.500}',\r\n      600: '{zinc.600}',\r\n      700: '{zinc.700}',\r\n      800: '{zinc.800}',\r\n      900: '{zinc.900}',\r\n      950: '{zinc.950}',\r\n    },\r\n    colorScheme: {\r\n      light: {\r\n        primary: {\r\n          color: '{zinc.950}',\r\n          inverseColor: '#ffffff',\r\n          hoverColor: '{zinc.900}',\r\n          activeColor: '{zinc.800}',\r\n        },\r\n        highlight: {\r\n          background: '{zinc.950}',\r\n          focusBackground: '{zinc.700}',\r\n          color: '#ffffff',\r\n          focusColor: '#ffffff',\r\n        },\r\n      },\r\n      dark: {\r\n        primary: {\r\n          color: '{zinc.50}',\r\n          inverseColor: '{zinc.950}',\r\n          hoverColor: '{zinc.100}',\r\n          activeColor: '{zinc.200}',\r\n        },\r\n        highlight: {\r\n          background: 'rgba(250, 250, 250, .16)',\r\n          focusBackground: 'rgba(250, 250, 250, .24)',\r\n          color: 'rgba(255,255,255,.87)',\r\n          focusColor: 'rgba(255,255,255,.87)',\r\n        },\r\n      },\r\n    },\r\n  },\r\n})"
+                }
+            ],
+            "src/app/form/rich-text/rich-text.component.ts": [
+                {
+                    "name": "quillOptions",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/form/rich-text/rich-text.component.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "QuillOptions",
+                    "defaultValue": "{\n  theme: 'snow',\n  modules: {\n    toolbar: [\n      ['bold', 'italic', 'underline', 'strike'],\n      [{ header: [1, 2, 3, 4, false] }],\n      [{ list: 'ordered' }, { list: 'bullet' }],\n    ],\n  },\n}"
+                }
+            ],
+            "src/app/types/social.ts": [
+                {
+                    "name": "SOCIAL_OPTIONS",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/types/social.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "SocialOption[]",
+                    "defaultValue": "[\r\n  { label: 'Github', value: 'github' },\r\n  { label: 'LinkedIn', value: 'linkedin' },\r\n]"
+                },
+                {
+                    "name": "SOCIAL_OPTIONS_PROVIDER",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/types/social.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\r\n  provide: SOCIAL_OPTIONS_TOKEN,\r\n  useValue: SOCIAL_OPTIONS,\r\n}"
+                },
+                {
+                    "name": "SOCIAL_OPTIONS_TOKEN",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/types/social.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "new InjectionToken<SocialOption[]>(\r\n  'SOCIAL_OPTIONS'\r\n)"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/app/form/rich-text/rich-text.component.ts": [
+                {
+                    "name": "convertDeltaToString",
+                    "file": "src/app/form/rich-text/rich-text.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "delta",
+                            "type": "Delta",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "delta",
+                            "type": "Delta",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "convertStringToDelta",
+                    "file": "src/app/form/rich-text/rich-text.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "string",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "string",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "src/app/types/social.ts": [
+                {
+                    "name": "Social",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"github\" | \"linkedin\"",
+                    "file": "src/app/types/social.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 192
+                },
+                {
+                    "name": "SocialItem",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "literal type",
+                    "file": "src/app/types/social.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 187
+                },
+                {
+                    "name": "SocialOption",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "literal type",
+                    "file": "src/app/types/social.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 187
+                }
+            ]
+        }
+    },
+    "routes": [],
+    "coverage": {
+        "count": 3,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.config.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "appConfig",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.routes.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "canMatch",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.routes.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "resolveCvData",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/cv-form/cv-form.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "CvFormComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/cv-form/personal-details/personal-details.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PersonalDetailsComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/cv-form/social/social.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "SocialComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/11",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/rich-text/rich-text.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "RichTextComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/rich-text/rich-text.component.ts",
+                "type": "function",
+                "linktype": "miscellaneous",
+                "linksubtype": "function",
+                "name": "convertDeltaToString",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/rich-text/rich-text.component.ts",
+                "type": "function",
+                "linktype": "miscellaneous",
+                "linksubtype": "function",
+                "name": "convertStringToDelta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/form/rich-text/rich-text.component.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "quillOptions",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/auth.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "AuthService",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/login.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoginComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/reg/reg.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "RegComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/ui/extend.style.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Noir",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/types/social.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SOCIAL_OPTIONS",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/types/social.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SOCIAL_OPTIONS_PROVIDER",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/types/social.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SOCIAL_OPTIONS_TOKEN",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/types/social.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Social",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/types/social.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "SocialItem",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/types/social.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "SocialOption",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/button.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ButtonComponent",
+                "coveragePercent": 83,
+                "coverageCount": "5/6",
+                "status": "very-good"
+            },
+            {
+                "filePath": "src/stories/header.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HeaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/page.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PageComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/user.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "User",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            }
+        ]
+    }
+}

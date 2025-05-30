@@ -4,16 +4,22 @@ export type Social = 'github' | 'linkedin';
 export type SocialOption = {
   label: string;
   value: Social;
+  src: string;
 };
 
 export type SocialItem = {
   url: string;
   type: Social;
+  src: string;
 };
 
 export const SOCIAL_OPTIONS: SocialOption[] = [
-  { label: 'Github', value: 'github' },
-  { label: 'LinkedIn', value: 'linkedin' },
+  { label: 'Github', value: 'github', src: 'assets/images/github-fill.png' },
+  {
+    label: 'LinkedIn',
+    value: 'linkedin',
+    src: 'assets/images/linkedin-box-fill.png',
+  },
 ];
 
 export const SOCIAL_OPTIONS_TOKEN = new InjectionToken<SocialOption[]>(

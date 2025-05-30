@@ -1,10 +1,17 @@
-<div>
+<div #cvForm class="cv-form">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <app-personal-details [parentForm]="form" />
+    <div class="divider"></div>
     <app-social [parentForm]="form" />
+    <div class="divider"></div>
+    <app-experience [parentForm]="form" />
+    <div class="divider"></div>
+    <app-expertise [parentForm]="form" />
+    <div class="divider"></div>
     <div>
       <app-rich-text [parentForm]="form" />
+      <div class="divider"></div>
     </div>
-    <p-button size="small" type="submit" label="Submit" />
+    <p-button [raised]="true" (click)="downloadPdf()" label="Download PDF" />
   </form>
 </div>

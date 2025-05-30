@@ -1,0 +1,107 @@
+h2 {
+  padding-bottom: 1rem;
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.experience-item {
+  padding: 1rem;
+  border: 1px solid var(--p-slate-200);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: grid;
+  gap: 1rem;
+
+  .experience-header {
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .company {
+      font-size: 0.875rem;
+      color: var(--p-slate-700);
+      margin: 0.25rem 0;
+    }
+
+    .period {
+      font-size: 0.75rem;
+      color: var(--p-slate-500);
+      margin: 0;
+
+      .location {
+        margin-left: 0.5rem;
+        &:before {
+          content: "•";
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .description-list {
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 1.25rem;
+
+    li {
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+      color: var(--p-slate-700);
+    }
+  }
+}
+
+.dialog-content {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  min-width: 500px;
+
+  .form-row {
+    display: grid;
+    gap: 0.5rem;
+
+    &.dates {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--p-slate-700);
+    }
+  }
+
+  .description-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: start;
+  }
+
+  .button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+
+:host ::ng-deep {
+  .p-calendar {
+    width: 100%;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  .p-inputtext {
+    width: 100%;
+  }
+}

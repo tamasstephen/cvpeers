@@ -1,19 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNG } from 'primeng/config';
+import { SidepanelComponent } from './sidepanel/sidepanel.component';
+import { SidepanelProviderService } from './services/sidepanel-provider/sidepanel-provider.service';
+import { HeaderComponent } from './shared/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, SidepanelComponent, HeaderComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  title = 'angular-starter';
+export class AppComponent implements AfterViewInit {
+  @ViewChild(SidepanelComponent) sidepanel!: SidepanelComponent;
 
-  constructor(private primeng: PrimeNG) {}
+  constructor(
+    private primeng: PrimeNG,
+    private sidepanelProvider: SidepanelProviderService
+  ) {}
 
   ngOnInit(): void {
     this.primeng.ripple.set(true);
+  }
+
+  ngAfterViewInit() {
+    this.sidepanelProvider.setSidepanelComponent(this.sidepanel);
   }
 }

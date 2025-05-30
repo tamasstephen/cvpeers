@@ -1,6 +1,28 @@
+.cv-form {
+  display: grid;
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
 form {
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
+
+  .divider {
+    height: 1px;
+    background-color: #e0e0e0;
+  }
+
+  p-button {
+    width: 100%;
+
+    // Override the button width
+    ::ng-deep button {
+      width: 100%;
+    }
+  }
 }
 
 .summary-container {
@@ -11,4 +33,9 @@ form {
   textarea {
     width: 100%;
   }
+}
+
+// Hide print-only content
+.print-only {
+  display: none;
 }
