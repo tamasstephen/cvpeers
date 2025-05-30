@@ -156,6 +156,33 @@
         </div>
       </section>
 
+      <section class="languages-section">
+        <h3
+          style="font-family: GeistMono-SemiBold, monospace; font-weight: bold"
+        >
+          LANGUAGES —
+        </h3>
+        <div class="languages-grid">
+          <div
+            *ngFor="let language of languages"
+            style="font-family: 'Geist', sans-serif"
+          >
+            <span
+              class="language-name"
+              style="font-family: 'Geist', sans-serif"
+            >
+              {{ language.name }}
+            </span>
+            <span
+              class="language-level"
+              style="font-family: 'Geist', sans-serif"
+            >
+              {{ language.level }}
+            </span>
+          </div>
+        </div>
+      </section>
+
       <!-- Soft Skills Section -->
       <section class="soft-skills-section">
         <h3

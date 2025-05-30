@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
 import { CvComponent } from '../../cv/cv.component';
 import { EducationComponent } from './education/education.component';
+import { LanguageComponent } from './language/language.component';
 
 @Component({
   selector: 'app-cv-form',
@@ -36,6 +37,7 @@ import { EducationComponent } from './education/education.component';
     TextareaModule,
     RichTextComponent,
     EducationComponent,
+    LanguageComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',

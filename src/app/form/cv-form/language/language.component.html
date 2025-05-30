@@ -1,0 +1,76 @@
+<fieldset>
+  <h2>Languages</h2>
+  <div>
+    <p-button
+      severity="secondary"
+      variant="outlined"
+      fluid
+      (click)="openDialog()"
+      label="Add Language"
+    />
+  </div>
+  <section>
+    <ul>
+      @for (language of languageControls; track $index) {
+      <li class="language-item">
+        <div class="language-details">
+          <h3>{{ language.value.name }}</h3>
+          <p>{{ language.value.level }}</p>
+        </div>
+        <p-button
+          icon="pi pi-trash"
+          severity="danger"
+          variant="outlined"
+          (click)="removeLanguage($index)"
+        />
+      </li>
+      }
+    </ul>
+  </section>
+</fieldset>
+
+<p-dialog
+  class="dialog"
+  [modal]="true"
+  [visible]="isDialogOpen"
+  (onHide)="closeDialog()"
+  [closable]="false"
+  header="Add Language"
+>
+  <div class="dialog-content" [formGroup]="languageItemForm">
+    <div class="form-row">
+      <p-iftalabel>
+        <label for="name">Language</label>
+        <input pInputText id="name" formControlName="name" required />
+      </p-iftalabel>
+    </div>
+    <div class="form-row">
+      <p-iftalabel>
+        <label for="level">Proficiency Level</label>
+        <p-selectButton
+          id="level"
+          [options]="proficiencyLevels"
+          formControlName="level"
+          optionLabel="label"
+          optionValue="value"
+          required
+        />
+      </p-iftalabel>
+    </div>
+    <div class="button-row">
+      <p-button
+        class="save-button"
+        [disabled]="!languageItemForm.valid"
+        (click)="addLanguage()"
+        label="Save"
+        fluid="true"
+      />
+      <p-button
+        fluid="true"
+        variant="outlined"
+        (click)="closeDialog()"
+        label="Cancel"
+      />
+    </div>
+  </div>
+</p-dialog>
