@@ -8,46 +8,12 @@ import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.ser
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { SocialItem } from '../types/social';
-
-interface PersonalDetails {
-  fullName: string;
-  email?: string;
-  phone?: string;
-  website?: string;
-  headline: string;
-  linkedin?: string;
-}
-
-interface SocialLink {
-  type: string;
-  url: string;
-}
-
-interface Experience {
-  title: string;
-  company: string;
-  location: string;
-  startDate: string;
-  endDate?: string;
-  description: string[];
-}
-
-interface Education {
-  degree: string;
-  institution: string;
-  location: string;
-  graduationDate: string;
-}
-
-interface Skill {
-  name: string;
-  level: number; // 0-100
-}
-
-interface Language {
-  name: string;
-  level: string;
-}
+import {
+  Education,
+  Experience,
+  Language,
+  PersonalDetails,
+} from '../shared/interface/cv.interface';
 
 @Component({
   selector: 'app-cv',
