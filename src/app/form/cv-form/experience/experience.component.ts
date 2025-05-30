@@ -20,15 +20,6 @@ import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 
-interface Experience {
-  title: string;
-  company: string;
-  location: string;
-  startDate: string;
-  endDate?: string;
-  description: string[];
-}
-
 @Component({
   selector: 'app-experience',
   standalone: true,
@@ -44,9 +35,8 @@ interface Experience {
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss',
 })
-export class ExperienceComponent implements OnInit, OnChanges {
+export class ExperienceComponent implements OnInit {
   parentForm = input<FormGroup>();
-  initialValues = input<any>(null);
   isDialogOpen = signal(false);
   yearRange = `${new Date().getFullYear() - 50}:${new Date().getFullYear()}`;
 
@@ -68,40 +58,6 @@ export class ExperienceComponent implements OnInit, OnChanges {
       'experienceForm',
       this.experienceForm.get('experience')
     );
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['initialValues'] && changes['initialValues'].currentValue) {
-      this.applyInitialValues(changes['initialValues'].currentValue);
-    }
-  }
-
-  private applyInitialValues(initialData: any) {
-    if (initialData.experience) {
-      const experienceArray = this.experienceForm.get(
-        'experience'
-      ) as FormArray;
-      // Clear existing controls
-      while (experienceArray.length) {
-        experienceArray.removeAt(0);
-      }
-      // Add new controls with initial values
-      initialData.experience.forEach((item: Experience) => {
-        const itemGroup = new FormGroup({
-          title: new FormControl(item.title, { nonNullable: true }),
-          company: new FormControl(item.company, { nonNullable: true }),
-          location: new FormControl(item.location, { nonNullable: true }),
-          startDate: new FormControl(item.startDate, { nonNullable: true }),
-          endDate: new FormControl(item.endDate || ''),
-          description: new FormArray(
-            item.description.map(
-              (desc) => new FormControl(desc, { nonNullable: true })
-            )
-          ),
-        });
-        experienceArray.push(itemGroup);
-      });
-    }
   }
 
   openDialog() {
