@@ -1,6 +1,6 @@
 # CV Generator
 
-A modern web application for creating and managing professional CVs/resumes built with Angular. This tool helps users create, edit, and export professional-looking CVs with ease.
+A lightweight web application for creating CVs/resumes built with Angular. This tool helps users create, edit, and export professional-looking CVs with ease.
 
 ## Features
 
@@ -8,7 +8,6 @@ A modern web application for creating and managing professional CVs/resumes buil
 - Professional templates
 - Real-time preview
 - Export to PDF
-- Responsive design
 - Easy-to-use form interface
 
 ## Prerequisites
