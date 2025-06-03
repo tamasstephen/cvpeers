@@ -1,35 +1,7 @@
-<h2>Expertise</h2>
-<fieldset>
-  <div class="add-expertise">
-    <p-iftalabel>
-      <label>Add your expertise</label>
-      <div class="input-row">
-        <input
-          pInputText
-          [(ngModel)]="newExpertise"
-          placeholder="Type your expertise"
-          (keyup.enter)="addExpertise()"
-        />
-        <p-button
-          icon="pi pi-plus"
-          (click)="addExpertise()"
-          [disabled]="!newExpertise.trim()"
-        ></p-button>
-      </div>
-    </p-iftalabel>
-  </div>
-  <div class="expertise-list">
-    <ul>
-      @for (expertise of expertiseControls; track $index) {
-      <li>
-        <span>{{ expertise.value }}</span>
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          (click)="removeExpertise($index)"
-        ></p-button>
-      </li>
-      }
-    </ul>
-  </div>
-</fieldset>
+<app-tag-list
+  [parentForm]="parentForm()"
+  title="Skills"
+  formControlName="expertise"
+  placeholder="Type your expertise"
+  addButtonLabel="Add your expertise"
+></app-tag-list>

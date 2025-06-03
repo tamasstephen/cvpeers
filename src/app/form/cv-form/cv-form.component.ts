@@ -13,6 +13,7 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { SocialComponent } from './social/social.component';
 import { ExperienceComponent } from './experience/experience.component';
 import { ExpertiseComponent } from './expertise/expertise.component';
+import { StrengthsComponent } from './strengths/strengths.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
@@ -34,6 +35,7 @@ import { LanguageComponent } from './language/language.component';
     SocialComponent,
     ExperienceComponent,
     ExpertiseComponent,
+    StrengthsComponent,
     TextareaModule,
     RichTextComponent,
     EducationComponent,

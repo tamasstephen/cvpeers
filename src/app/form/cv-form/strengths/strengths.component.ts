@@ -3,12 +3,12 @@ import { FormGroup } from '@angular/forms';
 import { TagListComponent } from '../../../shared/components/tag-list/tag-list.component';
 
 @Component({
-  selector: 'app-expertise',
+  selector: 'app-strengths',
   standalone: true,
   imports: [TagListComponent],
-  templateUrl: './expertise.component.html',
-  styleUrl: './expertise.component.scss',
+  templateUrl: './strengths.component.html',
+  styleUrl: './strengths.component.scss',
 })
-export class ExpertiseComponent {
+export class StrengthsComponent {
   parentForm = input<FormGroup>();
 }
