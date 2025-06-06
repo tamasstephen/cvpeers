@@ -13,12 +13,15 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { SocialComponent } from './social/social.component';
 import { ExperienceComponent } from './experience/experience.component';
 import { ExpertiseComponent } from './expertise/expertise.component';
+import { StrengthsComponent } from './strengths/strengths.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RichTextComponent } from '../rich-text/rich-text.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { DatePipe } from '@angular/common';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
 import { CvComponent } from '../../cv/cv.component';
+import { EducationComponent } from './education/education.component';
+import { LanguageComponent } from './language/language.component';
 
 @Component({
   selector: 'app-cv-form',
@@ -32,8 +35,11 @@ import { CvComponent } from '../../cv/cv.component';
     SocialComponent,
     ExperienceComponent,
     ExpertiseComponent,
+    StrengthsComponent,
     TextareaModule,
     RichTextComponent,
+    EducationComponent,
+    LanguageComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',

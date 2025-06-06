@@ -61,9 +61,9 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   expertise: string[] = [];
 
   /**
-   * The soft skills of the CV
+   * The strengths of the CV
    */
-  softSkills: string[] = [];
+  strengths: string[] = [];
 
   /**
    * The languages of the CV
@@ -95,6 +95,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
       this.cvForm.valueChanges
         .pipe(debounceTime(300), distinctUntilChanged())
         .subscribe((value) => {
+          console.log('formvalue changed', value);
           this.personalDetails = value?.personalDetailsForm;
           this.socialLinks = value?.socialForm?.social;
           if (value?.summary !== this.summary) {
@@ -108,7 +109,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           this.experience = value?.experienceForm;
           this.education = value?.educationForm;
           this.expertise = value?.expertiseForm;
-          this.softSkills = value?.softSkillsForm;
+          this.strengths = value?.strengthsForm;
           this.languages = value?.languagesForm;
         })
     );

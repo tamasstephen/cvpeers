@@ -1,0 +1,31 @@
+<h2>{{ title() }}</h2>
+<fieldset>
+  <div class="add-item">
+    <p-iftalabel>
+      <label>{{ addButtonLabel() }}</label>
+      <div class="input-row">
+        <input
+          pInputText
+          [(ngModel)]="newItem"
+          [placeholder]="placeholder()"
+          (keyup.enter)="addItem()"
+        />
+        <p-button
+          icon="pi pi-plus"
+          (click)="addItem()"
+          [disabled]="!newItem.trim()"
+        ></p-button>
+      </div>
+    </p-iftalabel>
+  </div>
+  <div class="item-chips">
+    @for (item of itemControls; track $index) {
+    <p-chip
+      [label]="item.value"
+      [removable]="true"
+      (onRemove)="removeItem($index)"
+    >
+    </p-chip>
+    }
+  </div>
+</fieldset>

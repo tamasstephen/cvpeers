@@ -1,0 +1,77 @@
+h2 {
+  padding-bottom: 1rem;
+}
+
+fieldset {
+  display: grid;
+  gap: 1rem;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+
+    .language-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+
+      .language-details {
+        h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          color: var(--primary-color);
+        }
+
+        p {
+          margin: 0.25rem 0;
+          color: var(--text-color-secondary);
+        }
+      }
+    }
+  }
+}
+
+.dialog {
+  .dialog-content {
+    display: grid;
+    gap: 1rem;
+    min-width: 400px;
+    padding: 1rem 0;
+
+    .form-row {
+      display: grid;
+      gap: 0.5rem;
+
+      ::ng-deep {
+        p-iftalabel {
+          width: 100%;
+        }
+
+        p-selectbutton {
+          .p-selectbutton {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .button-row {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+  }
+}
