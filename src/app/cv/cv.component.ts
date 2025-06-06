@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
+import '../assets/fonts/Geist-SemiBold-normal.js';
 import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -95,7 +96,6 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
       this.cvForm.valueChanges
         .pipe(debounceTime(300), distinctUntilChanged())
         .subscribe((value) => {
-          console.log('formvalue changed', value);
           this.personalDetails = value?.personalDetailsForm;
           this.socialLinks = value?.socialForm?.social;
           if (value?.summary !== this.summary) {

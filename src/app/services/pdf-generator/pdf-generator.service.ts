@@ -3,6 +3,7 @@ import { jsPDF } from 'jspdf';
 import '../../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../../assets/fonts/GeistMono-SemiBold-bold.js';
 import '../../assets/fonts/Geist-SemiBold-normal.js';
+import '../../assets/fonts/Geist-Variable_pdf-normal.js';
 
 @Injectable({
   providedIn: 'root',
