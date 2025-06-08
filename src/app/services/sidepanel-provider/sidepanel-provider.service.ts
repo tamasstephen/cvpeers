@@ -1,6 +1,6 @@
 import { Injectable, Type, OnDestroy, inject } from '@angular/core';
 import { SidepanelComponent } from '../../sidepanel/sidepanel.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ComponentBaseComponent } from '../../shared/core/component-base/component-base.component';
 
 export interface SidepanelConfig<T = any> {

@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { jsPDF } from 'jspdf';
+import '../../assets/fonts/Geist-SemiBold-normal.js';
 import '../../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../../assets/fonts/GeistMono-SemiBold-bold.js';
-import '../../assets/fonts/Geist-SemiBold-normal.js';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PdfGeneratorService {
-  constructor() {}
-
   /**
    * The jsPDF instance used to generate the PDF
    */
@@ -20,7 +18,7 @@ export class PdfGeneratorService {
    * @param htmlString The HTML string to process
    * @returns Processed HTML string with Geist font added to all tags
    */
-  addGeistFontToHtml(htmlString: string): string {
+  public addGeistFontToHtml(htmlString: string): string {
     // If the string is empty or not HTML, return as is
     if (!htmlString || !htmlString.includes('<')) {
       return htmlString;
@@ -31,9 +29,9 @@ export class PdfGeneratorService {
     tempDiv.innerHTML = htmlString;
 
     // Recursive function to process all elements
-    const processElement = (element: Element) => {
+    const processElement = (element: Element): void => {
       // Add font-family to current element
-      const currentStyle = element.getAttribute('style') || '';
+      const currentStyle = element.getAttribute('style') ?? '';
       if (!currentStyle.includes('font-family')) {
         element.setAttribute(
           'style',
@@ -42,13 +40,13 @@ export class PdfGeneratorService {
       }
 
       // Process all child elements
-      Array.from(element.children).forEach((child) => {
-        processElement(child as Element);
+      Array.from(element.children).forEach((child): void => {
+        processElement(child);
       });
     };
 
     // Process all root elements
-    Array.from(tempDiv.children).forEach((element) => {
+    Array.from(tempDiv.children).forEach((element): void => {
       processElement(element);
     });
 
@@ -59,14 +57,14 @@ export class PdfGeneratorService {
    * Creates a PDF from an HTML string
    * @param html The HTML element to create a PDF from
    */
-  createPdfFromHtml(html: HTMLElement) {
+  public async createPdfFromHtml(html: Element): Promise<void> {
     this.#pdfGenerator.setFillColor(255, 253, 248);
     this.#pdfGenerator.setFont('Geist');
     this.#pdfGenerator.setFont('GeistMono-SemiBold');
     this.#pdfGenerator.setCharSpace(0);
 
-    this.#pdfGenerator.html(html, {
-      callback: function (doc) {
+    await this.#pdfGenerator.html(html as HTMLElement, {
+      callback: (doc: jsPDF): void => {
         doc.output('dataurlnewwindow');
       },
       margin: [10, 10, 10, 10],

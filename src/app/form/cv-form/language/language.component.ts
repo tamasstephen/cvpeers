@@ -1,17 +1,13 @@
-import { Component, input, OnInit } from '@angular/core';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
+import { CommonModule } from '@angular/common';
+import { Component, input, OnInit, signal } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { CommonModule } from '@angular/common';
+import { CvForm } from '../../../types/cv-form';
+import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../types/language-form';
 
 @Component({
   selector: 'app-language',
@@ -29,46 +25,47 @@ import { CommonModule } from '@angular/common';
   styleUrl: './language.component.scss',
 })
 export class LanguageComponent implements OnInit {
-  parentForm = input<FormGroup>();
-  isDialogOpen = false;
+  public parentForm = input<CvForm>();
 
-  languageForm = new FormGroup({
-    languages: new FormArray<FormGroup>([]),
+  protected isDialogOpen = signal(false);
+
+  protected languageForm: LanguageForm = new FormGroup({
+    languages: new FormArray<LanguageItemForm>([]),
   });
 
-  languageItemForm = new FormGroup({
+  protected languageItemForm: LanguageItemForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     level: new FormControl('', [Validators.required]),
   });
 
-  proficiencyLevels = [
+  protected proficiencyLevels = [
     { label: 'Basic', value: 'Basic' },
     { label: 'Intermediate', value: 'Intermediate' },
     { label: 'Advanced', value: 'Advanced' },
     { label: 'Native', value: 'Native' },
   ];
 
-  get languageControls() {
-    return (this.languageForm.get('languages') as FormArray).controls;
+  protected get languageControls(): LanguageItemForm[] {
+    return (this.languageForm.get('languages') as FormArray<LanguageItemForm>).controls;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.parentForm()?.addControl(
       'languagesForm',
-      this.languageForm.get('languages')
+      this.languageForm.get('languages') as LanguageFormArray
     );
   }
 
-  openDialog() {
-    this.isDialogOpen = true;
+  protected openDialog(): void {
+    this.isDialogOpen.set(true);
     this.languageItemForm.reset();
   }
 
-  closeDialog() {
-    this.isDialogOpen = false;
+  protected closeDialog(): void {
+    this.isDialogOpen.set(false);
   }
 
-  addLanguage() {
+  protected addLanguage(): void {
     if (this.languageItemForm.valid) {
       const languageArray = this.languageForm.get('languages') as FormArray;
       const newLanguage = new FormGroup({
@@ -80,7 +77,7 @@ export class LanguageComponent implements OnInit {
     }
   }
 
-  removeLanguage(index: number) {
+  protected removeLanguage(index: number): void {
     const languageArray = this.languageForm.get('languages') as FormArray;
     languageArray.removeAt(index);
   }

@@ -1,29 +1,18 @@
-import {
-  Component,
-  inject,
-  input,
-  OnInit,
-  signal,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, input, OnInit, signal, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { CvForm } from '../../../types/cv-form';
 import {
   Social,
   SOCIAL_OPTIONS_PROVIDER,
   SOCIAL_OPTIONS_TOKEN,
+  SocialForm,
   SocialItem,
 } from '../../../types/social';
-import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-social',
@@ -41,33 +30,33 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class SocialComponent implements OnInit {
   /**
-   * The parent form
-   */
-  parentForm = input<FormGroup>();
-
-  /**
-   * The injected social options
-   */
-  socialOptions = inject(SOCIAL_OPTIONS_TOKEN);
-
-  /**
-   * The dialog open state
-   */
-  isDialogOpen = signal(false);
-
-  /**
    * The url input element
    */
   @ViewChild('url') protected urlInput!: ElementRef<HTMLInputElement>;
 
   /**
+   * The parent form
+   */
+  public parentForm = input<CvForm>();
+
+  /**
+   * The injected social options
+   */
+  protected socialOptions = inject(SOCIAL_OPTIONS_TOKEN);
+
+  /**
+   * The dialog open state
+   */
+  protected isDialogOpen = signal(false);
+
+  /**
    * The social form array
    */
-  socialForm = new FormGroup({
+  protected socialForm: SocialForm = new FormGroup({
     social: new FormArray<FormControl<SocialItem>>([]),
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.parentForm()?.addControl('socialForm', this.socialForm);
   }
 
@@ -77,10 +66,7 @@ export class SocialComponent implements OnInit {
    * @param type The type of the social link
    * @param src The source of the social link
    */
-  addSocial(url: string, type: Social, src: string) {
-    if (!url || !type || !src) {
-      return;
-    }
+  protected addSocial(url: string, type: Social, src: string): void {
     this.socialForm.controls.social.push(
       new FormControl<SocialItem>(
         {
@@ -98,15 +84,14 @@ export class SocialComponent implements OnInit {
   /**
    * Open the dialog to add a social item
    */
-  openDialog() {
+  protected openDialog(): void {
     this.isDialogOpen.set(true);
   }
 
   /**
    * Close the dialog
    */
-  closeDialog() {
-    console.log('closeDialog');
+  protected closeDialog(): void {
     this.isDialogOpen.set(false);
   }
 
@@ -114,17 +99,15 @@ export class SocialComponent implements OnInit {
    * @param current type of the selected social item.
    * @returns the url string of the social image
    */
-  getSocialOptionSrc(type: Social): string {
-    return (
-      this.socialOptions.find((option) => option.value === type)?.src ?? ''
-    );
+  protected getSocialOptionSrc(type: Social): string {
+    return this.socialOptions.find((option): boolean => option.value === type)?.src ?? '';
   }
 
   /**
    * Remove a social link
    * @param index The index of the social link to remove
    */
-  removeSocial(index: number) {
+  protected removeSocial(index: number): void {
     this.socialForm.controls.social.removeAt(index);
   }
 }

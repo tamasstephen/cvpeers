@@ -1,17 +1,17 @@
-import { Component, input, OnInit } from '@angular/core';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { CalendarModule } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
+import { Component, input, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { DialogModule } from 'primeng/dialog';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { CvForm } from '../../../types/cv-form';
+import {
+  EducationForm,
+  EducationFormArray,
+  EducationItemForm,
+} from '../../../types/education-form';
 
 @Component({
   selector: 'app-education',
@@ -29,61 +29,56 @@ import { DatePipe } from '@angular/common';
   styleUrl: './education.component.scss',
 })
 export class EducationComponent implements OnInit {
-  parentForm = input<FormGroup>();
-  isDialogOpen = false;
+  public parentForm = input<CvForm>();
+  protected isDialogOpen = false;
 
-  educationForm = new FormGroup({
-    education: new FormArray<FormGroup>([]),
+  protected educationForm: EducationForm = new FormGroup({
+    education: new FormArray<FormGroup<EducationItemForm>>([]),
   });
 
-  educationItemForm = new FormGroup({
+  protected educationItemForm = new FormGroup<EducationItemForm>({
     degree: new FormControl('', [Validators.required]),
     institution: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
     graduationDate: new FormControl('', [Validators.required]),
   });
 
-  get educationControls() {
-    return (this.educationForm.get('education') as FormArray).controls;
+  protected get educationControls(): FormGroup<EducationItemForm>[] {
+    return (this.educationForm.get('education') as FormArray<FormGroup<EducationItemForm>>)
+      .controls;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.parentForm()?.addControl(
       'educationForm',
-      this.educationForm.get('education')
+      this.educationForm.get('education') as EducationFormArray
     );
   }
 
-  openDialog() {
+  protected openDialog(): void {
     this.isDialogOpen = true;
     this.educationItemForm.reset();
   }
 
-  closeDialog() {
+  protected closeDialog(): void {
     this.isDialogOpen = false;
   }
 
-  addEducation() {
+  protected addEducation(): void {
     if (this.educationItemForm.valid) {
       const educationArray = this.educationForm.get('education') as FormArray;
       const newEducation = new FormGroup({
         degree: new FormControl(this.educationItemForm.get('degree')?.value),
-        institution: new FormControl(
-          this.educationItemForm.get('institution')?.value
-        ),
-        location: new FormControl(
-          this.educationItemForm.get('location')?.value
-        ),
-        graduationDate: new FormControl(
-          this.educationItemForm.get('graduationDate')?.value
-        ),
+        institution: new FormControl(this.educationItemForm.get('institution')?.value),
+        location: new FormControl(this.educationItemForm.get('location')?.value),
+        graduationDate: new FormControl(this.educationItemForm.get('graduationDate')?.value),
       });
       educationArray.push(newEducation);
       this.closeDialog();
     }
   }
 
-  removeEducation(index: number) {
+  protected removeEducation(index: number): void {
     const educationArray = this.educationForm.get('education') as FormArray;
     educationArray.removeAt(index);
   }

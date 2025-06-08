@@ -1,19 +1,9 @@
-import {
-  Component,
-  input,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IftaLabelModule } from 'primeng/iftalabel';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { hasChangedFromInitial } from '../../validators/initial-value.validator';
+import { CvForm } from '../../../types/cv-form';
+import { PersonalDetailsForm } from '../../../types/personal-details-form';
 
 @Component({
   selector: 'app-personal-details',
@@ -22,10 +12,9 @@ import { hasChangedFromInitial } from '../../validators/initial-value.validator'
   styleUrl: './personal-details.component.scss',
 })
 export class PersonalDetailsComponent implements OnInit {
-  parentForm = input<FormGroup>();
-  initialValues = input<any>(null);
+  public parentForm = input<CvForm>();
 
-  personalDetailsForm = new FormGroup({
+  public personalDetailsForm: PersonalDetailsForm = new FormGroup({
     fullName: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', [Validators.required]),
@@ -33,10 +22,7 @@ export class PersonalDetailsComponent implements OnInit {
     headline: new FormControl('', [Validators.required]),
   });
 
-  ngOnInit(): void {
-    this.parentForm()?.addControl(
-      'personalDetailsForm',
-      this.personalDetailsForm
-    );
+  public ngOnInit(): void {
+    this.parentForm()?.addControl('personalDetailsForm', this.personalDetailsForm);
   }
 }

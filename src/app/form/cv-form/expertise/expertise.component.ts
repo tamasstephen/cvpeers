@@ -10,5 +10,5 @@ import { TagListComponent } from '../../../shared/components/tag-list/tag-list.c
   styleUrl: './expertise.component.scss',
 })
 export class ExpertiseComponent {
-  parentForm = input<FormGroup>();
+  public parentForm = input<FormGroup>();
 }

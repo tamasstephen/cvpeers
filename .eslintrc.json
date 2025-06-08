@@ -1,0 +1,167 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "error",
+          {
+            "accessibility": "explicit",
+            "overrides": {
+              "accessors": "explicit",
+              "constructors": "off",
+              "methods": "explicit",
+              "properties": "explicit",
+              "parameterProperties": "explicit"
+            }
+          }
+        ],
+        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/explicit-function-return-type": [
+          "error",
+          {
+            "allowExpressions": false,
+            "allowTypedFunctionExpressions": false,
+            "allowHigherOrderFunctions": false,
+            "allowDirectConstAssertionInArrowFunctions": false,
+            "allowConciseArrowFunctionExpressionsStartingWithVoid": false,
+            "allowedNames": []
+          }
+        ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": {
+              "memberTypes": [
+                "signature",
+                "public-static-field",
+                "protected-static-field",
+                "private-static-field",
+                "public-decorated-field",
+                "protected-decorated-field",
+                "private-decorated-field",
+                "public-instance-field",
+                "protected-instance-field",
+                "private-instance-field",
+                "public-abstract-field",
+                "protected-abstract-field",
+                "public-field",
+                "protected-field",
+                "private-field",
+                "static-field",
+                "instance-field",
+                "abstract-field",
+                "decorated-field",
+                "field",
+                "public-constructor",
+                "protected-constructor",
+                "private-constructor",
+                "constructor",
+                "public-static-method",
+                "protected-static-method",
+                "private-static-method",
+                "public-decorated-method",
+                "protected-decorated-method",
+                "private-decorated-method",
+                "public-instance-method",
+                "protected-instance-method",
+                "private-instance-method",
+                "public-abstract-method",
+                "protected-abstract-method"
+              ]
+            }
+          }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": ["classProperty", "parameterProperty"],
+            "modifiers": ["public"],
+            "format": ["camelCase"]
+          },
+          {
+            "selector": ["classProperty", "parameterProperty"],
+            "modifiers": ["protected"],
+            "format": ["camelCase"]
+          },
+          {
+            "selector": ["classProperty", "parameterProperty"],
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "prefix": ["#"]
+          },
+          {
+            "selector": ["method", "accessor"],
+            "modifiers": ["public"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "forbid"
+          },
+          {
+            "selector": ["method", "accessor"],
+            "modifiers": ["protected"],
+            "format": ["camelCase"]
+          },
+          {
+            "selector": ["method", "accessor"],
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "prefix": ["#"]
+          }
+        ],
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-unnecessary-condition": "error",
+        "@typescript-eslint/no-unsafe-assignment": "error",
+        "@typescript-eslint/no-unsafe-member-access": "error",
+        "@typescript-eslint/no-unsafe-call": "error",
+        "@typescript-eslint/no-unsafe-argument": "error",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@angular-eslint/prefer-standalone-component": "off",
+        "@angular-eslint/use-inject-decorator": "off",
+        "no-console": [
+          "error",
+          {
+            "allow": ["warn", "error"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility"
+      ],
+      "rules": {}
+    }
+  ]
+}
