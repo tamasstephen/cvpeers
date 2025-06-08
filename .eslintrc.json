@@ -38,13 +38,14 @@
             "accessibility": "explicit",
             "overrides": {
               "accessors": "explicit",
-              "constructors": "explicit",
+              "constructors": "off",
               "methods": "explicit",
               "properties": "explicit",
               "parameterProperties": "explicit"
             }
           }
         ],
+        "@typescript-eslint/unbound-method": "off",
         "@typescript-eslint/explicit-function-return-type": [
           "error",
           {
@@ -105,15 +106,12 @@
           {
             "selector": ["classProperty", "parameterProperty"],
             "modifiers": ["public"],
-            "format": ["camelCase"],
-            "prefix": ["public"]
+            "format": ["camelCase"]
           },
           {
             "selector": ["classProperty", "parameterProperty"],
             "modifiers": ["protected"],
-            "format": ["camelCase"],
-            "prefix": ["protected"],
-            "leadingUnderscore": "require"
+            "format": ["camelCase"]
           },
           {
             "selector": ["classProperty", "parameterProperty"],
@@ -130,8 +128,7 @@
           {
             "selector": ["method", "accessor"],
             "modifiers": ["protected"],
-            "format": ["camelCase"],
-            "leadingUnderscore": "require"
+            "format": ["camelCase"]
           },
           {
             "selector": ["method", "accessor"],
@@ -142,13 +139,14 @@
         ],
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-unused-vars": "error",
-        "@typescript-eslint/strict-boolean-expressions": "error",
         "@typescript-eslint/no-unnecessary-condition": "error",
         "@typescript-eslint/no-unsafe-assignment": "error",
         "@typescript-eslint/no-unsafe-member-access": "error",
         "@typescript-eslint/no-unsafe-call": "error",
         "@typescript-eslint/no-unsafe-argument": "error",
         "@typescript-eslint/no-floating-promises": "error",
+        "@angular-eslint/prefer-standalone-component": "off",
+        "@angular-eslint/use-inject-decorator": "off",
         "no-console": [
           "error",
           {
