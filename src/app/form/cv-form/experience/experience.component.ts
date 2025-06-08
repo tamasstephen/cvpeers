@@ -1,24 +1,17 @@
-import {
-  Component,
-  input,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  signal,
-} from '@angular/core';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { DialogModule } from 'primeng/dialog';
-import { CalendarModule } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
+import { Component, input, OnInit, signal } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { DialogModule } from 'primeng/dialog';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { CvForm } from '../../../types/cv-form';
+import {
+  ExperienceForm,
+  ExperienceFormArray,
+  ExperienceItemForm,
+} from '../../../types/experience-form';
 
 @Component({
   selector: 'app-experience',
@@ -36,15 +29,15 @@ import { DatePipe } from '@angular/common';
   styleUrl: './experience.component.scss',
 })
 export class ExperienceComponent implements OnInit {
-  parentForm = input<FormGroup>();
-  isDialogOpen = signal(false);
-  yearRange = `${new Date().getFullYear() - 50}:${new Date().getFullYear()}`;
+  public parentForm = input<CvForm>();
+  protected isDialogOpen = signal(false);
+  protected yearRange = `${new Date().getFullYear() - 50}:${new Date().getFullYear()}`;
 
-  experienceForm = new FormGroup({
-    experience: new FormArray([]),
+  protected experienceForm: ExperienceForm = new FormGroup({
+    experience: new FormArray<FormGroup<ExperienceItemForm>>([]),
   });
 
-  experienceItemForm = new FormGroup({
+  protected experienceItemForm = new FormGroup<ExperienceItemForm>({
     title: new FormControl('', [Validators.required]),
     company: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
@@ -53,34 +46,30 @@ export class ExperienceComponent implements OnInit {
     description: new FormArray([new FormControl('', [Validators.required])]),
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.parentForm()?.addControl(
       'experienceForm',
-      this.experienceForm.get('experience')
+      this.experienceForm.get('experience') as ExperienceFormArray
     );
   }
 
-  openDialog() {
+  protected openDialog(): void {
     this.isDialogOpen.set(true);
     this.experienceItemForm.reset();
     // Ensure there's at least one description field
-    const descriptionArray = this.experienceItemForm.get(
-      'description'
-    ) as FormArray;
+    const descriptionArray = this.experienceItemForm.get('description') as FormArray;
     while (descriptionArray.length > 1) {
       descriptionArray.removeAt(descriptionArray.length - 1);
     }
   }
 
-  closeDialog() {
+  protected closeDialog(): void {
     this.isDialogOpen.set(false);
   }
 
-  addExperience() {
+  protected addExperience(): void {
     if (this.experienceItemForm.valid) {
-      const experienceArray = this.experienceForm.get(
-        'experience'
-      ) as FormArray;
+      const experienceArray = this.experienceForm.get('experience') as FormArray;
       const value = this.experienceItemForm.value;
       const itemGroup = new FormGroup({
         title: new FormControl(value.title || '', { nonNullable: true }),
@@ -92,7 +81,8 @@ export class ExperienceComponent implements OnInit {
         endDate: new FormControl(value.endDate || ''),
         description: new FormArray(
           (value.description || []).map(
-            (desc) => new FormControl(desc || '', { nonNullable: true })
+            (desc: string | null): FormControl<string | null> =>
+              new FormControl(desc || '', { nonNullable: true })
           )
         ),
       });
@@ -101,37 +91,35 @@ export class ExperienceComponent implements OnInit {
     }
   }
 
-  removeExperience(index: number) {
+  protected removeExperience(index: number): void {
     const experienceArray = this.experienceForm.get('experience') as FormArray;
     experienceArray.removeAt(index);
   }
 
-  addDescriptionField() {
-    const descriptionArray = this.experienceItemForm.get(
-      'description'
-    ) as FormArray;
+  protected addDescriptionField(): void {
+    const descriptionArray = this.experienceItemForm.get('description') as FormArray;
     descriptionArray.push(new FormControl('', [Validators.required]));
   }
 
-  removeDescriptionField(index: number) {
-    const descriptionArray = this.experienceItemForm.get(
-      'description'
-    ) as FormArray;
+  protected removeDescriptionField(index: number): void {
+    const descriptionArray = this.experienceItemForm.get('description') as FormArray;
     if (descriptionArray.length > 1) {
       descriptionArray.removeAt(index);
     }
   }
 
-  get descriptionControls() {
-    return (this.experienceItemForm.get('description') as FormArray).controls;
+  protected get descriptionControls(): FormControl<string | null>[] {
+    return (this.experienceItemForm.get('description') as FormArray).controls as FormControl<
+      string | null
+    >[];
   }
 
-  get experienceControls() {
+  protected get experienceControls(): FormGroup<ExperienceItemForm>[] {
     return (this.experienceForm.get('experience') as FormArray)
-      .controls as FormGroup[];
+      .controls as FormGroup<ExperienceItemForm>[];
   }
 
-  getDescriptionControls(experience: FormGroup) {
-    return (experience.get('description') as FormArray).controls;
+  protected getDescriptionControls(experience: FormGroup): FormControl<string | null>[] {
+    return (experience.get('description') as FormArray).controls as FormControl<string | null>[];
   }
 }

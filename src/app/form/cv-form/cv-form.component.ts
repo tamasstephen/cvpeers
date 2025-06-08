@@ -8,6 +8,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
+import { CvForm } from '../../types/cv-form';
 import { RichTextComponent } from '../rich-text/rich-text.component';
 import { EducationComponent } from './education/education.component';
 import { ExperienceComponent } from './experience/experience.component';
@@ -48,7 +49,7 @@ export class CvFormComponent implements OnInit, AfterViewInit {
 
   protected readonly sidepanelProvider: SidepanelProviderService = inject(SidepanelProviderService);
 
-  protected form = new FormGroup({});
+  protected form: CvForm = new FormGroup({});
 
   protected currentDate = new Date();
 

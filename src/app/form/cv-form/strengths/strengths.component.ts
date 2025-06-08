@@ -10,5 +10,5 @@ import { TagListComponent } from '../../../shared/components/tag-list/tag-list.c
   styleUrl: './strengths.component.scss',
 })
 export class StrengthsComponent {
-  parentForm = input<FormGroup>();
+  public parentForm = input<FormGroup>();
 }

@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export type Social = 'github' | 'linkedin';
 export type SocialOption = {
@@ -22,11 +23,15 @@ export const SOCIAL_OPTIONS: SocialOption[] = [
   },
 ];
 
-export const SOCIAL_OPTIONS_TOKEN = new InjectionToken<SocialOption[]>(
-  'SOCIAL_OPTIONS'
-);
+export const SOCIAL_OPTIONS_TOKEN = new InjectionToken<SocialOption[]>('SOCIAL_OPTIONS');
 
 export const SOCIAL_OPTIONS_PROVIDER = {
   provide: SOCIAL_OPTIONS_TOKEN,
   useValue: SOCIAL_OPTIONS,
 };
+
+export type SocialForm = FormGroup<{
+  social: FormArray<FormControl<SocialItem>>;
+}>;
+
+export type SocialFormValues = SocialItem[];
