@@ -147,6 +147,7 @@
         "@typescript-eslint/no-floating-promises": "error",
         "@angular-eslint/prefer-standalone-component": "off",
         "@angular-eslint/use-inject-decorator": "off",
+        "lines-between-class-members": ["error", "always"],
         "no-console": [
           "error",
           {

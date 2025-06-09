@@ -30,6 +30,7 @@ import {
 })
 export class EducationComponent implements OnInit {
   public parentForm = input<CvForm>();
+
   protected isDialogOpen = false;
 
   protected educationForm: EducationForm = new FormGroup({
