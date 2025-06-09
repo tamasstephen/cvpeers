@@ -30,7 +30,9 @@ import {
 })
 export class ExperienceComponent implements OnInit {
   public parentForm = input<CvForm>();
+
   protected isDialogOpen = signal(false);
+
   protected yearRange = `${new Date().getFullYear() - 50}:${new Date().getFullYear()}`;
 
   protected experienceForm: ExperienceForm = new FormGroup({

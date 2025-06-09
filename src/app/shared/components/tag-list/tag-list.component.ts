@@ -31,9 +31,13 @@ import { TagListForm } from '../../../types/tag-list-form';
 })
 export class TagListComponent implements OnInit {
   public parentForm = input<CvForm>();
+
   public title = input<string>('Items');
+
   public formControlName = input<string>('items');
+
   public placeholder = input<string>('Type your item');
+
   public addButtonLabel = input<string>('Add your item');
 
   public newItem = '';

@@ -1,31 +1,24 @@
-import { Injectable, Type, OnDestroy, inject } from '@angular/core';
-import { SidepanelComponent } from '../../sidepanel/sidepanel.component';
+import { Injectable, OnDestroy, Type, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComponentBaseComponent } from '../../shared/core/component-base/component-base.component';
+import { SidepanelComponent } from '../../sidepanel/sidepanel.component';
 
-export interface SidepanelConfig<T = any> {
+export interface SidepanelConfig<T = unknown> {
   component: Type<T>;
-  data?: any;
+  data?: unknown;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class SidepanelProviderService
-  extends ComponentBaseComponent
-  implements OnDestroy
-{
-  constructor() {
-    super();
-  }
-
+export class SidepanelProviderService extends ComponentBaseComponent implements OnDestroy {
   #sidepanelComponent?: SidepanelComponent;
 
   #currentConfig?: SidepanelConfig;
 
   #router = inject(Router);
 
-  public openSidepanel<T>(config: SidepanelConfig<T>) {
+  public openSidepanel<T>(config: SidepanelConfig<T>): void {
     if (!this.#sidepanelComponent) {
       console.warn('Sidepanel component not set');
       return;
@@ -35,7 +28,7 @@ export class SidepanelProviderService
     this.#sidepanelComponent.open();
   }
 
-  public setSidepanelConfig<T>(config: SidepanelConfig<T>) {
+  public setSidepanelConfig<T>(config: SidepanelConfig<T>): void {
     if (!this.#sidepanelComponent) {
       console.warn('Sidepanel component not set');
       return;
@@ -44,7 +37,7 @@ export class SidepanelProviderService
     this.#sidepanelComponent.setContent(config);
   }
 
-  public closeSidepanel() {
+  public closeSidepanel(): void {
     if (!this.#sidepanelComponent) {
       console.warn('Sidepanel component not set');
       return;
@@ -53,7 +46,7 @@ export class SidepanelProviderService
     this.#sidepanelComponent.close();
   }
 
-  public clearSidepanel() {
+  public clearSidepanel(): void {
     if (!this.#sidepanelComponent) {
       console.warn('Sidepanel component not set');
       return;
@@ -61,7 +54,7 @@ export class SidepanelProviderService
     this.#sidepanelComponent.clearSidepanel();
   }
 
-  public setSidepanelComponent(component: SidepanelComponent) {
+  public setSidepanelComponent(component: SidepanelComponent): void {
     this.#sidepanelComponent = component;
     /*     this.addSubscription(
       this.#router.events.subscribe((value) => {
@@ -70,7 +63,7 @@ export class SidepanelProviderService
     ); */
   }
 
-  public getCurrentConfig() {
+  public getCurrentConfig(): SidepanelConfig | undefined {
     return this.#currentConfig;
   }
 }

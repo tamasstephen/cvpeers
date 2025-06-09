@@ -1,16 +1,17 @@
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
   input,
+  OnDestroy,
   OnInit,
   signal,
-  ElementRef,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import Quill, { Delta, QuillOptions } from 'quill';
-import 'quill/dist/quill.snow.css';
 import DOMPurify from 'dompurify';
+import Quill, { QuillOptions } from 'quill';
+import 'quill/dist/quill.snow.css';
 
 const quillOptions: QuillOptions = {
   theme: 'snow',
@@ -28,37 +29,35 @@ const quillOptions: QuillOptions = {
   templateUrl: './rich-text.component.html',
   styleUrl: './rich-text.component.scss',
 })
-export class RichTextComponent implements OnInit, AfterViewInit {
-  parentForm = input.required<FormGroup>();
+export class RichTextComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('editor') public editor!: ElementRef;
 
-  initialValues = input<any>(null);
+  public parentForm = input.required<FormGroup>();
 
-  quill = signal<Quill | null>(null);
+  public initialValues = input<unknown>(null);
 
-  controller = new AbortController();
+  public quill = signal<Quill | null>(null);
 
-  summary = new FormControl('', {
+  public controller = new AbortController();
+
+  public summary = new FormControl('', {
     validators: [Validators.required],
   });
 
-  @ViewChild('editor') editor!: ElementRef;
-
-  ngOnInit() {
-    console.log('Editor: ', this.editor);
-    this.parentForm()?.addControl('summary', this.summary);
+  public ngOnInit(): void {
+    this.parentForm().addControl('summary', this.summary);
   }
 
-  ngAfterViewInit() {
-    this.quill.set(new Quill(this.editor.nativeElement, quillOptions));
+  public ngAfterViewInit(): void {
+    this.quill.set(new Quill(this.editor.nativeElement as HTMLElement, quillOptions));
     this.quill()?.on(
       'text-change',
-      () => {
+      (): void => {
         const currentDelta = this.quill()?.getContents();
         if (currentDelta) {
-          const quillHTML = this.quill()!.root.innerHTML;
-          const cleanHTML = DOMPurify.sanitize(quillHTML!);
+          const quillHTML = this.quill()?.root.innerHTML;
+          const cleanHTML = DOMPurify.sanitize(quillHTML ?? '');
           this.summary.setValue(cleanHTML);
-          console.log('summary', this.summary.value);
         } else {
           this.summary.setValue('');
         }
@@ -67,7 +66,7 @@ export class RichTextComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.controller.abort();
   }
 }

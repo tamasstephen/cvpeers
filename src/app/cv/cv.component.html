@@ -14,7 +14,7 @@
         *ngIf="personalDetails?.website"
         [href]="personalDetails?.website"
         class="contact-item"
-        style="font-family: 'Geist', sans-serif">
+        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
         <img src="assets/images/global-line.png" alt="Website" class="contact-icon" />
         {{ personalDetails?.website }}
       </a>
@@ -22,7 +22,7 @@
         *ngIf="personalDetails?.email"
         [href]="'mailto:' + personalDetails?.email"
         class="contact-item"
-        style="font-family: 'Geist', sans-serif">
+        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
         <img src="assets/images/mail-fill.png" alt="Email" class="contact-icon" />
         {{ personalDetails?.email }}
       </a>
@@ -32,7 +32,7 @@
         [href]="social.url"
         target="_blank"
         class="contact-item"
-        style="font-family: 'Geist', sans-serif">
+        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
         <img [src]="social.src" [alt]="social.type" class="contact-icon" />
         {{ social.url }}
       </a>
@@ -57,15 +57,19 @@
             <h4 style="font-family: 'Geist-SemiBold', sans-serif; font-weight: bold">
               {{ job.title }}
             </h4>
-            <span class="company" style="font-family: 'Geist', sans-serif">{{ job.company }}</span>
-            <div class="job-period" style="font-family: 'Geist', sans-serif">
-              <span style="font-family: 'Geist', sans-serif"
-                >{{ job.startDate | date: 'shortDate' }} -
-                {{ (job.endDate | date: 'shortDate') || 'Current' }}</span
+            <span class="company" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{
+              job.company
+            }}</span>
+            <div class="job-period" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              <span style="font-family: 'Geist', sans-serif; font-size: 0.875rem"
+                >{{ job.startDate | date: 'MM/yyyy' }} -
+                {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}</span
               >
-              <span class="location" style="font-family: 'Geist', sans-serif">{{
-                job.location
-              }}</span>
+              <span
+                class="location"
+                style="font-family: 'Geist', sans-serif; font-size: 0.875rem"
+                >{{ job.location }}</span
+              >
             </div>
           </div>
           <ul class="job-description">
@@ -97,11 +101,11 @@
       <section class="education-section">
         <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EDUCATION —</h3>
         <div *ngFor="let edu of education" class="education-item">
-          <h4 style="font-family: 'Geist', sans-serif">{{ edu.degree }}</h4>
-          <p style="font-family: 'Geist', sans-serif">
-            {{ edu.graduationDate }}, {{ edu.institution }}
+          <h4 style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</h4>
+          <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+            {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
           </p>
-          <p class="location" style="font-family: 'Geist', sans-serif">
+          <p class="location" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
             {{ edu.location }}
           </p>
         </div>
@@ -111,10 +115,14 @@
         <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">LANGUAGES —</h3>
         <div class="languages-grid">
           <div *ngFor="let language of languages" style="font-family: 'Geist', sans-serif">
-            <span class="language-name" style="font-family: 'Geist', sans-serif">
+            <span
+              class="language-name"
+              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
               {{ language.name }}
             </span>
-            <span class="language-level" style="font-family: 'Geist', sans-serif">
+            <span
+              class="language-level"
+              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
               {{ language.level }}
             </span>
           </div>
@@ -125,7 +133,9 @@
       <section class="soft-skills-section">
         <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">STRENGTHS —</h3>
         <ul class="skills-list">
-          <li *ngFor="let strength of strengths" style="font-family: 'Geist', sans-serif">
+          <li
+            *ngFor="let strength of strengths"
+            style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
             {{ strength }}
           </li>
         </ul>
