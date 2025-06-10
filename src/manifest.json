@@ -1,6 +1,6 @@
 {
-  "name": "CV Generator",
-  "short_name": "CV Gen",
+  "name": "CVPeers - Professional CV Generator",
+  "short_name": "CVPeers",
   "description": "Create professional, customizable CVs and resumes with our easy-to-use CV Generator.",
   "start_url": "/",
   "display": "standalone",
@@ -8,16 +8,9 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "/web-app-manifest-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/web-app-manifest-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
     }
   ]
 }
