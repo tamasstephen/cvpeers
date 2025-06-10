@@ -8,3 +8,12 @@ RUN npm run build -- --configuration production
 
 FROM nginx:alpine
 COPY --from=build /app/dist/angular-starter /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Make sure nginx can access the files
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
