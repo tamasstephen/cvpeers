@@ -1,3 +1,6 @@
+# robots.txt for CVPeers
+# https://cvpeers.com
+
 # Allow all crawlers
 User-agent: *
 Allow: /
@@ -7,5 +10,5 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
 
-# Sitemap location
+# Sitemap location (absolute URL)
 Sitemap: https://cvpeers.com/sitemap.xml
