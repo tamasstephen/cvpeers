@@ -8,7 +8,7 @@ RUN npm run build -- --configuration production
 RUN ls -la /app/dist
 
 FROM nginx:alpine
-COPY --from=build /app/dist/angular-cv/browser /usr/share/nginx/html
+COPY --from=build /app/dist/angular-cv /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Make sure nginx can access the files
