@@ -7,6 +7,11 @@
     flex-wrap: wrap;
     gap: 0.25rem;
   }
+
+  .add-item__button {
+    margin-left: 0.5rem;
+    min-width: 100px;
+  }
 }
 
 fieldset {
@@ -25,7 +30,7 @@ h2 {
   .input-row {
     display: flex;
     gap: 0.5rem;
-    align-items: center;
+    align-items: stretch;
 
     input {
       flex: 1;

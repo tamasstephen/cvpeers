@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { StructuredDataService } from '../services/seo/structured-data.service';
 
 @Component({
   selector: 'app-landing',
@@ -9,5 +10,15 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class LandingComponent {}
+export class LandingComponent implements OnInit, OnDestroy {
+  #structuredDataService = inject(StructuredDataService);
+
+  public ngOnInit(): void {
+    this.#structuredDataService.setWebsiteStructuredData();
+    this.#structuredDataService.setCvGeneratorStructuredData();
+  }
+
+  public ngOnDestroy(): void {
+    this.#structuredDataService.removeStructuredData();
+  }
+}

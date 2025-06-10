@@ -1,5 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { IftaLabelModule } from 'primeng/iftalabel';
@@ -7,6 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
+import { StructuredDataService } from '../../services/seo/structured-data.service';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
 import { CvForm } from '../../types/cv-form';
 import { RichTextComponent } from '../rich-text/rich-text.component';
@@ -40,7 +49,7 @@ import { StrengthsComponent } from './strengths/strengths.component';
   styleUrl: './cv-form.component.scss',
   providers: [DatePipe],
 })
-export class CvFormComponent implements OnInit, AfterViewInit {
+export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
   @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
@@ -48,6 +57,8 @@ export class CvFormComponent implements OnInit, AfterViewInit {
   protected readonly pdfService: PdfGeneratorService = inject(PdfGeneratorService);
 
   protected readonly sidepanelProvider: SidepanelProviderService = inject(SidepanelProviderService);
+
+  protected readonly structuredDataService: StructuredDataService = inject(StructuredDataService);
 
   protected form: CvForm = new FormGroup({});
 
@@ -63,6 +74,13 @@ export class CvFormComponent implements OnInit, AfterViewInit {
         cvForm: this.form,
       },
     });
+
+    // Add structured data
+    this.structuredDataService.setCvFormStructuredData();
+  }
+
+  public ngOnDestroy(): void {
+    this.structuredDataService.removeStructuredData();
   }
 
   public ngAfterViewInit(): void {
