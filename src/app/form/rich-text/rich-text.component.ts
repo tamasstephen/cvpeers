@@ -11,7 +11,6 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import DOMPurify from 'dompurify';
 import Quill, { QuillOptions } from 'quill';
-import 'quill/dist/quill.snow.css';
 
 const quillOptions: QuillOptions = {
   theme: 'snow',
