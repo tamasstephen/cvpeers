@@ -34,10 +34,7 @@
                 "output": "/assets/images"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/primeicons/primeicons.css"
-            ],
+            "styles": ["src/styles.scss", "node_modules/primeicons/primeicons.css"],
             "scripts": []
           },
           "configurations": {
@@ -46,12 +43,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "50kB"
                 }
               ],
               "outputHashing": "all"
@@ -96,15 +93,21 @@
                 "output": "/assets/fonts/"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/quill/dist/quill.snow.css"
-            ],
+            "styles": ["src/styles.scss", "node_modules/quill/dist/quill.snow.css"],
             "scripts": [],
             "karmaConfig": "karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

@@ -6,24 +6,22 @@
       variant="outlined"
       fluid
       (click)="openDialog()"
-      label="Add Language"
-    />
+      label="Add Language" />
   </div>
   <section>
     <ul>
       @for (language of languageControls; track $index) {
-      <li class="language-item">
-        <div class="language-details">
-          <h3>{{ language.value.name }}</h3>
-          <p>{{ language.value.level }}</p>
-        </div>
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          variant="outlined"
-          (click)="removeLanguage($index)"
-        />
-      </li>
+        <li class="language-item">
+          <div class="language-details">
+            <h3>{{ language.value.name }}</h3>
+            <p>{{ language.value.level }}</p>
+          </div>
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            variant="outlined"
+            (click)="removeLanguage($index)" />
+        </li>
       }
     </ul>
   </section>
@@ -32,11 +30,10 @@
 <p-dialog
   class="dialog"
   [modal]="true"
-  [visible]="isDialogOpen"
+  [visible]="isDialogOpen()"
   (onHide)="closeDialog()"
   [closable]="false"
-  header="Add Language"
->
+  header="Add Language">
   <div class="dialog-content" [formGroup]="languageItemForm">
     <div class="form-row">
       <p-iftalabel>
@@ -53,8 +50,7 @@
           formControlName="level"
           optionLabel="label"
           optionValue="value"
-          required
-        />
+          required />
       </p-iftalabel>
     </div>
     <div class="button-row">
@@ -63,14 +59,8 @@
         [disabled]="!languageItemForm.valid"
         (click)="addLanguage()"
         label="Save"
-        fluid="true"
-      />
-      <p-button
-        fluid="true"
-        variant="outlined"
-        (click)="closeDialog()"
-        label="Cancel"
-      />
+        fluid="true" />
+      <p-button fluid="true" variant="outlined" (click)="closeDialog()" label="Cancel" />
     </div>
   </div>
 </p-dialog>

@@ -1,27 +1,22 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { IftaLabelModule } from 'primeng/iftalabel';
 import { ButtonModule } from 'primeng/button';
-import { PersonalDetailsComponent } from './personal-details/personal-details.component';
-import { SocialComponent } from './social/social.component';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
+import { CvComponent } from '../../cv/cv.component';
+import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
+import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
+import { CvForm } from '../../types/cv-form';
+import { RichTextComponent } from '../rich-text/rich-text.component';
+import { EducationComponent } from './education/education.component';
 import { ExperienceComponent } from './experience/experience.component';
 import { ExpertiseComponent } from './expertise/expertise.component';
-import { StrengthsComponent } from './strengths/strengths.component';
-import { TextareaModule } from 'primeng/textarea';
-import { RichTextComponent } from '../rich-text/rich-text.component';
-import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
-import { DatePipe } from '@angular/common';
-import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
-import { CvComponent } from '../../cv/cv.component';
-import { EducationComponent } from './education/education.component';
 import { LanguageComponent } from './language/language.component';
+import { PersonalDetailsComponent } from './personal-details/personal-details.component';
+import { SocialComponent } from './social/social.component';
+import { StrengthsComponent } from './strengths/strengths.component';
 
 @Component({
   selector: 'app-cv-form',
@@ -46,24 +41,23 @@ import { LanguageComponent } from './language/language.component';
   providers: [DatePipe],
 })
 export class CvFormComponent implements OnInit, AfterViewInit {
-  image: File | null = null;
+  @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
-  form = new FormGroup({});
+  @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
 
-  @ViewChild('cvForm') cvForm!: ElementRef<HTMLDivElement>;
+  protected readonly pdfService: PdfGeneratorService = inject(PdfGeneratorService);
 
-  @ViewChild('portrait') portrait!: ElementRef<HTMLImageElement>;
+  protected readonly sidepanelProvider: SidepanelProviderService = inject(SidepanelProviderService);
 
-  currentDate = new Date();
+  protected form: CvForm = new FormGroup({});
 
-  constructor(
-    private readonly _pdfService: PdfGeneratorService,
-    private readonly _sidepanelProvider: SidepanelProviderService
-  ) {}
+  protected currentDate = new Date();
 
-  ngOnInit() {
+  #image: File | null = null;
+
+  public ngOnInit(): void {
     // Initialize sidepanel
-    this._sidepanelProvider.setSidepanelConfig({
+    this.sidepanelProvider.setSidepanelConfig({
       component: CvComponent,
       data: {
         cvForm: this.form,
@@ -71,30 +65,28 @@ export class CvFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    if (this.portrait?.nativeElement) {
-      // Crop the image to keep the aspect ratio on the pdf
-      this.portrait.nativeElement.onload = () => {
-        this.cropImage();
-      };
-    }
+  public ngAfterViewInit(): void {
+    // Crop the image to keep the aspect ratio on the pdf
+    this.portrait.nativeElement.onload = (): void => {
+      this.cropImage();
+    };
   }
 
-  onSubmit() {
+  public onSubmit(): void {
     if (this.form.valid) {
+      // eslint-disable-next-line no-console
       console.log(this.form.value);
     }
   }
 
-  downloadPdf() {
-    const element = document.querySelector('#cv')! as HTMLElement;
-    this._pdfService.createPdfFromHtml(element);
+  protected async downloadPdf(): Promise<void> {
+    const element = document.querySelector('#cv');
+    if (!element) return;
+    await this.pdfService.createPdfFromHtml(element);
   }
 
-  public testFn() {}
-
   // Workaround for keeping the image aspect ratio on the pdf
-  protected cropImage() {
+  protected cropImage(): void {
     const currentImage = this.portrait.nativeElement;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -106,10 +98,7 @@ export class CvFormComponent implements OnInit, AfterViewInit {
     canvas.height = 300;
 
     // Calculate the center crop dimensions
-    const size = Math.min(
-      currentImage.naturalWidth,
-      currentImage.naturalHeight
-    );
+    const size = Math.min(currentImage.naturalWidth, currentImage.naturalHeight);
     const startX = (currentImage.naturalWidth - size) / 2;
     const startY = (currentImage.naturalHeight - size) / 2;
 
@@ -117,7 +106,7 @@ export class CvFormComponent implements OnInit, AfterViewInit {
     ctx.drawImage(currentImage, startX, startY, size, size, 0, 0, 300, 300);
 
     // Convert canvas to blob
-    canvas.toBlob((blob) => {
+    canvas.toBlob((blob): void => {
       if (blob) {
         // Create a new File object
         const croppedFile = new File([blob], 'cropped-portrait.jpg', {
@@ -126,7 +115,7 @@ export class CvFormComponent implements OnInit, AfterViewInit {
 
         // Update the image source
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = (e): void => {
           if (e.target?.result) {
             currentImage.src = e.target.result as string;
           }
@@ -134,7 +123,7 @@ export class CvFormComponent implements OnInit, AfterViewInit {
         reader.readAsDataURL(croppedFile);
 
         // Store the cropped file
-        this.image = croppedFile;
+        this.#image = croppedFile;
       }
     }, 'image/jpeg');
   }

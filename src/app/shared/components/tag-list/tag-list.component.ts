@@ -1,16 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormControl,
   FormGroup,
-  ReactiveFormsModule,
   FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { IftaLabelModule } from 'primeng/iftalabel';
 import { ChipModule } from 'primeng/chip';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { CvForm } from '../../../types/cv-form';
+import { TagListForm } from '../../../types/tag-list-form';
 
 @Component({
   selector: 'app-tag-list',
@@ -28,42 +30,41 @@ import { ChipModule } from 'primeng/chip';
   styleUrl: './tag-list.component.scss',
 })
 export class TagListComponent implements OnInit {
-  parentForm = input<FormGroup>();
-  title = input<string>('Items');
-  formControlName = input<string>('items');
-  placeholder = input<string>('Type your item');
-  addButtonLabel = input<string>('Add your item');
+  public parentForm = input<CvForm>();
 
-  newItem = '';
+  public title = input<string>('Items');
 
-  itemForm = new FormGroup({
-    items: new FormArray([]),
+  public formControlName = input<string>('items');
+
+  public placeholder = input<string>('Type your item');
+
+  public addButtonLabel = input<string>('Add your item');
+
+  public newItem = '';
+
+  protected itemForm: TagListForm = new FormGroup({
+    items: new FormArray<FormControl<string>>([]),
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const controlName = this.formControlName();
-    this.parentForm()?.addControl(
-      controlName + 'Form',
-      this.itemForm.get('items')
-    );
+    this.parentForm()?.addControl(controlName + 'Form', this.itemForm.get('items') as FormArray);
   }
 
-  addItem() {
+  protected addItem(): void {
     if (this.newItem.trim()) {
       const itemArray = this.itemForm.get('items') as FormArray;
-      itemArray.push(
-        new FormControl(this.newItem.trim(), { nonNullable: true })
-      );
+      itemArray.push(new FormControl(this.newItem.trim(), { nonNullable: true }));
       this.newItem = '';
     }
   }
 
-  removeItem(index: number) {
+  protected removeItem(index: number): void {
     const itemArray = this.itemForm.get('items') as FormArray;
     itemArray.removeAt(index);
   }
 
-  get itemControls() {
-    return (this.itemForm.get('items') as FormArray).controls;
+  public get itemControls(): FormControl<string>[] {
+    return (this.itemForm.get('items') as FormArray).controls as FormControl<string>[];
   }
 }

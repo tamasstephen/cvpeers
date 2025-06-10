@@ -1,19 +1,18 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormGroup } from '@angular/forms';
-import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
-import '../assets/fonts/GeistMono-SemiBold-bold.js';
-import '../assets/fonts/Geist-Variable_pdf-normal.js';
-import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { SocialItem } from '../types/social';
-import {
-  Education,
-  Experience,
-  Language,
-  PersonalDetails,
-} from '../shared/interface/cv.interface';
+import '../assets/fonts/Geist-SemiBold-normal.js';
+import '../assets/fonts/Geist-Variable_pdf-normal.js';
+import '../assets/fonts/GeistMono-SemiBold-bold.js';
+import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
+import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
+import { CvForm } from '../types/cv-form';
+import { EducationFormValues } from '../types/education-form.js';
+import { ExperienceFormValues } from '../types/experience-form.js';
+import { LanguageFormValues } from '../types/language-form.js';
+import { PersonalDetailsFormValues } from '../types/personal-details-form.js';
+import { SocialFormValues } from '../types/social.js';
 
 @Component({
   selector: 'app-cv',
@@ -24,93 +23,86 @@ import {
 })
 export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
+   * The form group of the CV
+   */
+  @Input() public cvForm!: CvForm;
+
+  /**
    * The personal details of the CV
    */
-  personalDetails: PersonalDetails = {
-    fullName: 'Your Name',
-    headline: 'Your Title - Years of Experience',
-    email: 'your.email@example.com',
-    website: 'www.yourwebsite.com',
-    linkedin: 'linkedin.com/in/yourprofile',
-  };
+  protected personalDetails: PersonalDetailsFormValues | undefined = undefined;
 
   /**
    * The social links of the CV
    */
-  socialLinks: SocialItem[] = [];
+  protected socialLinks: SocialFormValues = [];
 
   /**
    * The summary of the CV
    */
-  summary: string = '';
-  parsedSummary = signal<SafeHtml>('');
+  protected summary: string | undefined = undefined;
+  protected parsedSummary = signal<SafeHtml | undefined>(undefined);
 
   /**
    * The experience of the CV
    */
-  experience: Experience[] = [];
+  protected experience: ExperienceFormValues | undefined = undefined;
 
   /**
    * The education of the CV
    */
-  education: Education[] = [];
+  protected education: EducationFormValues | undefined = undefined;
 
   /**
    * The expertise of the CV
    */
-  expertise: string[] = [];
+  protected expertise: string[] | undefined = undefined;
 
   /**
    * The strengths of the CV
    */
-  strengths: string[] = [];
+  protected strengths: string[] | undefined = undefined;
 
   /**
    * The languages of the CV
    */
-  languages: Language[] = [];
+  protected languages: LanguageFormValues | undefined = undefined;
 
   /**
    * The PDF generator service
    */
-  pdfGeneratorService = inject(PdfGeneratorService);
+  protected pdfGeneratorService = inject(PdfGeneratorService);
 
   /**
    * The sanitizer service
    */
-  sanitizer = inject(DomSanitizer);
+  protected sanitizer = inject(DomSanitizer);
 
-  /**
-   * The form group of the CV
-   */
-  @Input() cvForm!: FormGroup;
-
-  constructor() {
+  public constructor() {
     super();
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     // Subscribe to form data changes
     this.addSubscription(
       this.cvForm.valueChanges
         .pipe(debounceTime(300), distinctUntilChanged())
-        .subscribe((value) => {
-          console.log('formvalue changed', value);
-          this.personalDetails = value?.personalDetailsForm;
-          this.socialLinks = value?.socialForm?.social;
-          if (value?.summary !== this.summary) {
-            this.summary = value?.summary;
+        .subscribe((value): void => {
+          this.personalDetails = value.personalDetailsForm as PersonalDetailsFormValues;
+          this.socialLinks = value.socialForm?.social as SocialFormValues;
+          if (value.summary !== this.summary) {
+            this.summary = value.summary;
             this.parsedSummary.set(
               this.sanitizer.bypassSecurityTrustHtml(
-                this.pdfGeneratorService.addGeistFontToHtml(this.summary)
+                this.pdfGeneratorService.addGeistFontToHtml(this.summary ?? '')
               )
             );
           }
-          this.experience = value?.experienceForm;
-          this.education = value?.educationForm;
-          this.expertise = value?.expertiseForm;
-          this.strengths = value?.strengthsForm;
-          this.languages = value?.languagesForm;
+          this.experience = value.experienceForm as unknown as ExperienceFormValues;
+          this.education = value.educationForm as unknown as EducationFormValues;
+          this.expertise = value.expertiseForm as unknown as string[];
+          this.strengths = value.strengthsForm as unknown as string[];
+          this.languages = value.languagesForm as unknown as LanguageFormValues;
         })
     );
   }

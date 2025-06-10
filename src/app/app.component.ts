@@ -1,9 +1,9 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNG } from 'primeng/config';
-import { SidepanelComponent } from './sidepanel/sidepanel.component';
 import { SidepanelProviderService } from './services/sidepanel-provider/sidepanel-provider.service';
 import { HeaderComponent } from './shared/header/header.component';
+import { SidepanelComponent } from './sidepanel/sidepanel.component';
 
 @Component({
   selector: 'app-root',
@@ -12,19 +12,18 @@ import { HeaderComponent } from './shared/header/header.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
-  @ViewChild(SidepanelComponent) sidepanel!: SidepanelComponent;
+export class AppComponent implements AfterViewInit, OnInit {
+  @ViewChild(SidepanelComponent) public sidepanel!: SidepanelComponent;
 
-  constructor(
-    private primeng: PrimeNG,
-    private sidepanelProvider: SidepanelProviderService
-  ) {}
+  protected primeng = inject(PrimeNG);
 
-  ngOnInit(): void {
+  protected sidepanelProvider = inject(SidepanelProviderService);
+
+  public ngOnInit(): void {
     this.primeng.ripple.set(true);
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     this.sidepanelProvider.setSidepanelComponent(this.sidepanel);
   }
 }
