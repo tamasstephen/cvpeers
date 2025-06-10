@@ -8,24 +8,21 @@
           pInputText
           [(ngModel)]="newItem"
           [placeholder]="placeholder()"
-          (keyup.enter)="addItem()"
-        />
+          (keyup.enter)="addItem()" />
         <p-button
-          icon="pi pi-plus"
+          class="add-item__button"
+          severity="secondary"
+          variant="outlined"
+          fluid
+          label="Add"
           (click)="addItem()"
-          [disabled]="!newItem.trim()"
-        ></p-button>
+          [disabled]="!newItem.trim()" />
       </div>
     </p-iftalabel>
   </div>
   <div class="item-chips">
     @for (item of itemControls; track $index) {
-    <p-chip
-      [label]="item.value"
-      [removable]="true"
-      (onRemove)="removeItem($index)"
-    >
-    </p-chip>
+      <p-chip [label]="item.value" [removable]="true" (onRemove)="removeItem($index)"> </p-chip>
     }
   </div>
 </fieldset>
