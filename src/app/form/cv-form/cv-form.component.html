@@ -19,5 +19,22 @@
       <div class="divider"></div>
     </div>
     <p-button [raised]="true" (click)="downloadPdf()" label="Download PDF" />
+    <p-button variant="outlined" (click)="openResetFormDialog()" label="Reset form" />
   </form>
+  <p-toast />
 </div>
+
+<p-dialog
+  [visible]="isDialogOpen()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+  [header]="'Reset form'"
+  (onHide)="closeResetFormDialog()">
+  <p class="dialog-text text-center">Are you sure you want to reset the form?</p>
+  <div class="dialog-actions">
+    <p-button class="dialog-actions-button" (click)="closeResetFormDialog()" label="No" />
+    <p-button class="dialog-actions-button" severity="danger" (click)="resetForm()" label="Yes" />
+  </div>
+</p-dialog>

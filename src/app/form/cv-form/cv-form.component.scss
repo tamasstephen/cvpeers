@@ -39,3 +39,25 @@ form {
 .print-only {
   display: none;
 }
+
+.dialog-text {
+  margin-bottom: 1rem;
+}
+
+.dialog-actions {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+::ng-deep .dialog-actions-button {
+  width: 100%;
+
+  & > button {
+    width: 100%;
+  }
+}
+
+.dialog-actions p-button:first-child {
+  margin-right: 1rem;
+}
