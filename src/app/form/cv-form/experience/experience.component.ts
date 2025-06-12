@@ -3,6 +3,7 @@ import { Component, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -22,6 +23,7 @@ import {
     InputTextModule,
     IftaLabelModule,
     DialogModule,
+    DatePickerModule,
     CalendarModule,
     DatePipe,
   ],
