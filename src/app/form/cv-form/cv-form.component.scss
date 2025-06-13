@@ -1,9 +1,13 @@
+.cv-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .cv-form {
   display: grid;
   width: 100%;
   max-width: 600px;
   padding: 2rem;
-  margin: 0 auto;
 }
 
 form {

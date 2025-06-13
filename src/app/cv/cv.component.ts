@@ -41,6 +41,10 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The summary of the CV
    */
   protected summary: string | undefined = undefined;
+
+  /**
+   * The parsed summary of the CV
+   */
   protected parsedSummary = signal<SafeHtml | undefined>(undefined);
 
   /**
