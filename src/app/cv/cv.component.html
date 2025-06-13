@@ -19,6 +19,14 @@
         {{ personalDetails?.website }}
       </a>
       <a
+        *ngIf="personalDetails?.phone"
+        [href]="personalDetails?.phone"
+        class="contact-item"
+        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+        <img src="assets/images/phone.png" alt="phone" class="contact-icon" />
+        {{ personalDetails?.phone }}
+      </a>
+      <a
         *ngIf="personalDetails?.email"
         [href]="'mailto:' + personalDetails?.email"
         class="contact-item"
