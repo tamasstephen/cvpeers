@@ -11,6 +11,10 @@
   .add-item__button {
     margin-left: 0.5rem;
     min-width: 100px;
+
+    ::ng-deep button {
+      height: 100%;
+    }
   }
 }
 

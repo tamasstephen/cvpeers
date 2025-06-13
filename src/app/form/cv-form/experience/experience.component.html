@@ -16,10 +16,10 @@
             <h4>{{ experience.get('title')?.value }}</h4>
             <p class="company">{{ experience.get('company')?.value }}</p>
             <p class="period">
-              {{ experience.get('startDate')?.value | date: 'shortDate' }} -
+              {{ experience.get('startDate')?.value | date: 'MM/yyyy' }} -
               {{
                 experience.get('endDate')?.value
-                  ? (experience.get('endDate')?.value | date: 'shortDate')
+                  ? (experience.get('endDate')?.value | date: 'MM/yyyy')
                   : 'Present'
               }}
               <span class="location">{{ experience.get('location')?.value }}</span>
