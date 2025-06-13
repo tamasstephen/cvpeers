@@ -1,18 +1,24 @@
 import { DatePipe } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
 import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
@@ -31,12 +37,14 @@ import { StrengthsComponent } from './strengths/strengths.component';
   selector: 'app-cv-form',
   standalone: true,
   imports: [
+    DialogModule,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
     IftaLabelModule,
     PersonalDetailsComponent,
     SocialComponent,
+    MessageModule,
     ExperienceComponent,
     ExpertiseComponent,
     StrengthsComponent,
@@ -44,15 +52,18 @@ import { StrengthsComponent } from './strengths/strengths.component';
     RichTextComponent,
     EducationComponent,
     LanguageComponent,
+    ToastModule,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',
-  providers: [DatePipe],
+  providers: [DatePipe, MessageService],
 })
 export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
   @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
+
+  protected messageService = inject(MessageService);
 
   protected readonly pdfService: PdfGeneratorService = inject(PdfGeneratorService);
 
@@ -63,6 +74,10 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   protected form: CvForm = new FormGroup({});
 
   protected currentDate = new Date();
+
+  protected isDialogOpen = signal<boolean>(false);
+
+  readonly #cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   #image: File | null = null;
 
@@ -101,6 +116,30 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     const element = document.querySelector('#cv');
     if (!element) return;
     await this.pdfService.createPdfFromHtml(element);
+  }
+
+  protected resetForm(): void {
+    this.form.reset();
+    this.closeResetFormDialog();
+    this.#cdRef.detectChanges();
+    this.showToast();
+  }
+
+  protected showToast(): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Form reset successfully',
+      life: 3000,
+    });
+  }
+
+  protected showErrorToast(): void {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Form reset failed',
+    });
   }
 
   // Workaround for keeping the image aspect ratio on the pdf
@@ -144,5 +183,13 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
         this.#image = croppedFile;
       }
     }, 'image/jpeg');
+  }
+
+  protected openResetFormDialog(): void {
+    this.isDialogOpen.set(true);
+  }
+
+  protected closeResetFormDialog(): void {
+    this.isDialogOpen.set(false);
   }
 }

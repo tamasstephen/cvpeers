@@ -41,6 +41,10 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The summary of the CV
    */
   protected summary: string | undefined = undefined;
+
+  /**
+   * The parsed summary of the CV
+   */
   protected parsedSummary = signal<SafeHtml | undefined>(undefined);
 
   /**
@@ -80,6 +84,13 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
 
   public constructor() {
     super();
+    this.personalDetails = {
+      fullName: 'John Doe',
+      email: 'john.doe@example.com',
+      phone: '+1 (555) 123-4567',
+      website: 'https://johndoe.com',
+      headline: 'Senior Software Engineer',
+    };
   }
 
   public ngOnInit(): void {

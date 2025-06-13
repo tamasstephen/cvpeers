@@ -6,41 +6,36 @@
       variant="outlined"
       fluid
       (click)="openDialog()"
-      label="Add Experience"
-    />
+      label="Add Experience" />
   </div>
   <section>
     <ul>
       @for (experience of experienceControls; track $index) {
-      <li class="experience-item">
-        <div class="experience-header">
-          <h4>{{ experience.get("title")?.value }}</h4>
-          <p class="company">{{ experience.get("company")?.value }}</p>
-          <p class="period">
-            {{ experience.get("startDate")?.value | date : "shortDate" }} -
-            {{
-              experience.get("endDate")?.value
-                ? (experience.get("endDate")?.value | date : "shortDate")
-                : "Present"
-            }}
-            <span class="location">{{
-              experience.get("location")?.value
-            }}</span>
-          </p>
-        </div>
-        <ul class="description-list">
-          @for (description of getDescriptionControls(experience); track $index)
-          {
-          <li>{{ description.value }}</li>
-          }
-        </ul>
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          variant="outlined"
-          (click)="removeExperience($index)"
-        />
-      </li>
+        <li class="experience-item">
+          <div class="experience-header">
+            <h4>{{ experience.get('title')?.value }}</h4>
+            <p class="company">{{ experience.get('company')?.value }}</p>
+            <p class="period">
+              {{ experience.get('startDate')?.value | date: 'MM/yyyy' }} -
+              {{
+                experience.get('endDate')?.value
+                  ? (experience.get('endDate')?.value | date: 'MM/yyyy')
+                  : 'Present'
+              }}
+              <span class="location">{{ experience.get('location')?.value }}</span>
+            </p>
+          </div>
+          <ul class="description-list">
+            @for (description of getDescriptionControls(experience); track $index) {
+              <li>{{ description.value }}</li>
+            }
+          </ul>
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            variant="outlined"
+            (click)="removeExperience($index)" />
+        </li>
       }
     </ul>
   </section>
@@ -52,8 +47,7 @@
   [visible]="isDialogOpen()"
   (onHide)="closeDialog()"
   [closable]="false"
-  header="Add Experience"
->
+  header="Add Experience">
   <div class="dialog-content" [formGroup]="experienceItemForm">
     <div class="form-row">
       <p-iftalabel>
@@ -68,9 +62,8 @@
       </p-iftalabel>
     </div>
     <div class="form-row dates">
-      <p-iftalabel>
-        <label for="startDate">Start Date</label>
-        <p-calendar
+      <p-iftalabel variant="in">
+        <p-datePicker
           id="startDate"
           formControlName="startDate"
           dateFormat="mm/yy"
@@ -78,13 +71,13 @@
           [showIcon]="true"
           [readonlyInput]="true"
           [yearNavigator]="true"
-          [yearRange]="yearRange"
-          required
-        />
+          [yearRange]="'1900:2050'"
+          [showButtonBar]="true"
+          required />
+        <label for="startDate">Start Date</label>
       </p-iftalabel>
-      <p-iftalabel>
-        <label for="endDate">End Date</label>
-        <p-calendar
+      <p-iftalabel variant="in">
+        <p-datePicker
           id="endDate"
           formControlName="endDate"
           dateFormat="mm/yy"
@@ -92,8 +85,9 @@
           [showIcon]="true"
           [readonlyInput]="true"
           [yearNavigator]="true"
-          [yearRange]="yearRange"
-        />
+          [yearRange]="'1900:2050'"
+          [showButtonBar]="true" />
+        <label for="endDate">End Date</label>
       </p-iftalabel>
     </div>
     <div class="form-row">
@@ -103,28 +97,26 @@
       </p-iftalabel>
     </div>
     <div class="form-row" formArrayName="description">
-      <label>Description</label>
+      <label for="description">Description</label>
       @for (description of descriptionControls; track $index) {
-      <div class="description-item">
-        <p-iftalabel>
-          <input pInputText [formControlName]="$index" required />
-        </p-iftalabel>
-        @if ($index === 0) {
-        <p-button
-          icon="pi pi-plus"
-          severity="secondary"
-          variant="outlined"
-          (click)="addDescriptionField()"
-        />
-        } @else {
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          variant="outlined"
-          (click)="removeDescriptionField($index)"
-        />
-        }
-      </div>
+        <div class="description-item">
+          <p-iftalabel>
+            <input id="description" pInputText [formControlName]="$index" required />
+          </p-iftalabel>
+          @if ($index === 0) {
+            <p-button
+              icon="pi pi-plus"
+              severity="secondary"
+              variant="outlined"
+              (click)="addDescriptionField()" />
+          } @else {
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              variant="outlined"
+              (click)="removeDescriptionField($index)" />
+          }
+        </div>
       }
     </div>
     <div class="button-row">
@@ -133,14 +125,8 @@
         [disabled]="!experienceItemForm.valid"
         (click)="addExperience()"
         label="Save"
-        fluid="true"
-      />
-      <p-button
-        fluid="true"
-        variant="outlined"
-        (click)="closeDialog()"
-        label="Cancel"
-      />
+        fluid="true" />
+      <p-button fluid="true" variant="outlined" (click)="closeDialog()" label="Cancel" />
     </div>
   </div>
 </p-dialog>

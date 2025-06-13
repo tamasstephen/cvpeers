@@ -28,6 +28,10 @@ export class SidepanelProviderService extends ComponentBaseComponent implements 
     this.#sidepanelComponent.open();
   }
 
+  public open(): void {
+    this.#sidepanelComponent?.open();
+  }
+
   public setSidepanelConfig<T>(config: SidepanelConfig<T>): void {
     if (!this.#sidepanelComponent) {
       console.warn('Sidepanel component not set');
@@ -56,11 +60,6 @@ export class SidepanelProviderService extends ComponentBaseComponent implements 
 
   public setSidepanelComponent(component: SidepanelComponent): void {
     this.#sidepanelComponent = component;
-    /*     this.addSubscription(
-      this.#router.events.subscribe((value) => {
-        console.log('url', value);
-      })
-    ); */
   }
 
   public getCurrentConfig(): SidepanelConfig | undefined {

@@ -1,6 +1,5 @@
-import { OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Component } from '@angular/core';
 
 @Component({
   template: '',
@@ -8,12 +7,11 @@ import { Component } from '@angular/core';
 export class ComponentBaseComponent implements OnDestroy {
   #subscriptions: Subscription[] = [];
 
-  protected addSubscription(subscription: Subscription) {
-    this.#subscriptions.push(subscription);
+  public ngOnDestroy(): void {
+    this.#subscriptions.forEach((subscription): void => subscription.unsubscribe());
   }
 
-  ngOnDestroy(): void {
-    console.log('ngOnDestroy');
-    this.#subscriptions.forEach((subscription) => subscription.unsubscribe());
+  protected addSubscription(subscription: Subscription): void {
+    this.#subscriptions.push(subscription);
   }
 }

@@ -48,10 +48,17 @@ section {
     gap: 1rem;
     min-width: 400px;
     padding: 1rem 0;
+    overflow: visible;
 
     .form-row {
       display: grid;
       gap: 0.5rem;
+      width: 100%;
+
+      input,
+      ::ng-deep p-datePicker > span.p-datepicker {
+        width: 100%;
+      }
 
       ::ng-deep p-iftalabel {
         width: 100%;

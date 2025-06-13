@@ -1,9 +1,13 @@
+.cv-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .cv-form {
   display: grid;
   width: 100%;
   max-width: 600px;
   padding: 2rem;
-  margin: 0 auto;
 }
 
 form {
@@ -38,4 +42,26 @@ form {
 // Hide print-only content
 .print-only {
   display: none;
+}
+
+.dialog-text {
+  margin-bottom: 1rem;
+}
+
+.dialog-actions {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+::ng-deep .dialog-actions-button {
+  width: 100%;
+
+  & > button {
+    width: 100%;
+  }
+}
+
+.dialog-actions p-button:first-child {
+  margin-right: 1rem;
 }

@@ -1,16 +1,9 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-  inject,
-  signal,
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild, ViewContainerRef, inject, signal } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SidepanelConfig } from '../services/sidepanel-provider/sidepanel-provider.service';
-import { CommonModule } from '@angular/common';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
-import { NavigationEnd, Router } from '@angular/router';
 
 /**
  * A component that displays a drawer-like sidepanel.
@@ -25,20 +18,22 @@ import { NavigationEnd, Router } from '@angular/router';
     class: 'sidepanel-host',
   },
 })
-export class SidepanelComponent
-  extends ComponentBaseComponent
-  implements OnInit
-{
-  /**
-   * A signal that determines if the sidepanel is open.
-   */
-  isOpen = signal(false);
-
+export class SidepanelComponent extends ComponentBaseComponent implements OnInit {
   /**
    * A view container reference to the dynamic content.
    */
   @ViewChild('dynamicContent', { read: ViewContainerRef, static: true })
-  private dynamicContentContainer!: ViewContainerRef;
+  protected dynamicContentContainer!: ViewContainerRef;
+
+  /**
+   * A signal that determines if the sidepanel is open.
+   */
+  protected isOpen = signal<boolean>(false);
+
+  /**
+   * A signal that determines if the sidepanel is hidden.
+   */
+  protected isHidden = signal<boolean>(true);
 
   /**
    * A router instance.
@@ -53,17 +48,12 @@ export class SidepanelComponent
   #openPanel?: (open: () => void) => void;
 
   /**
-   * A signal that determines if the sidepanel is hidden.
-   */
-  protected isHidden = signal(true);
-
-  /**
    * A function that opens the sidepanel.
    */
-  public open() {
+  public open(): void {
     // If a custom function is provided, use it to open the sidepanel.
     if (this.#openPanel) {
-      this.#openPanel(() => this.isOpen.set(true));
+      this.#openPanel((): void => this.isOpen.set(true));
     } else {
       // Otherwise, just set the sidepanel to open.
       this.isOpen.set(true);
@@ -73,14 +63,14 @@ export class SidepanelComponent
   /**
    * A function that closes the sidepanel.
    */
-  public close() {
+  public close(): void {
     this.isOpen.set(false);
   }
 
   /**
    * A function that clears the sidepanel.
    */
-  public clearSidepanel() {
+  public clearSidepanel(): void {
     this.dynamicContentContainer.clear();
     this.#openPanel = undefined;
   }
@@ -90,15 +80,10 @@ export class SidepanelComponent
    * @param config - A configuration object for the sidepanel.
    * @param openPanel - A custom function that opens the sidepanel.
    */
-  public setContent<T>(
-    config: SidepanelConfig<T>,
-    openPanel?: (open: () => void) => void
-  ) {
+  public setContent<T>(config: SidepanelConfig<T>, openPanel?: (open: () => void) => void): void {
     this.dynamicContentContainer.clear();
     this.#openPanel = openPanel;
-    const componentRef = this.dynamicContentContainer.createComponent(
-      config.component
-    );
+    const componentRef = this.dynamicContentContainer.createComponent(config.component);
     if (config.data) {
       Object.assign(
         componentRef.instance as Record<string, unknown>,
@@ -107,9 +92,9 @@ export class SidepanelComponent
     }
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.addSubscription(
-      this.#router.events.subscribe((event) => {
+      this.#router.events.subscribe((event): void => {
         if (event instanceof NavigationEnd) {
           this.isHidden.set(!event.url.includes('/cv'));
         }
