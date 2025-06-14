@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
+import { Subject } from 'rxjs';
 import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
@@ -62,6 +63,8 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
   @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
+
+  protected reset$ = new Subject<boolean>();
 
   protected messageService = inject(MessageService);
 
@@ -121,6 +124,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   protected resetForm(): void {
     this.form.reset();
     this.closeResetFormDialog();
+    this.reset$.next(true);
     this.#cdRef.detectChanges();
     this.showToast();
   }

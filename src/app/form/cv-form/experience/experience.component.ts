@@ -1,3 +1,5 @@
+import { CvForm } from '@/types/cv-form';
+import { ExperienceForm, ExperienceFormArray, ExperienceItemForm } from '@/types/experience-form';
 import { DatePipe } from '@angular/common';
 import { Component, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,12 +9,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { CvForm } from '../../../types/cv-form';
-import {
-  ExperienceForm,
-  ExperienceFormArray,
-  ExperienceItemForm,
-} from '../../../types/experience-form';
+import { Subject } from 'rxjs';
+import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 
 @Component({
   selector: 'app-experience',
@@ -30,8 +28,10 @@ import {
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss',
 })
-export class ExperienceComponent implements OnInit {
+export class ExperienceComponent extends ComponentBaseComponent implements OnInit {
   public parentForm = input<CvForm>();
+
+  public reset$ = input.required<Subject<boolean>>();
 
   protected isDialogOpen = signal(false);
 
@@ -54,6 +54,17 @@ export class ExperienceComponent implements OnInit {
     this.parentForm()?.addControl(
       'experienceForm',
       this.experienceForm.get('experience') as ExperienceFormArray
+    );
+
+    this.addSubscription(
+      this.reset$().subscribe((value: boolean): void => {
+        if (value) {
+          const experienceArray = this.experienceForm.get('experience') as FormArray;
+          while (experienceArray.length) {
+            experienceArray.removeAt(0);
+          }
+        }
+      })
     );
   }
 
