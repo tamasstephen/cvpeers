@@ -11,6 +11,8 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import DOMPurify from 'dompurify';
 import Quill, { QuillOptions } from 'quill';
+import { Subject } from 'rxjs';
+import { ComponentBaseComponent } from '../../shared/core/component-base/component-base.component';
 
 const quillOptions: QuillOptions = {
   theme: 'snow',
@@ -24,14 +26,20 @@ const quillOptions: QuillOptions = {
 
 @Component({
   selector: 'app-rich-text',
+  standalone: true,
   imports: [],
   templateUrl: './rich-text.component.html',
   styleUrl: './rich-text.component.scss',
 })
-export class RichTextComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RichTextComponent
+  extends ComponentBaseComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild('editor') public editor!: ElementRef;
 
   public parentForm = input.required<FormGroup>();
+
+  public reset$ = input.required<Subject<boolean>>();
 
   public initialValues = input<unknown>(null);
 
@@ -45,6 +53,15 @@ export class RichTextComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit(): void {
     this.parentForm().addControl('summary', this.summary);
+
+    this.addSubscription(
+      this.reset$().subscribe((value: boolean): void => {
+        if (value) {
+          this.summary.reset();
+          this.quill()?.setText('');
+        }
+      })
+    );
   }
 
   public ngAfterViewInit(): void {
@@ -65,7 +82,8 @@ export class RichTextComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
+    super.ngOnDestroy();
     this.controller.abort();
   }
 }

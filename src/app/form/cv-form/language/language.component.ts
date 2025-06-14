@@ -6,6 +6,8 @@ import { DialogModule } from 'primeng/dialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { Subject } from 'rxjs';
+import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../types/language-form';
 
@@ -24,8 +26,10 @@ import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../type
   templateUrl: './language.component.html',
   styleUrl: './language.component.scss',
 })
-export class LanguageComponent implements OnInit {
+export class LanguageComponent extends ComponentBaseComponent implements OnInit {
   public parentForm = input<CvForm>();
+
+  public reset$ = input.required<Subject<boolean>>();
 
   protected isDialogOpen = signal(false);
 
@@ -53,6 +57,17 @@ export class LanguageComponent implements OnInit {
     this.parentForm()?.addControl(
       'languagesForm',
       this.languageForm.get('languages') as LanguageFormArray
+    );
+
+    this.addSubscription(
+      this.reset$().subscribe((value: boolean): void => {
+        if (value) {
+          const languageArray = this.languageForm.get('languages') as FormArray;
+          while (languageArray.length) {
+            languageArray.removeAt(0);
+          }
+        }
+      })
     );
   }
 

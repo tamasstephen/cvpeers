@@ -7,6 +7,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
+import { Subject } from 'rxjs';
+import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import {
   EducationForm,
@@ -30,8 +32,10 @@ import {
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',
 })
-export class EducationComponent implements OnInit {
+export class EducationComponent extends ComponentBaseComponent implements OnInit {
   public parentForm = input<CvForm>();
+
+  public reset$ = input.required<Subject<boolean>>();
 
   protected isDialogOpen = false;
 
@@ -55,6 +59,17 @@ export class EducationComponent implements OnInit {
     this.parentForm()?.addControl(
       'educationForm',
       this.educationForm.get('education') as EducationFormArray
+    );
+
+    this.addSubscription(
+      this.reset$().subscribe((value: boolean): void => {
+        if (value) {
+          const educationArray = this.educationForm.get('education') as FormArray;
+          while (educationArray.length) {
+            educationArray.removeAt(0);
+          }
+        }
+      })
     );
   }
 
