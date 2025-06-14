@@ -5,7 +5,7 @@
       <h1 style="font-family: 'Geist-SemiBold', serif; letter-spacing: -0.1px">
         {{ personalDetails?.fullName ?? '' }}
       </h1>
-      <h2 style="font-family: 'Geist', sans-serif">
+      <h2 style="font-family: 'Geist', sans-serif; font-size: 1.25rem">
         {{ personalDetails?.headline ?? '' }}
       </h2>
     </div>
@@ -109,7 +109,7 @@
       <section class="education-section">
         <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EDUCATION —</h3>
         <div *ngFor="let edu of education" class="education-item">
-          <h4 style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</h4>
+          <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</p>
           <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
             {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
           </p>
@@ -125,12 +125,17 @@
           <div *ngFor="let language of languages" style="font-family: 'Geist', sans-serif">
             <span
               class="language-name"
-              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              style="font-family: 'Geist', sans-serif; font-size: 0.875rem; display: block">
               {{ language.name }}
             </span>
             <span
               class="language-level"
-              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              style="
+                font-family: 'Geist', sans-serif;
+                font-size: 0.875rem;
+                color: #789;
+                display: block;
+              ">
               {{ language.level }}
             </span>
           </div>
