@@ -455,11 +455,12 @@ section {
 
       .language-name {
         color: #333;
+        display: block;
       }
 
       .language-level {
-        color: #666;
         font-size: 0.9rem;
+        display: block;
       }
     }
   }
