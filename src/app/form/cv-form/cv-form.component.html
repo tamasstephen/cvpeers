@@ -16,7 +16,10 @@
       <app-language [parentForm]="form" [reset$]="$any(reset$)" />
       <div class="divider"></div>
       <div>
-        <app-rich-text [parentForm]="form" [reset$]="$any(reset$)" />
+        <app-rich-text
+          [parentForm]="form"
+          [reset$]="$any(reset$)"
+          [initialValues]="richTextInitialValue$" />
         <div class="divider"></div>
       </div>
       <p-button [raised]="true" (click)="downloadPdf()" label="Download PDF" />

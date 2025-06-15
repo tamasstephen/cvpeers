@@ -1,6 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import DOMPurify from 'dompurify';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import '../assets/fonts/Geist-SemiBold-normal.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
@@ -103,9 +104,11 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           this.socialLinks = value.socialForm?.social as SocialFormValues;
           if (value.summary !== this.summary) {
             this.summary = value.summary;
+
+            const cleanHTML: string = DOMPurify.sanitize(this.summary ?? '');
             this.parsedSummary.set(
               this.sanitizer.bypassSecurityTrustHtml(
-                this.pdfGeneratorService.addGeistFontToHtml(this.summary ?? '')
+                this.pdfGeneratorService.addGeistFontToHtml(cleanHTML)
               )
             );
           }
