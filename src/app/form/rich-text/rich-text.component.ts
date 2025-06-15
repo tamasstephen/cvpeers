@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import DOMPurify from 'dompurify';
 import Quill, { QuillOptions } from 'quill';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ComponentBaseComponent } from '../../shared/core/component-base/component-base.component';
 
 const quillOptions: QuillOptions = {
@@ -41,7 +41,7 @@ export class RichTextComponent
 
   public reset$ = input.required<Subject<boolean>>();
 
-  public initialValues = input<unknown>(null);
+  public initialValues = input.required<Observable<string | null>>();
 
   public quill = signal<Quill | null>(null);
 
@@ -62,6 +62,18 @@ export class RichTextComponent
         }
       })
     );
+
+    this.addSubscription(
+      this.initialValues().subscribe((value: string | null): void => {
+        if (value) {
+          const cleanHTML = DOMPurify.sanitize(value);
+          const delta = this.quill()?.clipboard.convert({ html: cleanHTML });
+          if (delta) {
+            this.quill()?.setContents(delta, 'silent');
+          }
+        }
+      })
+    );
   }
 
   public ngAfterViewInit(): void {
@@ -72,8 +84,7 @@ export class RichTextComponent
         const currentDelta = this.quill()?.getContents();
         if (currentDelta) {
           const quillHTML = this.quill()?.root.innerHTML;
-          const cleanHTML = DOMPurify.sanitize(quillHTML ?? '');
-          this.summary.setValue(cleanHTML);
+          this.summary.setValue(quillHTML?.toString() || '');
         } else {
           this.summary.setValue('');
         }
