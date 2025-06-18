@@ -119,17 +119,6 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     // Add resize listener
     window.addEventListener('resize', this.#onResize.bind(this));
 
-    // Initialize sidepanel
-    this.sidepanelProvider.setSidepanelConfig({
-      component: CvComponent,
-      data: {
-        cvForm: this.form,
-      },
-    });
-
-    // Add structured data
-    this.structuredDataService.setCvFormStructuredData();
-
     // Load form data from localStorage if exists
     this.#loadFormData();
 
@@ -141,6 +130,19 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
         localStorage.removeItem(this.#STORAGE_KEY);
       }
     });
+
+    // Add structured data
+    this.structuredDataService.setCvFormStructuredData();
+
+    // Initialize sidepanel if not in mobile mode
+    if (!this.isMobile()) {
+      this.sidepanelProvider.openSidepanel({
+        component: CvComponent,
+        data: {
+          cvForm: this.form,
+        },
+      });
+    }
   }
 
   #formDataHasValues(value: StoredFormData | Partial<StoredFormData>): boolean {
@@ -361,8 +363,28 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   #checkScreenSize(): void {
+    const wasMobile = this.isMobile();
     this.isMobile.set(window.innerWidth < this.#MOBILE_BREAKPOINT);
-    if (this.isMobile()) {
+
+    if (wasMobile && !this.isMobile()) {
+      // When switching from mobile to desktop, reinitialize completely
+      this.sidepanelProvider.clearSidepanel();
+      // Force a new form instance
+      const formValue = this.form.value;
+      this.form = new FormGroup({});
+      this.#loadFormData();
+      // Wait for next tick to ensure form is initialized
+      setTimeout((): void => {
+        this.form.patchValue(formValue);
+        this.sidepanelProvider.openSidepanel({
+          component: CvComponent,
+          data: {
+            cvForm: this.form,
+          },
+        });
+      });
+    } else if (this.isMobile()) {
+      this.sidepanelProvider.clearSidepanel();
       this.sidepanelProvider.hideSidepanel();
     } else {
       this.sidepanelProvider.displaySidepanel();
