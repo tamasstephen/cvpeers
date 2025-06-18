@@ -92,6 +92,14 @@ export class SidepanelComponent extends ComponentBaseComponent implements OnInit
     }
   }
 
+  public hideSidepanel(): void {
+    this.isHidden.set(true);
+  }
+
+  public displaySidepanel(): void {
+    this.isHidden.set(false);
+  }
+
   public ngOnInit(): void {
     this.addSubscription(
       this.#router.events.subscribe((event): void => {

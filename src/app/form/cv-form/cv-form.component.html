@@ -1,45 +1,53 @@
 <div class="cv-form-container">
-  <div #cvForm class="cv-form">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <app-personal-details [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <app-social [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <app-experience [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <app-education [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <app-expertise [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <app-strengths [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <app-language [parentForm]="form" [reset$]="$any(reset$)" />
-      <div class="divider"></div>
-      <div>
-        <app-rich-text
-          [parentForm]="form"
-          [reset$]="$any(reset$)"
-          [initialValues]="richTextInitialValue$" />
+  @if (isMobile()) {
+    <app-mobile-warning />
+  } @else {
+    <div #cvForm class="cv-form">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-personal-details [parentForm]="form" [reset$]="$any(reset$)" />
         <div class="divider"></div>
-      </div>
-      <p-button [raised]="true" (click)="downloadPdf()" label="Download PDF" />
-      <p-button variant="outlined" (click)="openResetFormDialog()" label="Reset form" />
-    </form>
-    <p-toast />
-  </div>
-
-  <p-dialog
-    [visible]="isDialogOpen()"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
-    [closable]="false"
-    [header]="'Reset form'"
-    (onHide)="closeResetFormDialog()">
-    <p class="dialog-text text-center">Are you sure you want to reset the form?</p>
-    <div class="dialog-actions">
-      <p-button class="dialog-actions-button" (click)="closeResetFormDialog()" label="No" />
-      <p-button class="dialog-actions-button" severity="danger" (click)="resetForm()" label="Yes" />
+        <app-social [parentForm]="form" [reset$]="$any(reset$)" />
+        <div class="divider"></div>
+        <app-experience [parentForm]="form" [reset$]="$any(reset$)" />
+        <div class="divider"></div>
+        <app-education [parentForm]="form" [reset$]="$any(reset$)" />
+        <div class="divider"></div>
+        <app-expertise [parentForm]="form" [reset$]="$any(reset$)" />
+        <div class="divider"></div>
+        <app-strengths [parentForm]="form" [reset$]="$any(reset$)" />
+        <div class="divider"></div>
+        <app-language [parentForm]="form" [reset$]="$any(reset$)" />
+        <div class="divider"></div>
+        <div>
+          <app-rich-text
+            [parentForm]="form"
+            [reset$]="$any(reset$)"
+            [initialValues]="richTextInitialValue$" />
+          <div class="divider"></div>
+        </div>
+        <p-button [raised]="true" (click)="downloadPdf()" label="Download PDF" />
+        <p-button variant="outlined" (click)="openResetFormDialog()" label="Reset form" />
+      </form>
+      <p-toast />
     </div>
-  </p-dialog>
+
+    <p-dialog
+      [visible]="isDialogOpen()"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="false"
+      [header]="'Reset form'"
+      (onHide)="closeResetFormDialog()">
+      <p class="dialog-text text-center">Are you sure you want to reset the form?</p>
+      <div class="dialog-actions">
+        <p-button class="dialog-actions-button" (click)="closeResetFormDialog()" label="No" />
+        <p-button
+          class="dialog-actions-button"
+          severity="danger"
+          (click)="resetForm()"
+          label="Yes" />
+      </div>
+    </p-dialog>
+  }
 </div>

@@ -1,0 +1,42 @@
+:host ::ng-deep {
+  .consent-dialog {
+    max-width: 600px !important;
+    margin: 1rem;
+
+    .p-dialog-content {
+      padding: 1.5rem;
+    }
+  }
+
+  .p-dialog-mask {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.consent-content {
+  .title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    line-height: 1.5;
+  }
+
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.consent-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
