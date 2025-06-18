@@ -2,7 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import DOMPurify from 'dompurify';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import '../assets/fonts/Geist-SemiBold-normal.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
@@ -95,10 +95,14 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // Subscribe to form data changes
+    // Wait for form to be initialized and subscribe to changes
     this.addSubscription(
       this.cvForm.valueChanges
-        .pipe(debounceTime(300), distinctUntilChanged())
+        .pipe(
+          filter((): boolean => !!this.cvForm), // Only proceed if form exists
+          debounceTime(300),
+          distinctUntilChanged()
+        )
         .subscribe((value): void => {
           this.personalDetails = value.personalDetailsForm as PersonalDetailsFormValues;
           this.socialLinks = value.socialForm?.social as SocialFormValues;

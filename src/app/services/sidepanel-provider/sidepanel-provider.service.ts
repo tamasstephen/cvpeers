@@ -1,5 +1,4 @@
-import { Injectable, OnDestroy, Type, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, OnDestroy, Type } from '@angular/core';
 import { ComponentBaseComponent } from '../../shared/core/component-base/component-base.component';
 import { SidepanelComponent } from '../../sidepanel/sidepanel.component';
 
@@ -16,8 +15,6 @@ export class SidepanelProviderService extends ComponentBaseComponent implements 
 
   #currentConfig?: SidepanelConfig;
 
-  #router = inject(Router);
-
   public openSidepanel<T>(config: SidepanelConfig<T>): void {
     if (!this.#sidepanelComponent) {
       console.warn('Sidepanel component not set');
@@ -30,6 +27,14 @@ export class SidepanelProviderService extends ComponentBaseComponent implements 
 
   public open(): void {
     this.#sidepanelComponent?.open();
+  }
+
+  public displaySidepanel(): void {
+    this.#sidepanelComponent?.displaySidepanel();
+  }
+
+  public hideSidepanel(): void {
+    this.#sidepanelComponent?.hideSidepanel();
   }
 
   public setSidepanelConfig<T>(config: SidepanelConfig<T>): void {

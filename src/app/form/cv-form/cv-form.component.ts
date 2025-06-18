@@ -24,6 +24,7 @@ import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
+import { MobileWarningComponent } from '../../shared/components/mobile-warning/mobile-warning.component';
 import { CvForm } from '../../types/cv-form';
 import { EducationItemFormValues } from '../../types/education-form';
 import { ExperienceItemFormValues } from '../../types/experience-form';
@@ -70,6 +71,7 @@ interface StoredFormData {
     EducationComponent,
     LanguageComponent,
     ToastModule,
+    MobileWarningComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',
@@ -79,6 +81,8 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
   @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
+
+  protected isMobile = signal<boolean>(false);
 
   protected reset$ = new Subject<boolean>();
 
@@ -106,17 +110,14 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly #STORAGE_KEY = 'cv_form_data';
 
-  public ngOnInit(): void {
-    // Initialize sidepanel
-    this.sidepanelProvider.setSidepanelConfig({
-      component: CvComponent,
-      data: {
-        cvForm: this.form,
-      },
-    });
+  readonly #MOBILE_BREAKPOINT = 768;
 
-    // Add structured data
-    this.structuredDataService.setCvFormStructuredData();
+  public ngOnInit(): void {
+    // Check initial screen size
+    this.#checkScreenSize();
+
+    // Add resize listener
+    window.addEventListener('resize', this.#onResize.bind(this));
 
     // Load form data from localStorage if exists
     this.#loadFormData();
@@ -129,6 +130,19 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
         localStorage.removeItem(this.#STORAGE_KEY);
       }
     });
+
+    // Add structured data
+    this.structuredDataService.setCvFormStructuredData();
+
+    // Initialize sidepanel if not in mobile mode
+    if (!this.isMobile()) {
+      this.sidepanelProvider.openSidepanel({
+        component: CvComponent,
+        data: {
+          cvForm: this.form,
+        },
+      });
+    }
   }
 
   #formDataHasValues(value: StoredFormData | Partial<StoredFormData>): boolean {
@@ -151,6 +165,9 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    // Remove resize listener
+    window.removeEventListener('resize', this.#onResize.bind(this));
+
     this.structuredDataService.removeStructuredData();
   }
 
@@ -339,5 +356,38 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected closeResetFormDialog(): void {
     this.isDialogOpen.set(false);
+  }
+
+  #onResize(): void {
+    this.#checkScreenSize();
+  }
+
+  #checkScreenSize(): void {
+    const wasMobile = this.isMobile();
+    this.isMobile.set(window.innerWidth < this.#MOBILE_BREAKPOINT);
+
+    if (wasMobile && !this.isMobile()) {
+      // When switching from mobile to desktop, reinitialize completely
+      this.sidepanelProvider.clearSidepanel();
+      // Force a new form instance
+      const formValue = this.form.value;
+      this.form = new FormGroup({});
+      this.#loadFormData();
+      // Wait for next tick to ensure form is initialized
+      setTimeout((): void => {
+        this.form.patchValue(formValue);
+        this.sidepanelProvider.openSidepanel({
+          component: CvComponent,
+          data: {
+            cvForm: this.form,
+          },
+        });
+      });
+    } else if (this.isMobile()) {
+      this.sidepanelProvider.clearSidepanel();
+      this.sidepanelProvider.hideSidepanel();
+    } else {
+      this.sidepanelProvider.displaySidepanel();
+    }
   }
 }
