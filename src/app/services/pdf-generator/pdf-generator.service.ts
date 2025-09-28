@@ -86,7 +86,7 @@ export class PdfGeneratorService {
     const strongs = Array.from(tempDiv.querySelectorAll('strong'));
     strongs.forEach((strongEl): void => {
       const span = document.createElement('span');
-      span.setAttribute('style', "font-family: 'GeistMono-SemiBold'; font-weight: bold;");
+      span.setAttribute('style', "font-family: 'Geist-SemiBold'; font-weight: bold;");
       // Keep existing inline styles if present
       const existingStyle = strongEl.getAttribute('style');
       if (existingStyle) {
@@ -97,6 +97,16 @@ export class PdfGeneratorService {
     });
 
     // Sanitize inline styles to remove background colors and enforce readable text color
+    const ensureStyle = (styles: string[], property: string, value: string): void => {
+      const normalizedProperty = property.toLowerCase();
+      const hasProperty = styles.some((style): boolean =>
+        style.trim().toLowerCase().startsWith(`${normalizedProperty}:`)
+      );
+      if (!hasProperty) {
+        styles.push(`${property}: ${value}`);
+      }
+    };
+
     const sanitizeElement = (element: Element): void => {
       if (element instanceof HTMLElement) {
         const style = element.getAttribute('style');
@@ -105,11 +115,29 @@ export class PdfGeneratorService {
             .replace(/background(-color)?:[^;]+;?/gi, '')
             .replace(/background:[^;]+;?/gi, '')
             .trim();
-          const styles: string[] = sanitizedStyle ? sanitizedStyle.split(';').filter(Boolean) : [];
+          const styles: string[] = sanitizedStyle
+            ? sanitizedStyle
+                .split(';')
+                .map((value): string => value.trim())
+                .filter(Boolean)
+            : [];
 
-          const hasColor = styles.some((value): boolean => value.trim().startsWith('color'));
-          if (!hasColor) {
-            styles.push('color: #323232');
+          ensureStyle(styles, 'color', '#323232');
+
+          if (element.tagName === 'UL') {
+            ensureStyle(styles, 'list-style-type', 'disc');
+            ensureStyle(styles, 'list-style-position', 'outside');
+            ensureStyle(styles, 'padding-left', '18px');
+            ensureStyle(styles, 'margin', '0 0 8px 0');
+          }
+
+          if (element.tagName === 'LI') {
+            ensureStyle(styles, 'list-style-type', 'disc');
+            ensureStyle(styles, 'list-style-position', 'outside');
+            ensureStyle(styles, 'display', 'list-item');
+            ensureStyle(styles, 'line-height', '1.5');
+            ensureStyle(styles, 'margin', '0 0 6px 0');
+            ensureStyle(styles, 'padding-left', '0');
           }
 
           if (styles.length > 0) {
@@ -118,7 +146,28 @@ export class PdfGeneratorService {
             element.removeAttribute('style');
           }
         } else {
-          element.setAttribute('style', 'color: #323232;');
+          const styles: string[] = [];
+          ensureStyle(styles, 'color', '#323232');
+
+          if (element.tagName === 'UL') {
+            ensureStyle(styles, 'list-style-type', 'disc');
+            ensureStyle(styles, 'list-style-position', 'outside');
+            ensureStyle(styles, 'padding-left', '18px');
+            ensureStyle(styles, 'margin', '0 0 8px 0');
+          }
+
+          if (element.tagName === 'LI') {
+            ensureStyle(styles, 'list-style-type', 'disc');
+            ensureStyle(styles, 'list-style-position', 'outside');
+            ensureStyle(styles, 'display', 'list-item');
+            ensureStyle(styles, 'line-height', '1.5');
+            ensureStyle(styles, 'margin', '0 0 6px 0');
+            ensureStyle(styles, 'padding-left', '0');
+          }
+
+          if (styles.length > 0) {
+            element.setAttribute('style', `${styles.join('; ')};`);
+          }
         }
       }
 
