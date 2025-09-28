@@ -132,6 +132,7 @@ export class PdfGeneratorService {
           if (element.tagName === 'LI') {
             ensureStyle(styles, 'font-family', 'Geist');
             ensureStyle(styles, 'font-size', '0.875rem');
+            ensureStyle(styles, 'list-style-position', 'outside');
           }
 
           if (element.tagName === 'SPAN') {
