@@ -132,6 +132,7 @@ export class PdfGeneratorService {
           if (element.tagName === 'LI') {
             ensureStyle(styles, 'font-family', 'Geist');
             ensureStyle(styles, 'font-size', '0.875rem');
+            ensureStyle(styles, 'list-style-position', 'outside');
           }
 
           if (element.tagName === 'SPAN') {
@@ -160,7 +161,7 @@ export class PdfGeneratorService {
             element.style.fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist'
           );
 
-          if (element.tagName === 'UL') {
+          if (element.tagName === 'UL' || element.tagName === 'OL') {
             ensureStyle(styles, 'font-family', 'Geist');
             ensureStyle(styles, 'font-size', '0.875rem');
           }
@@ -168,6 +169,7 @@ export class PdfGeneratorService {
           if (element.tagName === 'LI') {
             ensureStyle(styles, 'font-family', 'Geist');
             ensureStyle(styles, 'font-size', '0.875rem');
+            ensureStyle(styles, 'list-style-position', 'outside');
           }
 
           if (element.tagName === 'SPAN') {
