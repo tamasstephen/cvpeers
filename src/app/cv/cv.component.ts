@@ -110,11 +110,9 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
             this.summary = value.summary;
 
             const cleanHTML: string = DOMPurify.sanitize(this.summary ?? '');
-            this.parsedSummary.set(
-              this.sanitizer.bypassSecurityTrustHtml(
-                this.pdfGeneratorService.addGeistFontToHtml(cleanHTML)
-              )
-            );
+            const parsedForPdf = this.pdfGeneratorService.parseSummaryHtml(cleanHTML);
+            const withFonts = this.pdfGeneratorService.addGeistFontToHtml(parsedForPdf);
+            this.parsedSummary.set(this.sanitizer.bypassSecurityTrustHtml(withFonts));
           }
           this.experience = value.experienceForm as unknown as ExperienceFormValues;
           this.education = value.educationForm as unknown as EducationFormValues;
