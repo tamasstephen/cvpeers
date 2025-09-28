@@ -3,40 +3,40 @@
   <header class="header-section">
     <div class="name-title">
       <h1 style="font-family: 'Geist-SemiBold', serif; letter-spacing: -0.1px">
-        {{ personalDetails?.fullName ?? '' }}
+        {{ personalDetails()?.fullName ?? '' }}
       </h1>
       <h2 style="font-family: 'Geist', sans-serif; font-size: 1.25rem">
-        {{ personalDetails?.headline ?? '' }}
+        {{ personalDetails()?.headline ?? '' }}
       </h2>
     </div>
     <div class="contact-links">
       <a
-        *ngIf="personalDetails?.website"
-        [href]="personalDetails?.website"
+        *ngIf="personalDetails()?.website"
+        [href]="personalDetails()?.website"
         class="contact-item"
         style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
         <img src="assets/images/global-line.png" alt="Website" class="contact-icon" />
-        {{ personalDetails?.website }}
+        {{ personalDetails()?.website }}
       </a>
       <a
-        *ngIf="personalDetails?.phone"
-        [href]="personalDetails?.phone"
+        *ngIf="personalDetails()?.phone"
+        [href]="personalDetails()?.phone"
         class="contact-item"
         style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
         <img src="assets/images/phone.png" alt="phone" class="contact-icon" />
-        {{ personalDetails?.phone }}
+        {{ personalDetails()?.phone }}
       </a>
       <a
-        *ngIf="personalDetails?.email"
-        [href]="'mailto:' + personalDetails?.email"
+        *ngIf="personalDetails()?.email"
+        [href]="'mailto:' + personalDetails()?.email"
         class="contact-item"
         style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
         <img src="assets/images/mail-fill.png" alt="Email" class="contact-icon" />
-        {{ personalDetails?.email }}
+        {{ personalDetails()?.email }}
       </a>
       <!-- Social Links -->
       <a
-        *ngFor="let social of socialLinks"
+        *ngFor="let social of socialLinks()"
         [href]="social.url"
         target="_blank"
         class="contact-item"
@@ -52,8 +52,8 @@
     <!-- Left Column -->
     <div class="left-column">
       <!-- Summary/Bio Section -->
-      @if (summary) {
-        <section class="summary-section" *ngIf="summary">
+      @if (summary()) {
+        <section class="summary-section" *ngIf="summary()">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">BIO —</h3>
           <div [innerHTML]="parsedSummary()"></div>
         </section>
@@ -61,24 +61,22 @@
       <!-- Experience Section -->
       <section class="experience-section">
         <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EXPERIENCE —</h3>
-        <div *ngFor="let job of experience" class="experience-item">
+        <div *ngFor="let job of experience()" class="experience-item">
           <div class="job-header">
             <h4 style="font-family: 'Geist-SemiBold', sans-serif; font-weight: bold">
               {{ job.title }}
             </h4>
-            <span class="company" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{
-              job.company
-            }}</span>
+            <span class="company" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              {{ job.company }}
+            </span>
             <div class="job-period" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-              <span style="font-family: 'Geist', sans-serif; font-size: 0.875rem"
-                >{{ job.startDate | date: 'MM/yyyy' }} -
-                {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}</span
-              >
-              <span
-                class="location"
-                style="font-family: 'Geist', sans-serif; font-size: 0.875rem"
-                >{{ job.location }}</span
-              >
+              <span style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+                {{ job.startDate | date: 'MM/yyyy' }} -
+                {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}
+              </span>
+              <span class="location" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+                {{ job.location }}
+              </span>
             </div>
           </div>
           <ul class="job-description" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
@@ -94,13 +92,13 @@
 
     <!-- Right Column -->
     <div class="right-column">
-      @if (expertise && expertise.length > 0) {
+      @if (expertise()?.length) {
         <!-- Design Skills Section -->
         <section class="skills-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">SKILLS —</h3>
           <ul class="skills-list">
             <li
-              *ngFor="let skill of expertise"
+              *ngFor="let skill of expertise()"
               style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
               {{ skill }}
             </li>
@@ -108,10 +106,10 @@
         </section>
       }
       <!-- Education Section -->
-      @if (education && education.length > 0) {
+      @if (education()?.length) {
         <section class="education-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EDUCATION —</h3>
-          <div *ngFor="let edu of education" class="education-item">
+          <div *ngFor="let edu of education()" class="education-item">
             <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</p>
             <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
               {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
@@ -123,11 +121,11 @@
         </section>
       }
 
-      @if (languages && languages.length > 0) {
+      @if (languages()?.length) {
         <section class="languages-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">LANGUAGES —</h3>
           <div class="languages-grid">
-            <div *ngFor="let language of languages" style="font-family: 'Geist', sans-serif">
+            <div *ngFor="let language of languages()" style="font-family: 'Geist', sans-serif">
               <span
                 class="language-name"
                 style="font-family: 'Geist', sans-serif; font-size: 0.875rem; display: block">
@@ -148,13 +146,13 @@
         </section>
       }
 
-      @if (strengths && strengths.length > 0) {
+      @if (strengths()?.length) {
         <!-- Soft Skills Section -->
         <section class="soft-skills-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">STRENGTHS —</h3>
           <ul class="skills-list">
             <li
-              *ngFor="let strength of strengths"
+              *ngFor="let strength of strengths()"
               style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
               {{ strength }}
             </li>
