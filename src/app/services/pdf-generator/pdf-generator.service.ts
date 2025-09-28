@@ -82,6 +82,57 @@ export class PdfGeneratorService {
       }
     });
 
+    // Normalise unordered lists to a static layout to avoid bullet misalignment in PDFs
+    const unorderedLists = Array.from(tempDiv.querySelectorAll('ul'));
+    unorderedLists.forEach((ul): void => {
+      const listContainer = document.createElement('div');
+      listContainer.setAttribute('style', 'display: flex; flex-direction: column; gap: 6px;');
+      Array.from(ul.attributes).forEach((attr): void => {
+        listContainer.setAttribute(attr.name, attr.value);
+      });
+
+      Array.from(ul.children).forEach((child): void => {
+        if (!(child instanceof HTMLLIElement)) {
+          listContainer.appendChild(child);
+          return;
+        }
+
+        const indentLevel =
+          Array.from(child.classList)
+            .map((cls): number | null =>
+              cls.startsWith('ql-indent-') ? Number(cls.replace('ql-indent-', '')) : null
+            )
+            .find((value): value is number => value !== null) ?? 0;
+        const indentOffset = indentLevel * 18;
+
+        const row = document.createElement('div');
+        row.setAttribute(
+          'style',
+          `position: relative; padding-left: ${indentOffset + 14}px; font-family: 'Geist'; font-size: 0.875rem; line-height: 1.5;`
+        );
+
+        const bullet = document.createElement('span');
+        bullet.innerHTML = '&#8226;';
+        bullet.setAttribute(
+          'style',
+          `position: absolute; left: ${indentOffset}px; top: 0; font-family: 'Geist-SemiBold'; font-size: 0.875rem; line-height: 1.5;`
+        );
+
+        const content = document.createElement('div');
+        content.setAttribute(
+          'style',
+          "display: block; font-family: 'Geist'; font-size: 0.875rem; line-height: 1.5; white-space: normal;"
+        );
+        content.innerHTML = child.innerHTML;
+
+        row.appendChild(bullet);
+        row.appendChild(content);
+        listContainer.appendChild(row);
+      });
+
+      ul.replaceWith(listContainer);
+    });
+
     // Replace <strong> with inline-styled <span>
     const strongs = Array.from(tempDiv.querySelectorAll('strong'));
     strongs.forEach((strongEl): void => {
