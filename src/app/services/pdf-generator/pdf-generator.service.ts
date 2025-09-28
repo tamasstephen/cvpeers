@@ -64,6 +64,9 @@ export class PdfGeneratorService {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlString;
 
+    // Remove Quill helper spans that interfere with rendering
+    tempDiv.querySelectorAll('span.ql-ui').forEach((el): void => el.remove());
+
     // Convert bullet-marked ordered lists to unordered lists
     const orderedLists = Array.from(tempDiv.querySelectorAll('ol'));
     orderedLists.forEach((ol): void => {
@@ -92,6 +95,37 @@ export class PdfGeneratorService {
       span.innerHTML = strongEl.innerHTML;
       strongEl.replaceWith(span);
     });
+
+    // Sanitize inline styles to remove background colors and enforce readable text color
+    const sanitizeElement = (element: Element): void => {
+      if (element instanceof HTMLElement) {
+        const style = element.getAttribute('style');
+        if (style) {
+          const sanitizedStyle = style
+            .replace(/background(-color)?:[^;]+;?/gi, '')
+            .replace(/background:[^;]+;?/gi, '')
+            .trim();
+          const styles: string[] = sanitizedStyle ? sanitizedStyle.split(';').filter(Boolean) : [];
+
+          const hasColor = styles.some((value): boolean => value.trim().startsWith('color'));
+          if (!hasColor) {
+            styles.push('color: #323232');
+          }
+
+          if (styles.length > 0) {
+            element.setAttribute('style', `${styles.join('; ')};`);
+          } else {
+            element.removeAttribute('style');
+          }
+        } else {
+          element.setAttribute('style', 'color: #323232;');
+        }
+      }
+
+      Array.from(element.children).forEach((child): void => sanitizeElement(child));
+    };
+
+    Array.from(tempDiv.children).forEach((element): void => sanitizeElement(element));
 
     return tempDiv.innerHTML;
   }
