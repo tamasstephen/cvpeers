@@ -109,10 +109,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           if (value.summary !== this.summary) {
             this.summary = value.summary;
 
-            console.log('summary', this.summary);
-
             const cleanHTML: string = DOMPurify.sanitize(this.summary ?? '');
-            console.log('sanitized', cleanHTML);
             const parsedForPdf = this.pdfGeneratorService.parseSummaryHtml(cleanHTML);
             const withFonts = this.pdfGeneratorService.addGeistFontToHtml(parsedForPdf);
             this.parsedSummary.set(this.sanitizer.bypassSecurityTrustHtml(withFonts));
