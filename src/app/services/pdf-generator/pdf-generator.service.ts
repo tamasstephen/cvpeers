@@ -125,19 +125,25 @@ export class PdfGeneratorService {
           ensureStyle(styles, 'color', '#323232');
 
           if (element.tagName === 'UL') {
-            ensureStyle(styles, 'list-style-type', 'disc');
-            ensureStyle(styles, 'list-style-position', 'outside');
-            ensureStyle(styles, 'padding-left', '18px');
-            ensureStyle(styles, 'margin', '0 0 8px 0');
+            ensureStyle(styles, 'font-family', 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
           }
 
           if (element.tagName === 'LI') {
-            ensureStyle(styles, 'list-style-type', 'disc');
-            ensureStyle(styles, 'list-style-position', 'outside');
-            ensureStyle(styles, 'display', 'list-item');
-            ensureStyle(styles, 'line-height', '1.5');
-            ensureStyle(styles, 'margin', '0 0 6px 0');
-            ensureStyle(styles, 'padding-left', '0');
+            ensureStyle(styles, 'font-family', 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
+          }
+
+          if (element.tagName === 'SPAN') {
+            const fontWeight = element.style.fontWeight;
+            ensureStyle(styles, 'font-family', fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
+          }
+
+          if (element.tagName === 'SPAN') {
+            const fontWeight = element.style.fontWeight;
+            ensureStyle(styles, 'font-family', fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
           }
 
           if (styles.length > 0) {
@@ -148,21 +154,26 @@ export class PdfGeneratorService {
         } else {
           const styles: string[] = [];
           ensureStyle(styles, 'color', '#323232');
+          ensureStyle(
+            styles,
+            'font-family',
+            element.style.fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist'
+          );
 
           if (element.tagName === 'UL') {
-            ensureStyle(styles, 'list-style-type', 'disc');
-            ensureStyle(styles, 'list-style-position', 'outside');
-            ensureStyle(styles, 'padding-left', '18px');
-            ensureStyle(styles, 'margin', '0 0 8px 0');
+            ensureStyle(styles, 'font-family', 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
           }
 
           if (element.tagName === 'LI') {
-            ensureStyle(styles, 'list-style-type', 'disc');
-            ensureStyle(styles, 'list-style-position', 'outside');
-            ensureStyle(styles, 'display', 'list-item');
-            ensureStyle(styles, 'line-height', '1.5');
-            ensureStyle(styles, 'margin', '0 0 6px 0');
-            ensureStyle(styles, 'padding-left', '0');
+            ensureStyle(styles, 'font-family', 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
+          }
+
+          if (element.tagName === 'SPAN') {
+            const fontWeight = element.style.fontWeight;
+            ensureStyle(styles, 'font-family', fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist');
+            ensureStyle(styles, 'font-size', '0.875rem');
           }
 
           if (styles.length > 0) {
@@ -186,6 +197,7 @@ export class PdfGeneratorService {
   public async createPdfFromHtml(html: Element): Promise<void> {
     this.#pdfGenerator.setFillColor(255, 253, 248);
     this.#pdfGenerator.setFont('Geist');
+    this.#pdfGenerator.setFont('Geist-SemiBold');
     this.#pdfGenerator.setFont('GeistMono-SemiBold');
     this.#pdfGenerator.setCharSpace(0);
 
