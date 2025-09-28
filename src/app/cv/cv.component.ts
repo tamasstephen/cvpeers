@@ -31,17 +31,17 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
    * The personal details of the CV
    */
-  protected personalDetails: PersonalDetailsFormValues | undefined = undefined;
+  protected personalDetails = signal<PersonalDetailsFormValues | undefined>(undefined);
 
   /**
    * The social links of the CV
    */
-  protected socialLinks: SocialFormValues = [];
+  protected socialLinks = signal<SocialFormValues>([]);
 
   /**
    * The summary of the CV
    */
-  protected summary: string | undefined = undefined;
+  protected summary = signal<string | undefined>(undefined);
 
   /**
    * The parsed summary of the CV
@@ -51,27 +51,27 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
    * The experience of the CV
    */
-  protected experience: ExperienceFormValues | undefined = undefined;
+  protected experience = signal<ExperienceFormValues>([]);
 
   /**
    * The education of the CV
    */
-  protected education: EducationFormValues | undefined = undefined;
+  protected education = signal<EducationFormValues>([]);
 
   /**
    * The expertise of the CV
    */
-  protected expertise: string[] | undefined = undefined;
+  protected expertise = signal<string[]>([]);
 
   /**
    * The strengths of the CV
    */
-  protected strengths: string[] | undefined = undefined;
+  protected strengths = signal<string[]>([]);
 
   /**
    * The languages of the CV
    */
-  protected languages: LanguageFormValues | undefined = undefined;
+  protected languages = signal<LanguageFormValues>([]);
 
   /**
    * The PDF generator service
@@ -85,13 +85,13 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
 
   public constructor() {
     super();
-    this.personalDetails = {
+    this.personalDetails.set({
       fullName: 'John Doe',
       email: 'john.doe@example.com',
       phone: '+1 (555) 123-4567',
       website: 'https://johndoe.com',
       headline: 'Senior Software Engineer',
-    };
+    });
   }
 
   public ngOnInit(): void {
@@ -104,21 +104,21 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           distinctUntilChanged()
         )
         .subscribe((value): void => {
-          this.personalDetails = value.personalDetailsForm as PersonalDetailsFormValues;
-          this.socialLinks = value.socialForm?.social as SocialFormValues;
-          if (value.summary !== this.summary) {
-            this.summary = value.summary;
+          this.personalDetails.set(value.personalDetailsForm as PersonalDetailsFormValues);
+          this.socialLinks.set((value.socialForm?.social as SocialFormValues) ?? []);
+          if (value.summary !== this.summary()) {
+            this.summary.set(value.summary);
 
-            const cleanHTML: string = DOMPurify.sanitize(this.summary ?? '');
+            const cleanHTML: string = DOMPurify.sanitize(this.summary() ?? '');
             const parsedForPdf = this.pdfGeneratorService.parseSummaryHtml(cleanHTML);
             const withFonts = this.pdfGeneratorService.addGeistFontToHtml(parsedForPdf);
             this.parsedSummary.set(this.sanitizer.bypassSecurityTrustHtml(withFonts));
           }
-          this.experience = value.experienceForm as unknown as ExperienceFormValues;
-          this.education = value.educationForm as unknown as EducationFormValues;
-          this.expertise = value.expertiseForm as unknown as string[];
-          this.strengths = value.strengthsForm as unknown as string[];
-          this.languages = value.languagesForm as unknown as LanguageFormValues;
+          this.experience.set((value.experienceForm as unknown as ExperienceFormValues) ?? []);
+          this.education.set((value.educationForm as unknown as EducationFormValues) ?? []);
+          this.expertise.set((value.expertiseForm as unknown as string[]) ?? []);
+          this.strengths.set((value.strengthsForm as unknown as string[]) ?? []);
+          this.languages.set((value.languagesForm as unknown as LanguageFormValues) ?? []);
         })
     );
   }
