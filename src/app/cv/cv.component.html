@@ -52,11 +52,12 @@
     <!-- Left Column -->
     <div class="left-column">
       <!-- Summary/Bio Section -->
-      <section class="summary-section" *ngIf="summary">
-        <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">BIO —</h3>
-        <div [innerHTML]="parsedSummary()"></div>
-      </section>
-
+      @if (summary) {
+        <section class="summary-section" *ngIf="summary">
+          <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">BIO —</h3>
+          <div [innerHTML]="parsedSummary()"></div>
+        </section>
+      }
       <!-- Experience Section -->
       <section class="experience-section">
         <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EXPERIENCE —</h3>
@@ -93,66 +94,73 @@
 
     <!-- Right Column -->
     <div class="right-column">
-      <!-- Design Skills Section -->
-      <section class="skills-section">
-        <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">SKILLS —</h3>
-        <ul class="skills-list">
-          <li
-            *ngFor="let skill of expertise"
-            style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-            {{ skill }}
-          </li>
-        </ul>
-      </section>
-
+      @if (expertise && expertise.length > 0) {
+        <!-- Design Skills Section -->
+        <section class="skills-section">
+          <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">SKILLS —</h3>
+          <ul class="skills-list">
+            <li
+              *ngFor="let skill of expertise"
+              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              {{ skill }}
+            </li>
+          </ul>
+        </section>
+      }
       <!-- Education Section -->
-      <section class="education-section">
-        <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EDUCATION —</h3>
-        <div *ngFor="let edu of education" class="education-item">
-          <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</p>
-          <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-            {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
-          </p>
-          <p class="location" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-            {{ edu.location }}
-          </p>
-        </div>
-      </section>
-
-      <section class="languages-section">
-        <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">LANGUAGES —</h3>
-        <div class="languages-grid">
-          <div *ngFor="let language of languages" style="font-family: 'Geist', sans-serif">
-            <span
-              class="language-name"
-              style="font-family: 'Geist', sans-serif; font-size: 0.875rem; display: block">
-              {{ language.name }}
-            </span>
-            <span
-              class="language-level"
-              style="
-                font-family: 'Geist', sans-serif;
-                font-size: 0.875rem;
-                color: #789;
-                display: block;
-              ">
-              {{ language.level }}
-            </span>
+      @if (education && education.length > 0) {
+        <section class="education-section">
+          <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EDUCATION —</h3>
+          <div *ngFor="let edu of education" class="education-item">
+            <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</p>
+            <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
+            </p>
+            <p class="location" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              {{ edu.location }}
+            </p>
           </div>
-        </div>
-      </section>
+        </section>
+      }
 
-      <!-- Soft Skills Section -->
-      <section class="soft-skills-section">
-        <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">STRENGTHS —</h3>
-        <ul class="skills-list">
-          <li
-            *ngFor="let strength of strengths"
-            style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-            {{ strength }}
-          </li>
-        </ul>
-      </section>
+      @if (languages && languages.length > 0) {
+        <section class="languages-section">
+          <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">LANGUAGES —</h3>
+          <div class="languages-grid">
+            <div *ngFor="let language of languages" style="font-family: 'Geist', sans-serif">
+              <span
+                class="language-name"
+                style="font-family: 'Geist', sans-serif; font-size: 0.875rem; display: block">
+                {{ language.name }}
+              </span>
+              <span
+                class="language-level"
+                style="
+                  font-family: 'Geist', sans-serif;
+                  font-size: 0.875rem;
+                  color: #789;
+                  display: block;
+                ">
+                {{ language.level }}
+              </span>
+            </div>
+          </div>
+        </section>
+      }
+
+      @if (strengths && strengths.length > 0) {
+        <!-- Soft Skills Section -->
+        <section class="soft-skills-section">
+          <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">STRENGTHS —</h3>
+          <ul class="skills-list">
+            <li
+              *ngFor="let strength of strengths"
+              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              {{ strength }}
+            </li>
+          </ul>
+        </section>
+      }
     </div>
   </div>
 </div>
