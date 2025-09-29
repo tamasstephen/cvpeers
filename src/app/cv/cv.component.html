@@ -10,40 +10,48 @@
       </h2>
     </div>
     <div class="contact-links">
-      <a
-        *ngIf="personalDetails()?.website"
-        [href]="personalDetails()?.website"
-        class="contact-item"
-        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
-        <img src="assets/images/global-line.png" alt="Website" class="contact-icon" />
-        {{ personalDetails()?.website }}
-      </a>
-      <a
-        *ngIf="personalDetails()?.phone"
-        [href]="personalDetails()?.phone"
-        class="contact-item"
-        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
-        <img src="assets/images/phone.png" alt="phone" class="contact-icon" />
-        {{ personalDetails()?.phone }}
-      </a>
-      <a
-        *ngIf="personalDetails()?.email"
-        [href]="'mailto:' + personalDetails()?.email"
-        class="contact-item"
-        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
-        <img src="assets/images/mail-fill.png" alt="Email" class="contact-icon" />
-        {{ personalDetails()?.email }}
-      </a>
-      <!-- Social Links -->
-      <a
-        *ngFor="let social of socialLinks()"
-        [href]="social.url"
-        target="_blank"
-        class="contact-item"
-        style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
-        <img [src]="social.src" [alt]="social.type" class="contact-icon" />
-        {{ social.url }}
-      </a>
+      <div>
+        <a
+          *ngIf="personalDetails()?.website"
+          [href]="personalDetails()?.website"
+          class="contact-item"
+          style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+          <img src="assets/images/global-line.png" alt="Website" class="contact-icon" />
+          {{ personalDetails()?.website }}
+        </a>
+      </div>
+      <div>
+        <a
+          *ngIf="personalDetails()?.phone"
+          [href]="personalDetails()?.phone"
+          class="contact-item"
+          style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+          <img src="assets/images/phone.png" alt="phone" class="contact-icon" />
+          {{ personalDetails()?.phone }}
+        </a>
+      </div>
+      <div>
+        <a
+          *ngIf="personalDetails()?.email"
+          [href]="'mailto:' + personalDetails()?.email"
+          class="contact-item"
+          style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+          <img src="assets/images/mail-fill.png" alt="Email" class="contact-icon" />
+          {{ personalDetails()?.email }}
+        </a>
+      </div>
+      <div>
+        <!-- Social Links -->
+        <a
+          *ngFor="let social of socialLinks()"
+          [href]="social.url"
+          target="_blank"
+          class="contact-item"
+          style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+          <img [src]="social.src" [alt]="social.type" class="contact-icon" />
+          {{ social.url }}
+        </a>
+      </div>
     </div>
   </header>
 
@@ -92,7 +100,7 @@
 
     <!-- Right Column -->
     <div class="right-column">
-      @if (expertise()?.length) {
+      @if (expertise().length) {
         <!-- Design Skills Section -->
         <section class="skills-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">SKILLS —</h3>
@@ -106,7 +114,7 @@
         </section>
       }
       <!-- Education Section -->
-      @if (education()?.length) {
+      @if (education().length) {
         <section class="education-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">EDUCATION —</h3>
           <div *ngFor="let edu of education()" class="education-item">
@@ -121,7 +129,7 @@
         </section>
       }
 
-      @if (languages()?.length) {
+      @if (languages().length) {
         <section class="languages-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">LANGUAGES —</h3>
           <div class="languages-grid">
@@ -146,7 +154,7 @@
         </section>
       }
 
-      @if (strengths()?.length) {
+      @if (strengths().length) {
         <!-- Soft Skills Section -->
         <section class="soft-skills-section">
           <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">STRENGTHS —</h3>

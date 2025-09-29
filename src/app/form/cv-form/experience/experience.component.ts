@@ -1,6 +1,6 @@
 import { CvForm } from '@/types/cv-form';
 import { ExperienceForm, ExperienceFormArray, ExperienceItemForm } from '@/types/experience-form';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -24,6 +24,7 @@ import { ComponentBaseComponent } from '../../../shared/core/component-base/comp
     DatePickerModule,
     CalendarModule,
     DatePipe,
+    CommonModule,
   ],
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss',
@@ -37,6 +38,8 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
 
   protected yearRange = `${new Date().getFullYear() - 50}:${new Date().getFullYear()}`;
 
+  protected editIndex = signal<number | null>(null);
+
   protected experienceForm: ExperienceForm = new FormGroup({
     experience: new FormArray<FormGroup<ExperienceItemForm>>([]),
   });
@@ -45,8 +48,8 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     title: new FormControl('', [Validators.required]),
     company: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
-    startDate: new FormControl('', [Validators.required]),
-    endDate: new FormControl(''),
+    startDate: new FormControl<Date | null>(null, [Validators.required]),
+    endDate: new FormControl<Date | null>(null),
     description: new FormArray([new FormControl('', [Validators.required])]),
   });
 
@@ -80,9 +83,14 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
 
   protected closeDialog(): void {
     this.isDialogOpen.set(false);
+    this.editIndex.set(null);
   }
 
-  protected addExperience(): void {
+  protected saveExperience(): void {
+    if (this.editIndex() !== null) {
+      this.updateExperience();
+      return;
+    }
     if (this.experienceItemForm.valid) {
       const experienceArray = this.experienceForm.get('experience') as FormArray;
       const value = this.experienceItemForm.value;
@@ -90,10 +98,12 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
         title: new FormControl(value.title || '', { nonNullable: true }),
         company: new FormControl(value.company || '', { nonNullable: true }),
         location: new FormControl(value.location || '', { nonNullable: true }),
-        startDate: new FormControl(value.startDate || '', {
+        startDate: new FormControl<Date | null>(value.startDate || null, {
           nonNullable: true,
         }),
-        endDate: new FormControl(value.endDate || ''),
+        endDate: new FormControl<Date | null>(value.endDate || null, {
+          nonNullable: true,
+        }),
         description: new FormArray(
           (value.description || []).map(
             (desc: string | null): FormControl<string | null> =>
@@ -102,6 +112,25 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
         ),
       });
       experienceArray.push(itemGroup);
+      this.closeDialog();
+    }
+  }
+
+  protected editExperience(index: number): void {
+    this.isDialogOpen.set(true);
+    this.editIndex.set(index);
+    const experienceArray = this.experienceForm.get('experience') as FormArray<
+      FormGroup<ExperienceItemForm>
+    >;
+    const experience = experienceArray.at(index);
+    this.experienceItemForm.patchValue(experience.value);
+    console.log(experience.value);
+  }
+
+  protected updateExperience(): void {
+    if (this.experienceItemForm.valid) {
+      const experienceArray = this.experienceForm.get('experience') as FormArray;
+      experienceArray.at(this.editIndex() as number).patchValue(this.experienceItemForm.value);
       this.closeDialog();
     }
   }

@@ -35,6 +35,11 @@
             severity="danger"
             variant="outlined"
             (click)="removeExperience($index)" />
+          <p-button
+            icon="pi pi-pencil"
+            severity="secondary"
+            variant="outlined"
+            (click)="editExperience($index)" />
         </li>
       }
     </ul>
@@ -123,7 +128,7 @@
       <p-button
         class="save-button"
         [disabled]="!experienceItemForm.valid"
-        (click)="addExperience()"
+        (click)="saveExperience()"
         label="Save"
         fluid="true" />
       <p-button fluid="true" variant="outlined" (click)="closeDialog()" label="Cancel" />
