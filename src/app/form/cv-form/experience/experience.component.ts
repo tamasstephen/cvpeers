@@ -3,12 +3,13 @@ import { ExperienceForm, ExperienceFormArray, ExperienceItemForm } from '@/types
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
-import { DatePickerModule } from 'primeng/datepicker';
-import { DialogModule } from 'primeng/dialog';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 
@@ -17,12 +18,13 @@ import { ComponentBaseComponent } from '../../../shared/core/component-base/comp
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    IftaLabelModule,
-    DialogModule,
-    DatePickerModule,
-    CalendarModule,
+    MatButtonModule,
+    MatInputModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatSnackBarModule,
+    MatIconModule,
+    MatFormFieldModule,
     DatePipe,
     CommonModule,
   ],
@@ -124,7 +126,6 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     >;
     const experience = experienceArray.at(index);
     this.experienceItemForm.patchValue(experience.value);
-    console.log(experience.value);
   }
 
   protected updateExperience(): void {

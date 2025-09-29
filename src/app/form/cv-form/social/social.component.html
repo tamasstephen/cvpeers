@@ -1,62 +1,23 @@
 <fieldset>
   <h2>Social Links</h2>
-  <div>
-    <p-select [options]="socialOptions" #type />
-    <p-button
-      severity="secondary"
-      variant="outlined"
-      fluid
-      (click)="openDialog()"
-      label="Add"
-    />
+  <div class="social-actions">
+    <button mat-stroked-button color="primary" type="button" (click)="openDialog()">Add</button>
   </div>
   <section>
     <ul>
       @for (social of socialForm.controls.social.controls; track $index) {
-      <li class="social-item">
-        <p>
-          <span class="pi pi-{{ social.value.type }}"></span>
-          <a
-            [href]="social.value.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ social.value.url }}</a
-          >
-        </p>
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          variant="outlined"
-          (click)="removeSocial($index)"
-        />
-      </li>
+        <li class="social-item">
+          <div class="social-details">
+            <mat-icon class="social-icon">share</mat-icon>
+            <a [href]="social.value.url" target="_blank" rel="noopener noreferrer">
+              {{ social.value.url }}
+            </a>
+          </div>
+          <button mat-icon-button color="warn" type="button" (click)="removeSocial($index)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </li>
       }
     </ul>
   </section>
 </fieldset>
-
-<p-dialog
-  class="dialog"
-  [modal]="true"
-  [visible]="isDialogOpen()"
-  (onHide)="closeDialog()"
-  [closable]="false"
-  header="Add Social Link"
->
-  <div class="dialog-content">
-    <input pInputText id="url" #url type="url" />
-    <p-button
-      class="save-button"
-      [disabled]="!url"
-      (click)="addSocial(url.value, type.value, getSocialOptionSrc(type.value))"
-      label="Save"
-      fluid="true"
-    />
-    <p-button
-      fluid="true"
-      variant="outlined"
-      (click)="closeDialog()"
-      label="Cancel"
-    />
-  </div>
-</p-dialog>

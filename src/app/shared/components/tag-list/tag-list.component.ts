@@ -7,10 +7,11 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { ChipModule } from 'primeng/chip';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { Subject } from 'rxjs';
 import { CvForm } from '../../../types/cv-form';
 import { TagListForm } from '../../../types/tag-list-form';
@@ -23,10 +24,11 @@ import { ComponentBaseComponent } from '../../core/component-base/component-base
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    ButtonModule,
-    InputTextModule,
-    IftaLabelModule,
-    ChipModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatIconModule,
   ],
   templateUrl: './tag-list.component.html',
   styleUrl: './tag-list.component.scss',

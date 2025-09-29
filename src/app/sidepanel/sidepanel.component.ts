@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, ViewContainerRef, inject, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { NavigationEnd, Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
 import { SidepanelConfig } from '../services/sidepanel-provider/sidepanel-provider.service';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 
@@ -11,7 +12,7 @@ import { ComponentBaseComponent } from '../shared/core/component-base/component-
 @Component({
   selector: 'app-sidepanel',
   standalone: true,
-  imports: [ButtonModule, CommonModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   templateUrl: './sidepanel.component.html',
   styleUrl: './sidepanel.component.scss',
   host: {

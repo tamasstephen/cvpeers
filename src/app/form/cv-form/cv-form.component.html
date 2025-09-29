@@ -25,29 +25,24 @@
             [initialValues]="richTextInitialValue$" />
           <div class="divider"></div>
         </div>
-        <p-button [raised]="true" (click)="downloadPdf()" label="Download PDF" />
-        <p-button variant="outlined" (click)="openResetFormDialog()" label="Reset form" />
+        <button mat-raised-button color="primary" type="button" (click)="downloadPdf()">
+          Download PDF
+        </button>
+        <button mat-stroked-button color="primary" type="button" (click)="openResetFormDialog()">
+          Reset form
+        </button>
       </form>
-      <p-toast />
     </div>
 
-    <p-dialog
-      [visible]="isDialogOpen()"
-      [modal]="true"
-      [draggable]="false"
-      [resizable]="false"
-      [closable]="false"
-      [header]="'Reset form'"
-      (onHide)="closeResetFormDialog()">
-      <p class="dialog-text text-center">Are you sure you want to reset the form?</p>
-      <div class="dialog-actions">
-        <p-button class="dialog-actions-button" (click)="closeResetFormDialog()" label="No" />
-        <p-button
-          class="dialog-actions-button"
-          severity="danger"
-          (click)="resetForm()"
-          label="Yes" />
-      </div>
-    </p-dialog>
+    <ng-template #resetDialog>
+      <h2 mat-dialog-title>Reset form</h2>
+      <mat-dialog-content>
+        <p class="dialog-text text-center">Are you sure you want to reset the form?</p>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end" class="dialog-actions">
+        <button mat-stroked-button type="button" (click)="closeResetFormDialog()">No</button>
+        <button mat-flat-button color="warn" type="button" (click)="resetForm()">Yes</button>
+      </mat-dialog-actions>
+    </ng-template>
   }
 </div>

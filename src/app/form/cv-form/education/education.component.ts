@@ -1,13 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
-import { DatePickerModule } from 'primeng/datepicker';
-import { DialogModule } from 'primeng/dialog';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
-import { Subject } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { Subject, Subscription } from 'rxjs';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import {
@@ -20,24 +20,26 @@ import {
   selector: 'app-education',
   standalone: true,
   imports: [
-    IftaLabelModule,
+    MatButtonModule,
+    MatInputModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatFormFieldModule,
     ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    DialogModule,
-    CalendarModule,
     DatePipe,
-    DatePickerModule,
   ],
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',
 })
-export class EducationComponent extends ComponentBaseComponent implements OnInit {
+export class EducationComponent extends ComponentBaseComponent implements OnInit, OnDestroy {
+  @ViewChild('educationDialog') protected educationDialogTemplate!: TemplateRef<unknown>;
+
   public parentForm = input<CvForm>();
 
   public reset$ = input.required<Subject<boolean>>();
 
-  protected isDialogOpen = false;
+  protected dialog = inject(MatDialog);
 
   protected educationForm: EducationForm = new FormGroup({
     education: new FormArray<FormGroup<EducationItemForm>>([]),
@@ -47,13 +49,18 @@ export class EducationComponent extends ComponentBaseComponent implements OnInit
     degree: new FormControl('', [Validators.required]),
     institution: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
-    graduationDate: new FormControl('', [Validators.required]),
+    startDate: new FormControl('', [Validators.required]),
+    endDate: new FormControl('', [Validators.required]),
   });
 
   protected get educationControls(): FormGroup<EducationItemForm>[] {
     return (this.educationForm.get('education') as FormArray<FormGroup<EducationItemForm>>)
       .controls;
   }
+
+  #dialogRef: MatDialogRef<unknown> | null = null;
+
+  #afterCloseSubscription: Subscription | null = null;
 
   public ngOnInit(): void {
     this.parentForm()?.addControl(
@@ -73,13 +80,29 @@ export class EducationComponent extends ComponentBaseComponent implements OnInit
     );
   }
 
+  public override ngOnDestroy(): void {
+    this.#afterCloseSubscription?.unsubscribe();
+    this.#afterCloseSubscription = null;
+  }
+
   protected openDialog(): void {
-    this.isDialogOpen = true;
     this.educationItemForm.reset();
+    this.#dialogRef = this.dialog.open(this.educationDialogTemplate, {
+      width: '440px',
+      disableClose: true,
+    });
+
+    this.#afterCloseSubscription?.unsubscribe();
+    this.#afterCloseSubscription = this.#dialogRef.afterClosed().subscribe((): void => {
+      this.educationItemForm.reset();
+    });
   }
 
   protected closeDialog(): void {
-    this.isDialogOpen = false;
+    this.#dialogRef?.close();
+    this.#dialogRef = null;
+    this.#afterCloseSubscription?.unsubscribe();
+    this.#afterCloseSubscription = null;
   }
 
   protected addEducation(): void {

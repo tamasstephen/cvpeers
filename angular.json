@@ -34,11 +34,7 @@
                 "output": "/assets/images"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/quill/dist/quill.snow.css"
-            ],
+            "styles": ["src/styles.scss", "node_modules/quill/dist/quill.snow.css"],
             "scripts": []
           },
           "configurations": {

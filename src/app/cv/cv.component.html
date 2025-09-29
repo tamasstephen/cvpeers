@@ -120,7 +120,7 @@
           <div *ngFor="let edu of education()" class="education-item">
             <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</p>
             <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-              {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
+              {{ edu.endDate | date: 'MM/yyyy' }}, {{ edu.institution }}
             </p>
             <p class="location" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
               {{ edu.location }}

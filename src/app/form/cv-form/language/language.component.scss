@@ -24,54 +24,35 @@ section {
       align-items: center;
       padding: 1rem;
       border: 1px solid #e0e0e0;
-      border-radius: 4px;
+      border-radius: 6px;
 
       .language-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
         h3 {
           margin: 0;
           font-size: 1.1rem;
-          color: var(--primary-color);
+          color: #1976d2;
         }
 
         p {
-          margin: 0.25rem 0;
-          color: var(--text-color-secondary);
+          margin: 0;
+          color: #616161;
         }
       }
     }
   }
 }
 
-.dialog {
-  .dialog-content {
-    display: grid;
-    gap: 1rem;
-    min-width: 400px;
-    padding: 1rem 0;
+.dialog-content {
+  display: grid;
+  gap: 1rem;
+  min-width: 360px;
+}
 
-    .form-row {
-      display: grid;
-      gap: 0.5rem;
-
-      ::ng-deep {
-        p-iftalabel {
-          width: 100%;
-        }
-
-        p-selectbutton {
-          .p-selectbutton {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            width: 100%;
-          }
-        }
-      }
-    }
-
-    .button-row {
-      display: grid;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-  }
+.dialog-actions {
+  display: flex;
+  gap: 0.75rem;
 }

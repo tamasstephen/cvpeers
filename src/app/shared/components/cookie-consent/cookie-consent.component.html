@@ -1,19 +1,15 @@
-<p-dialog
-  [visible]="!hasConsent && !isPrivacyPage"
-  [modal]="true"
-  [closable]="false"
-  [draggable]="false"
-  [resizable]="false"
-  styleClass="consent-dialog"
-  position="bottom">
-  <div class="consent-content">
-    <h2 class="title">🍪 We value your privacy</h2>
-    <p>
-      We use strictly necessary cookies to make the CV generator work. Read our
-      <a routerLink="/privacy">Privacy Policy</a> for more details.
-    </p>
-    <div class="consent-actions">
-      <p-button label="Accept" (onClick)="acceptConsent()" severity="primary"></p-button>
+<ng-container *ngIf="!hasConsent && !isPrivacyPage">
+  <div class="consent-backdrop"></div>
+  <div class="consent-dialog" role="dialog" aria-modal="true">
+    <div class="consent-content">
+      <h2 class="title">🍪 We value your privacy</h2>
+      <p>
+        We use strictly necessary cookies to make the CV generator work. Read our
+        <a routerLink="/privacy">Privacy Policy</a> for more details.
+      </p>
+      <div class="consent-actions">
+        <button mat-flat-button color="primary" (click)="acceptConsent()">Accept</button>
+      </div>
     </div>
   </div>
-</p-dialog>
+</ng-container>

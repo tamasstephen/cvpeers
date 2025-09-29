@@ -1,10 +1,12 @@
-import { Component, ElementRef, inject, input, OnInit, signal, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
@@ -15,27 +17,27 @@ import {
   SocialForm,
   SocialItem,
 } from '../../../types/social';
+import { SocialDialogComponent } from './social-dialog/social-dialog.component';
 
 @Component({
   selector: 'app-social',
   standalone: true,
   imports: [
-    ButtonModule,
+    MatButtonModule,
     ReactiveFormsModule,
-    InputTextModule,
-    IftaLabelModule,
-    SelectModule,
-    DialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatIconModule,
+    CommonModule,
   ],
   templateUrl: './social.component.html',
   styleUrl: './social.component.scss',
   providers: [SOCIAL_OPTIONS_PROVIDER],
 })
-export class SocialComponent extends ComponentBaseComponent implements OnInit {
-  /**
-   * The url input element
-   */
-  @ViewChild('url') protected urlInput!: ElementRef<HTMLInputElement>;
+export class SocialComponent extends ComponentBaseComponent implements OnInit, OnDestroy {
+  @ViewChild('socialDialog') protected socialDialogTemplate!: TemplateRef<unknown>;
 
   public reset$ = input.required<Subject<boolean>>();
 
@@ -50,16 +52,13 @@ export class SocialComponent extends ComponentBaseComponent implements OnInit {
   protected socialOptions = inject(SOCIAL_OPTIONS_TOKEN);
 
   /**
-   * The dialog open state
-   */
-  protected isDialogOpen = signal(false);
-
-  /**
    * The social form array
    */
   protected socialForm: SocialForm = new FormGroup({
     social: new FormArray<FormControl<SocialItem>>([]),
   });
+
+  #dialog = inject(MatDialog);
 
   public ngOnInit(): void {
     this.parentForm()?.addControl('socialForm', this.socialForm);
@@ -82,33 +81,29 @@ export class SocialComponent extends ComponentBaseComponent implements OnInit {
    * @param type The type of the social link
    * @param src The source of the social link
    */
-  protected addSocial(url: string, type: Social, src: string): void {
+  protected addSocialFromDialog(url: string, type: Social): void {
     this.socialForm.controls.social.push(
       new FormControl<SocialItem>(
         {
           url,
           type,
-          src,
+          src: this.getSocialOptionSrc(type),
         },
         { nonNullable: true }
       )
     );
-    this.urlInput.nativeElement.value = '';
-    this.closeDialog();
   }
 
   /**
    * Open the dialog to add a social item
    */
   protected openDialog(): void {
-    this.isDialogOpen.set(true);
-  }
-
-  /**
-   * Close the dialog
-   */
-  protected closeDialog(): void {
-    this.isDialogOpen.set(false);
+    const dialogRef = this.#dialog.open(SocialDialogComponent);
+    dialogRef.afterClosed().subscribe((result: { url: string; type: Social } | null): void => {
+      if (result) {
+        this.addSocialFromDialog(result.url, result.type);
+      }
+    });
   }
 
   /**

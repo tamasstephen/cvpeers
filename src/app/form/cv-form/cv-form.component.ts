@@ -8,17 +8,14 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
-import { MessageModule } from 'primeng/message';
-import { TextareaModule } from 'primeng/textarea';
-import { ToastModule } from 'primeng/toast';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
@@ -55,38 +52,39 @@ interface StoredFormData {
   selector: 'app-cv-form',
   standalone: true,
   imports: [
-    DialogModule,
     ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    IftaLabelModule,
+    MatButtonModule,
+    MatInputModule,
+    MatDialogModule,
+    MatSnackBarModule,
     PersonalDetailsComponent,
     SocialComponent,
-    MessageModule,
     ExperienceComponent,
     ExpertiseComponent,
     StrengthsComponent,
-    TextareaModule,
     RichTextComponent,
     EducationComponent,
     LanguageComponent,
-    ToastModule,
     MobileWarningComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',
-  providers: [DatePipe, MessageService],
+  providers: [DatePipe],
 })
 export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
   @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
 
+  @ViewChild('resetDialog') protected resetDialogTemplate!: TemplateRef<unknown>;
+
   protected isMobile = signal<boolean>(false);
 
   protected reset$ = new Subject<boolean>();
 
-  protected messageService = inject(MessageService);
+  protected snackBar = inject(MatSnackBar);
+
+  protected dialog = inject(MatDialog);
 
   protected readonly pdfService: PdfGeneratorService = inject(PdfGeneratorService);
 
@@ -98,11 +96,11 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected currentDate = new Date();
 
-  protected isDialogOpen = signal<boolean>(false);
-
   protected richTextInitialValue = new Subject<string | null>();
 
   protected richTextInitialValue$ = this.richTextInitialValue.asObservable();
+
+  #dialogRef: MatDialogRef<unknown> | null = null;
 
   readonly #cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
@@ -241,7 +239,8 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
                 degree: new FormControl(edu.degree, { nonNullable: true }),
                 institution: new FormControl(edu.institution, { nonNullable: true }),
                 location: new FormControl(edu.location, { nonNullable: true }),
-                graduationDate: new FormControl(edu.graduationDate, { nonNullable: true }),
+                startDate: new FormControl(edu.startDate, { nonNullable: true }),
+                endDate: new FormControl(edu.endDate, { nonNullable: true }),
               });
               educationControl.push(eduGroup);
             });
@@ -291,19 +290,19 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected showToast(): void {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Form reset successfully',
-      life: 3000,
+    this.snackBar.open('Form reset successfully', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
     });
   }
 
   protected showErrorToast(): void {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Form reset failed',
+    this.snackBar.open('Form reset failed', 'Close', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['snackbar-error'],
     });
   }
 
@@ -351,11 +350,15 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected openResetFormDialog(): void {
-    this.isDialogOpen.set(true);
+    this.#dialogRef = this.dialog.open(this.resetDialogTemplate, {
+      width: '400px',
+      disableClose: true,
+    });
   }
 
   protected closeResetFormDialog(): void {
-    this.isDialogOpen.set(false);
+    this.#dialogRef?.close();
+    this.#dialogRef = null;
   }
 
   #onResize(): void {
