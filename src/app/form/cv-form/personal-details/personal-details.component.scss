@@ -1,12 +1,14 @@
-h2 {
-  padding-bottom: 1rem;
-}
+:host {
+  h2 {
+    padding-bottom: 1rem;
+  }
 
-fieldset {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  border: none;
-  margin: 0;
-  padding: 0;
+  fieldset {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
 }

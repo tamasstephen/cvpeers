@@ -1,57 +1,59 @@
-.sidepanel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 700px;
-  height: 100vh;
-  background-color: white;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  transition: transform 0.3s ease-in-out;
-  transform: translateX(0);
-
-  &.hidden {
-    display: none;
-  }
-
-  &.closed {
-    transform: translateX(100%);
-  }
-
-  .sidepanel-arrow {
-    position: absolute;
-    top: 50%;
-    left: -20px;
-    transform: translate(-50%, -50%);
+:host {
+  .sidepanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 700px;
+    height: 100vh;
     background-color: white;
-    padding: 0.5rem;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
 
-    &.close {
-      transform: translate(-50%, -50%) rotate(180deg);
+    &.hidden {
+      display: none;
     }
 
-    i {
-      font-size: 1rem;
-      color: #333;
+    &.closed {
+      transform: translateX(100%);
     }
-  }
 
-  .close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-  }
+    .sidepanel-arrow {
+      position: absolute;
+      top: 50%;
+      left: -20px;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  &-content {
-    padding: 20px;
-    height: 100%;
-    overflow-y: auto;
+      &.close {
+        transform: translate(-50%, -50%) rotate(180deg);
+      }
+
+      i {
+        font-size: 1rem;
+        color: #333;
+      }
+    }
+
+    .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    &-content {
+      padding: 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
   }
 }
