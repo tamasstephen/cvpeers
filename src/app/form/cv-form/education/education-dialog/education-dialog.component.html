@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Add Education</h2>
+<mat-dialog-content class="dialog-content" [formGroup]="educationItemForm">
+  <div class="dates">
+    <mat-form-field appearance="outline">
+      <mat-label>Graduation Date</mat-label>
+      <input matInput [matDatepicker]="endPicker" formControlName="graduationDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker startView="multi-year"></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Degree</mat-label>
+    <input matInput id="degree" formControlName="degree" required />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Institution</mat-label>
+    <input matInput id="institution" formControlName="institution" required />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Location</mat-label>
+    <input matInput id="location" formControlName="location" required />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="button-row">
+  <button mat-stroked-button type="button" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="saveEducation()"
+    [disabled]="!educationItemForm.valid">
+    Save
+  </button>
+</mat-dialog-actions>

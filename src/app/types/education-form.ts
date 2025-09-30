@@ -4,8 +4,7 @@ export type EducationItemForm = {
   degree: FormControl<EducationItemFormValues['degree']>;
   institution: FormControl<EducationItemFormValues['institution']>;
   location: FormControl<EducationItemFormValues['location']>;
-  startDate: FormControl<EducationItemFormValues['startDate']>;
-  endDate: FormControl<EducationItemFormValues['endDate']>;
+  graduationDate: FormControl<EducationItemFormValues['graduationDate']>;
 };
 
 export type EducationForm = FormGroup<{
@@ -18,8 +17,7 @@ export type EducationItemFormValues = {
   degree: string | null;
   institution: string | null;
   location: string | null;
-  startDate: string | null;
-  endDate: string | null;
+  graduationDate: Date | null;
 };
 
 export type EducationFormValues = EducationItemFormValues[];

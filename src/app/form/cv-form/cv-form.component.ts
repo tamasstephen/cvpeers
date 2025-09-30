@@ -239,8 +239,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
                 degree: new FormControl(edu.degree, { nonNullable: true }),
                 institution: new FormControl(edu.institution, { nonNullable: true }),
                 location: new FormControl(edu.location, { nonNullable: true }),
-                startDate: new FormControl(edu.startDate, { nonNullable: true }),
-                endDate: new FormControl(edu.endDate, { nonNullable: true }),
+                graduationDate: new FormControl(edu.graduationDate, { nonNullable: true }),
               });
               educationControl.push(eduGroup);
             });
