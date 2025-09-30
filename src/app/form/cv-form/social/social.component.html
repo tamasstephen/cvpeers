@@ -8,7 +8,7 @@
       @for (social of socialForm.controls.social.controls; track $index) {
         <li class="social-item">
           <div class="social-details">
-            <mat-icon class="social-icon">share</mat-icon>
+            <img [src]="social.value.src" alt="social icon" class="social-icon" />
             <a [href]="social.value.url" target="_blank" rel="noopener noreferrer">
               {{ social.value.url }}
             </a>
