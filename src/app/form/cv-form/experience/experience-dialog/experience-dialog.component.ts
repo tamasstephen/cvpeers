@@ -1,14 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ComponentBaseComponent } from '../../../../shared/core/component-base/component-base.component';
-import { ExperienceItemForm } from '../../../../types/experience-form';
+import { ExperienceItemForm, ExperienceItemFormValues } from '../../../../types/experience-form';
 
 @Component({
   selector: 'app-experience-dialog',
@@ -27,7 +27,7 @@ import { ExperienceItemForm } from '../../../../types/experience-form';
   templateUrl: './experience-dialog.component.html',
   styleUrl: './experience-dialog.component.scss',
 })
-export class ExperienceDialogComponent extends ComponentBaseComponent {
+export class ExperienceDialogComponent extends ComponentBaseComponent implements OnInit {
   protected experienceItemForm = new FormGroup<ExperienceItemForm>({
     title: new FormControl('', [Validators.required]),
     company: new FormControl('', [Validators.required]),
@@ -37,7 +37,15 @@ export class ExperienceDialogComponent extends ComponentBaseComponent {
     description: new FormArray([new FormControl('', [Validators.required])]),
   });
 
+  readonly #data = inject<ExperienceItemFormValues>(MAT_DIALOG_DATA);
+
   #dialogRef = inject(MatDialogRef<ExperienceDialogComponent>);
+
+  public ngOnInit(): void {
+    if (this.#data.title) {
+      this.experienceItemForm.patchValue(this.#data);
+    }
+  }
 
   protected addDescriptionField(): void {
     const descriptionArray = this.experienceItemForm.get('description') as FormArray;

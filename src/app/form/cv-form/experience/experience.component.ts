@@ -46,8 +46,6 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
 
   protected yearRange = `${new Date().getFullYear() - 50}:${new Date().getFullYear()}`;
 
-  protected editIndex = signal<number | null>(null);
-
   protected experienceForm: ExperienceForm = new FormGroup({
     experience: new FormArray<FormGroup<ExperienceItemForm>>([]),
   });
@@ -90,12 +88,18 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     });
   }
 
-  protected saveExperience(result: ExperienceItemFormValues): void {
-    if (this.editIndex() !== null) {
-      this.updateExperience(result);
-      return;
-    }
+  #openDialog(index: number): void {
+    const dialogRef = this.#dialog.open(ExperienceDialogComponent, {
+      data: this.experienceControls[index].value,
+    });
+    dialogRef.afterClosed().subscribe((result: ExperienceItemFormValues | null): void => {
+      if (result) {
+        this.updateExperience(result, index);
+      }
+    });
+  }
 
+  protected saveExperience(result: ExperienceItemFormValues): void {
     const experienceArray = this.experienceForm.get('experience') as FormArray;
     const itemGroup = new FormGroup({
       title: new FormControl(result.title || '', { nonNullable: true }),
@@ -118,18 +122,12 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
   }
 
   protected editExperience(index: number): void {
-    this.isDialogOpen.set(true);
-    this.editIndex.set(index);
-    const experienceArray = this.experienceForm.get('experience') as FormArray<
-      FormGroup<ExperienceItemForm>
-    >;
-    const experience = experienceArray.at(index);
-    this.experienceItemForm.patchValue(experience.value);
+    this.#openDialog(index);
   }
 
-  protected updateExperience(result: ExperienceItemFormValues): void {
+  protected updateExperience(result: ExperienceItemFormValues, index: number): void {
     const experienceArray = this.experienceForm.get('experience') as FormArray;
-    experienceArray.at(this.editIndex() as number).patchValue(result);
+    experienceArray.at(index).patchValue(result);
   }
 
   protected removeExperience(index: number): void {
