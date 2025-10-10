@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
+import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import {
@@ -31,6 +32,7 @@ import { SocialDialogComponent } from './social-dialog/social-dialog.component';
     MatDialogModule,
     MatIconModule,
     CommonModule,
+    SectionHeaderComponent,
   ],
   templateUrl: './social.component.html',
   styleUrl: './social.component.scss',
@@ -98,7 +100,9 @@ export class SocialComponent extends ComponentBaseComponent implements OnInit, O
    * Open the dialog to add a social item
    */
   protected openDialog(): void {
-    const dialogRef = this.#dialog.open(SocialDialogComponent);
+    const dialogRef = this.#dialog.open(SocialDialogComponent, {
+      width: '520px',
+    });
     dialogRef.afterClosed().subscribe((result: { url: string; type: Social } | null): void => {
       if (result) {
         this.addSocialFromDialog(result.url, result.type);

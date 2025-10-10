@@ -1,36 +1,32 @@
 <fieldset>
-  <h2>Experience</h2>
-  <div>
-    <button mat-stroked-button color="primary" (click)="openDialog()">Add Experience</button>
-  </div>
-  <section>
+  <app-section-header
+    [title]="'Experience'"
+    [addLabel]="'Add Experience'"
+    (add)="openDialog()"></app-section-header>
+  <section class="v-stack gap-12">
     <ul>
       @for (experience of experienceControls; track $index) {
-        <li class="experience-item">
-          <div class="experience-header">
-            <h4>{{ experience.get('title')?.value }}</h4>
-            <p class="company">{{ experience.get('company')?.value }}</p>
-            <p class="period">
-              {{ experience.get('startDate')?.value | date: 'MM/yyyy' }} -
-              {{
-                experience.get('endDate')?.value
-                  ? (experience.get('endDate')?.value | date: 'MM/yyyy')
-                  : 'Present'
-              }}
-              <span class="location">{{ experience.get('location')?.value }}</span>
-            </p>
+        <li class="list-card">
+          <div class="card-body">
+            <div class="v-stack gap-8">
+              <h4 class="card-title">{{ experience.get('title')?.value }}</h4>
+              <p class="card-subtitle company">{{ experience.get('company')?.value }}</p>
+              <p class="card-subtitle period">
+                {{ experience.get('startDate')?.value | date: 'MM/yyyy' }} -
+                {{
+                  experience.get('endDate')?.value
+                    ? (experience.get('endDate')?.value | date: 'MM/yyyy')
+                    : 'Present'
+                }}
+                <span class="location">{{ experience.get('location')?.value }}</span>
+              </p>
+            </div>
           </div>
-          <ul class="description-list">
-            @for (description of getDescriptionControls(experience); track $index) {
-              <li>{{ description.value }}</li>
-            }
-          </ul>
-          <button mat-icon-button color="warn" (click)="removeExperience($index)">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="editExperience($index)">
-            <mat-icon>edit</mat-icon>
-          </button>
+          <div class="card-divider"></div>
+          <div class="card-actions">
+            <button mat-button color="warn" (click)="removeExperience($index)">Delete</button>
+            <button mat-button color="primary" (click)="editExperience($index)">Edit</button>
+          </div>
         </li>
       }
     </ul>

@@ -38,7 +38,6 @@ export class EducationDialogComponent extends ComponentBaseComponent {
   readonly #dialogRef = inject(MatDialogRef<EducationDialogComponent>);
 
   protected saveEducation(): void {
-    console.log(this.educationItemForm.getRawValue());
     this.#dialogRef.close(this.educationItemForm.getRawValue());
   }
 

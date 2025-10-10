@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
+import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { ExperienceDialogComponent } from './experience-dialog/experience-dialog.component';
 
@@ -33,6 +34,7 @@ import { ExperienceDialogComponent } from './experience-dialog/experience-dialog
     MatFormFieldModule,
     DatePipe,
     CommonModule,
+    SectionHeaderComponent,
   ],
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss',

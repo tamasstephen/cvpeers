@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Subject, Subscription } from 'rxjs';
+import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import {
@@ -30,6 +31,7 @@ import { EducationDialogComponent } from './education-dialog/education-dialog.co
     MatFormFieldModule,
     ReactiveFormsModule,
     DatePipe,
+    SectionHeaderComponent,
   ],
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',

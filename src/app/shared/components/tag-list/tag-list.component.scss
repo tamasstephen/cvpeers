@@ -2,10 +2,15 @@
   display: block;
   margin-bottom: 1rem;
 
+  .mat-button {
+    height: 100%;
+  }
+
   .item-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .add-item__button {
@@ -23,7 +28,10 @@
   }
 
   .add-item {
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-items: stretch;
 
     .input-field {
       width: 100%;

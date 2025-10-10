@@ -1,11 +1,11 @@
-<h2 mat-dialog-title>Add Social Link</h2>
-<mat-dialog-content class="dialog-content" [formGroup]="dialogForm">
-  <mat-form-field appearance="outline">
+<h2 mat-dialog-title class="dialog-header">Add Social Link</h2>
+<mat-dialog-content class="dialog-content v-stack gap-12" [formGroup]="dialogForm">
+  <mat-form-field appearance="outline" class="w-100">
     <mat-label>URL</mat-label>
     <input matInput formControlName="url" type="url" required />
     <mat-error *ngIf="dialogForm.controls.url.invalid">URL is required</mat-error>
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="w-100">
     <mat-label>Platform</mat-label>
     <mat-select formControlName="type" required>
       @for (option of socialOptions; track option.value) {
@@ -15,12 +15,15 @@
     <mat-error *ngIf="dialogForm.controls.type.invalid">Platform is required</mat-error>
   </mat-form-field>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-stroked-button type="button" (click)="closeDialog()">Cancel</button>
+<mat-dialog-actions align="end" class="dialog-actions h-stack gap-8">
+  <button mat-stroked-button type="button" class="btn-outlined" (click)="closeDialog()">
+    Cancel
+  </button>
   <button
     mat-flat-button
     color="primary"
     type="button"
+    class="btn-filled"
     [disabled]="dialogForm.invalid"
     (click)="addSocialFromDialog()">
     Save

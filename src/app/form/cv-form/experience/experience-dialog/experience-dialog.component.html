@@ -1,14 +1,15 @@
 <mat-dialog-content>
-  <div class="dialog-content" [formGroup]="experienceItemForm">
-    <mat-form-field appearance="outline">
+  <h2 mat-dialog-title class="dialog-header">Add Experience</h2>
+  <div class="dialog-content v-stack gap-12" [formGroup]="experienceItemForm">
+    <mat-form-field appearance="outline" class="w-100">
       <mat-label>Job Title</mat-label>
       <input matInput id="title" formControlName="title" required />
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="w-100">
       <mat-label>Company</mat-label>
       <input matInput id="company" formControlName="company" required />
     </mat-form-field>
-    <div class="dates">
+    <div class="dates h-stack gap-8">
       <mat-form-field appearance="outline">
         <mat-label>Start Date</mat-label>
         <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
@@ -22,43 +23,42 @@
         <mat-datepicker #endPicker startView="multi-year"></mat-datepicker>
       </mat-form-field>
     </div>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="w-100">
       <mat-label>Location</mat-label>
       <input matInput id="location" formControlName="location" required />
     </mat-form-field>
-    <div class="description" formArrayName="description">
-      <mat-label>Description</mat-label>
+    <div class="description v-stack gap-12" formArrayName="description">
+      <mat-label>Responsibilities</mat-label>
       @for (description of experienceItemForm.controls.description.controls; track $index) {
-        <div class="description-item">
-          <mat-form-field appearance="outline" class="description-field">
-            <mat-label>Entry {{ $index + 1 }}</mat-label>
+        <div class="description-item h-stack gap-8">
+          <mat-form-field appearance="outline" class="description-field w-100">
+            <mat-label>Responsibility {{ $index + 1 }}</mat-label>
             <input matInput [formControlName]="$index" required />
           </mat-form-field>
-          @if ($index === 0) {
-            <button mat-icon-button color="primary" type="button" (click)="addDescriptionField()">
-              <mat-icon>add</mat-icon>
-            </button>
-          } @else {
-            <button
-              mat-icon-button
-              color="warn"
-              type="button"
-              (click)="removeDescriptionField($index)">
-              <mat-icon>delete</mat-icon>
+          @if ($index > 0) {
+            <button mat-stroked-button type="button" (click)="removeDescriptionField($index)">
+              Remove
             </button>
           }
         </div>
       }
     </div>
-    <div class="actions">
+    <button mat-stroked-button color="primary" type="button" (click)="addDescriptionField()">
+      Add Responsibility
+    </button>
+
+    <div class="actions dialog-actions h-stack gap-8">
       <button
         mat-flat-button
         color="primary"
+        class="btn-filled"
         (click)="saveExperience()"
         [disabled]="!experienceItemForm.valid">
         Save
       </button>
-      <button mat-stroked-button type="button" (click)="closeDialog()">Cancel</button>
+      <button mat-stroked-button type="button" class="btn-outlined" (click)="closeDialog()">
+        Cancel
+      </button>
     </div>
   </div>
 </mat-dialog-content>

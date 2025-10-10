@@ -1,6 +1,6 @@
-<h2 mat-dialog-title>Add Education</h2>
-<mat-dialog-content class="dialog-content" [formGroup]="educationItemForm">
-  <div class="dates">
+<h2 mat-dialog-title class="dialog-header">Add Education</h2>
+<mat-dialog-content class="dialog-content v-stack gap-12" [formGroup]="educationItemForm">
+  <div class="dates h-stack gap-8">
     <mat-form-field appearance="outline">
       <mat-label>Graduation Date</mat-label>
       <input matInput [matDatepicker]="endPicker" formControlName="graduationDate" />
@@ -8,25 +8,28 @@
       <mat-datepicker #endPicker startView="multi-year"></mat-datepicker>
     </mat-form-field>
   </div>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="w-100">
     <mat-label>Degree</mat-label>
     <input matInput id="degree" formControlName="degree" required />
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="w-100">
     <mat-label>Institution</mat-label>
     <input matInput id="institution" formControlName="institution" required />
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="w-100">
     <mat-label>Location</mat-label>
     <input matInput id="location" formControlName="location" required />
   </mat-form-field>
 </mat-dialog-content>
-<mat-dialog-actions align="end" class="button-row">
-  <button mat-stroked-button type="button" (click)="closeDialog()">Cancel</button>
+<mat-dialog-actions align="end" class="dialog-actions h-stack gap-8">
+  <button mat-stroked-button type="button" class="btn-outlined" (click)="closeDialog()">
+    Cancel
+  </button>
   <button
     mat-flat-button
     color="primary"
     type="button"
+    class="btn-filled"
     (click)="saveEducation()"
     [disabled]="!educationItemForm.valid">
     Save

@@ -1,21 +1,23 @@
 <fieldset>
-  <h2>Social Links</h2>
-  <div class="social-actions">
-    <button mat-stroked-button color="primary" type="button" (click)="openDialog()">Add</button>
-  </div>
-  <section>
+  <app-section-header
+    [title]="'Social Links'"
+    [addLabel]="'Add'"
+    (add)="openDialog()"></app-section-header>
+  <section class="v-stack gap-12">
     <ul>
       @for (social of socialForm.controls.social.controls; track $index) {
-        <li class="social-item">
-          <div class="social-details">
-            <img [src]="social.value.src" alt="social icon" class="social-icon" />
-            <a [href]="social.value.url" target="_blank" rel="noopener noreferrer">
-              {{ social.value.url }}
-            </a>
+        <li class="list-card">
+          <div class="card-body h-stack justify-between w-100">
+            <div class="h-stack gap-8">
+              <img [src]="social.value.src" alt="social icon" class="card-icon" />
+              <span class="card-title">{{ social.value.type | titlecase }}</span>
+            </div>
+            <div class="h-stack gap-8">
+              <button mat-button color="warn" type="button" (click)="removeSocial($index)">
+                Delete
+              </button>
+            </div>
           </div>
-          <button mat-icon-button color="warn" type="button" (click)="removeSocial($index)">
-            <mat-icon>delete</mat-icon>
-          </button>
         </li>
       }
     </ul>

@@ -3,6 +3,14 @@
     padding-bottom: 1rem;
   }
 
+  section {
+    ul {
+      padding: 0;
+      display: grid;
+      gap: 1rem;
+    }
+  }
+
   fieldset {
     border: none;
     margin: 0;

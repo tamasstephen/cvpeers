@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
+import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../types/language-form';
@@ -24,6 +25,7 @@ import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../type
     MatFormFieldModule,
     MatSelectModule,
     MatIconModule,
+    SectionHeaderComponent,
   ],
   templateUrl: './language.component.html',
   styleUrl: './language.component.scss',

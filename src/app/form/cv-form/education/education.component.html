@@ -1,21 +1,24 @@
 <fieldset>
-  <h2>Education</h2>
-  <div>
-    <button mat-stroked-button color="primary" (click)="openDialog()">Add Education</button>
-  </div>
-  <section>
+  <app-section-header
+    [title]="'Education'"
+    [addLabel]="'Add Education'"
+    (add)="openDialog()"></app-section-header>
+  <section class="v-stack gap-12">
     <ul>
       @for (education of educationControls; track $index) {
-        <li class="education-item">
-          <div class="education-details">
-            <h3>{{ education.value.degree }}</h3>
-            <p>{{ education.value.institution }}</p>
-            <p>{{ education.value.location }}</p>
-            <p>{{ education.value.graduationDate | date: 'MM/yyyy' }}</p>
+        <li class="list-card">
+          <div class="card-body">
+            <div class="v-stack gap-8">
+              <h3 class="card-title">{{ education.value.degree }}</h3>
+              <p class="card-subtitle">{{ education.value.institution }}</p>
+            </div>
           </div>
-          <button mat-icon-button color="warn" type="button" (click)="removeEducation($index)">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <div class="card-divider"></div>
+          <div class="card-actions">
+            <button mat-button color="warn" type="button" (click)="removeEducation($index)">
+              Delete
+            </button>
+          </div>
         </li>
       }
     </ul>

@@ -15,6 +15,14 @@ import { LanguageFormValues } from '../types/language-form.js';
 import { PersonalDetailsFormValues } from '../types/personal-details-form.js';
 import { SocialFormValues } from '../types/social.js';
 
+const placeholderPersonalDetails: PersonalDetailsFormValues = {
+  fullName: 'John Doe',
+  email: 'john.doe@example.com',
+  phone: '+1 (555) 123-4567',
+  website: 'https://johndoe.com',
+  headline: 'Senior Software Engineer',
+};
+
 @Component({
   selector: 'app-cv',
   standalone: true,
@@ -31,7 +39,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
    * The personal details of the CV
    */
-  protected personalDetails = signal<PersonalDetailsFormValues | undefined>(undefined);
+  protected personalDetails = signal<PersonalDetailsFormValues>(placeholderPersonalDetails);
 
   /**
    * The social links of the CV
@@ -85,13 +93,6 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
 
   public constructor() {
     super();
-    this.personalDetails.set({
-      fullName: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 (555) 123-4567',
-      website: 'https://johndoe.com',
-      headline: 'Senior Software Engineer',
-    });
   }
 
   public ngOnInit(): void {
