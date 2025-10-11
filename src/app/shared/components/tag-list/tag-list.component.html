@@ -19,16 +19,7 @@
         [id]="addButtonLabel()"
         [(ngModel)]="newItem"
         [placeholder]="placeholder()"
-        (keyup.enter)="addItem()" />
+        (keyup.enter)="addItem($event)" />
     </mat-form-field>
-    <button
-      mat-stroked-button
-      color="primary"
-      class="add-item__button"
-      type="button"
-      (click)="addItem()"
-      [disabled]="!newItem.trim()">
-      Add
-    </button>
   </div>
 </fieldset>

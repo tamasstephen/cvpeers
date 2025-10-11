@@ -19,6 +19,12 @@ html {
       typograpy: 'Geist',
     )
   );
+
+  @include mat.chips-overrides(
+    (
+      outline-color: rgba(255, 255, 255, 0.3),
+    )
+  );
 }
 
 html,
@@ -38,7 +44,7 @@ button.mdc-button {
   padding: var(--space-12);
   border-radius: var(--radius-8);
   background: rgba(80, 80, 80, 0.16);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);

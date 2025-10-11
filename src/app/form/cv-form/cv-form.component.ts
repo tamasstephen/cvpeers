@@ -169,7 +169,9 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.structuredDataService.removeStructuredData();
   }
 
-  public onSubmit(): void {
+  public onSubmit(e: Event): void {
+    e.preventDefault();
+    e.stopPropagation();
     if (this.form.valid) {
       // eslint-disable-next-line no-console
       console.log(this.form.value);

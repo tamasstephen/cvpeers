@@ -73,7 +73,9 @@ export class TagListComponent extends ComponentBaseComponent implements OnInit, 
     );
   }
 
-  protected addItem(): void {
+  protected addItem(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
     if (this.newItem.trim()) {
       const itemArray = this.itemForm.get('items') as FormArray;
       itemArray.push(new FormControl(this.newItem.trim(), { nonNullable: true }));

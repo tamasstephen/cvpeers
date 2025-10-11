@@ -3,7 +3,7 @@
     <app-mobile-warning />
   } @else {
     <div #cvForm class="cv-form">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <form [formGroup]="form" (ngSubmit)="onSubmit($event)" (keydown.enter)="onSubmit($event)">
         <app-personal-details [parentForm]="form" [reset$]="$any(reset$)" />
         <div class="divider"></div>
         <app-social [parentForm]="form" [reset$]="$any(reset$)" />
