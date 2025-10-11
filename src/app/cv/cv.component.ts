@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import '../assets/fonts/Geist-SemiBold-normal.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
+import { Template } from '../enums/template.enum.js';
 import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import { CvForm } from '../types/cv-form';
@@ -35,6 +36,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The form group of the CV
    */
   @Input() public cvForm!: CvForm;
+
+  protected templates = Template;
 
   /**
    * The personal details of the CV
@@ -80,6 +83,11 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The languages of the CV
    */
   protected languages = signal<LanguageFormValues>([]);
+
+  /**
+   * The selected template
+   */
+  protected selectedTemplate = signal<Template>(Template.MINIMAL);
 
   /**
    * The PDF generator service
@@ -132,5 +140,12 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           }
         })
     );
+  }
+
+  /**
+   * Handles template selection change
+   */
+  protected onTemplateChange(template: Template): void {
+    this.selectedTemplate.set(template);
   }
 }

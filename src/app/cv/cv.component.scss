@@ -1,4 +1,37 @@
 :host {
+  .template-selector {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+
+    label {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    select {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+
+      &:hover {
+        border-color: #999;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #333;
+      }
+    }
+  }
+
   .cv-container {
     font-family: 'Geist', sans-serif;
     letter-spacing: 0;

@@ -1,3 +1,11 @@
+<div class="template-selector">
+  <label for="template-select">Template: </label>
+  <select id="template-select" (change)="onTemplateChange($any($event.target).value)">
+    <option [value]="templates.MINIMAL">Default Template</option>
+    <option [value]="templates.MODERN">Modern Template</option>
+  </select>
+</div>
+
 <div style="font-family: 'Geist', sans-serif" class="cv-container" id="cv">
   <!-- Header Section -->
   <header class="header-section">
