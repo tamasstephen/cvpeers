@@ -25,7 +25,12 @@
             [initialValues]="richTextInitialValue$" />
           <div class="divider"></div>
         </div>
-        <button mat-raised-button color="primary" type="button" (click)="downloadPdf()">
+        <button
+          mat-raised-button
+          class="btn-filled"
+          color="primary"
+          type="button"
+          (click)="downloadPdf()">
           Download PDF
         </button>
         <button mat-stroked-button color="primary" type="button" (click)="openResetFormDialog()">

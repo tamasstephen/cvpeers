@@ -4,6 +4,12 @@
     margin: 0 auto;
   }
 
+  .btn-filled {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-family: 'Geist', sans-serif;
+  }
+
   .cv-form {
     display: grid;
     width: 100%;
