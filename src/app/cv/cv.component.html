@@ -197,3 +197,284 @@
     </div>
   </div>
 }
+
+<!-- MODERN Template (Professional) -->
+@if (selectedTemplate() === templates.MODERN) {
+  <div style="font-family: 'Geist', sans-serif" class="cv-container cv-container-modern" id="cv">
+    <!-- Header Section -->
+    <header class="header-section-modern">
+      <div class="name-title-modern">
+        <h1
+          style="
+            font-family: 'Geist-SemiBold', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8b6b47;
+          ">
+          {{ personalDetails().fullName }}
+        </h1>
+        <h2 style="font-family: 'Geist', sans-serif; font-size: 1rem; color: #666">
+          {{ personalDetails().headline ?? '' }}
+        </h2>
+      </div>
+      <div class="contact-info-modern">
+        <div *ngIf="personalDetails().phone" class="contact-item-modern">
+          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{
+            personalDetails().phone
+          }}</span>
+        </div>
+        <div *ngIf="personalDetails().email" class="contact-item-modern">
+          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{
+            personalDetails().email
+          }}</span>
+        </div>
+        <div *ngIf="personalDetails().website" class="contact-item-modern">
+          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{
+            personalDetails().website
+          }}</span>
+        </div>
+        <div *ngFor="let social of socialLinks()" class="contact-item-modern">
+          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{ social.url }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="divider-modern"></div>
+
+    <!-- Main Content -->
+    <div class="main-content-modern">
+      <!-- Left Column -->
+      <div class="left-column-modern">
+        <!-- Summary/Bio Section -->
+        @if (summary()) {
+          <section class="section-modern">
+            <h3
+              style="
+                font-family: 'Geist-SemiBold', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #8b6b47;
+              ">
+              BIO
+            </h3>
+            <div
+              [innerHTML]="parsedSummary()"
+              style="
+                font-family: 'Geist', sans-serif;
+                font-size: 0.75rem;
+                line-height: 1.6;
+                color: #333;
+              "></div>
+          </section>
+          <div class="divider-modern"></div>
+        }
+
+        <!-- Experience Section -->
+        <section class="section-modern">
+          <h3
+            style="
+              font-family: 'Geist-SemiBold', sans-serif;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              color: #8b6b47;
+            ">
+            EXPERIENCE
+          </h3>
+          <div *ngFor="let job of experience()" class="experience-item-modern">
+            <div class="job-header-modern">
+              <h4
+                style="
+                  font-family: 'Geist-SemiBold', sans-serif;
+                  font-size: 0.875rem;
+                  color: #000;
+                  margin: 0 0 4px 0;
+                ">
+                {{ job.title }}
+              </h4>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  font-family: 'Geist', sans-serif;
+                  font-size: 0.75rem;
+                  margin-bottom: 8px;
+                ">
+                <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+                  {{ job.company }}, {{ job.location }}
+                </span>
+                <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #8b6b47">
+                  {{ job.startDate | date: 'MM/yyyy' }} -
+                  {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}
+                </span>
+              </div>
+            </div>
+            <ul
+              class="job-description-modern"
+              style="
+                font-family: 'Geist', sans-serif;
+                font-size: 0.75rem;
+                margin: 8px 0 0 0;
+                padding-left: 16px;
+              ">
+              <li
+                *ngFor="let point of job.description"
+                style="
+                  font-family: 'Geist', sans-serif;
+                  font-size: 0.75rem;
+                  line-height: 1.5;
+                  margin-bottom: 6px;
+                ">
+                {{ point }}
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column-modern">
+        <div class="divider-modern"></div>
+
+        <!-- Education Section -->
+        @if (education().length) {
+          <section class="section-modern">
+            <h3
+              style="
+                font-family: 'Geist-SemiBold', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #8b6b47;
+                font-size: 0.875rem;
+              ">
+              EDUCATION
+            </h3>
+            <div *ngFor="let edu of education()" class="education-item-modern">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 4px;
+                ">
+                <p
+                  style="
+                    font-family: 'Geist-SemiBold', sans-serif;
+                    font-size: 0.75rem;
+                    font-weight: bold;
+                    margin: 0;
+                  ">
+                  {{ edu.degree }}
+                </p>
+                @if (edu.graduationDate) {
+                  <span
+                    style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #8b6b47">
+                    {{ edu.graduationDate | date: 'MM/yyyy' }}
+                  </span>
+                }
+              </div>
+              <p
+                style="
+                  font-family: 'Geist', sans-serif;
+                  font-size: 0.75rem;
+                  color: #333;
+                  margin: 0;
+                ">
+                {{ edu.institution }}, {{ edu.location }}
+              </p>
+            </div>
+          </section>
+          <div class="divider-modern"></div>
+        }
+
+        <!-- Languages Section -->
+        @if (languages().length) {
+          <section class="section-modern">
+            <h3
+              style="
+                font-family: 'Geist-SemiBold', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #8b6b47;
+                font-size: 0.875rem;
+              ">
+              LANGUAGES
+            </h3>
+            <div class="languages-grid-modern">
+              <div *ngFor="let language of languages()" style="font-family: 'Geist', sans-serif">
+                <span
+                  class="language-name"
+                  style="
+                    font-family: 'Geist-SemiBold', sans-serif;
+                    font-size: 0.75rem;
+                    font-weight: bold;
+                    display: block;
+                  ">
+                  {{ language.name }}
+                </span>
+                <span
+                  class="language-level"
+                  style="
+                    font-family: 'Geist', sans-serif;
+                    font-size: 0.75rem;
+                    color: #8b6b47;
+                    display: block;
+                  ">
+                  {{ language.level }}
+                </span>
+              </div>
+            </div>
+          </section>
+          <div class="divider-modern"></div>
+        }
+
+        <!-- Skills Section -->
+        @if (expertise().length) {
+          <section class="section-modern">
+            <h3
+              style="
+                font-family: 'Geist-SemiBold', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #8b6b47;
+                font-size: 0.875rem;
+              ">
+              SKILLS
+            </h3>
+            <div class="skills-grid-three-column">
+              <div
+                *ngFor="let skill of expertise()"
+                style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+                • {{ skill }}
+              </div>
+            </div>
+          </section>
+          <div class="divider-modern"></div>
+        }
+
+        <!-- Strengths Section -->
+        @if (strengths().length) {
+          <section class="section-modern">
+            <h3
+              style="
+                font-family: 'Geist-SemiBold', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #8b6b47;
+                font-size: 0.875rem;
+              ">
+              STRENGTHS
+            </h3>
+            <div class="skills-grid-three-column">
+              <div
+                *ngFor="let strength of strengths()"
+                style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+                • {{ strength }}
+              </div>
+            </div>
+          </section>
+        }
+      </div>
+    </div>
+  </div>
+}
