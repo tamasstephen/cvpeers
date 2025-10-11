@@ -36,7 +36,11 @@
             <input matInput [formControlName]="$index" required />
           </mat-form-field>
           @if ($index > 0) {
-            <button mat-stroked-button type="button" (click)="removeDescriptionField($index)">
+            <button
+              mat-stroked-button
+              class="btn-delete"
+              type="button"
+              (click)="removeDescriptionField($index)">
               Remove
             </button>
           }

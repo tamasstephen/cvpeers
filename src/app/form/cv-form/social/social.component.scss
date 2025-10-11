@@ -1,8 +1,6 @@
 :host {
-  .dialog-content {
-    display: grid;
-    gap: 0.5rem;
-    grid-template-columns: 3fr 1fr 1fr;
+  ::ng-deep div.list-card.card-body.h-stack {
+    padding-top: 0;
   }
 
   fieldset {
@@ -10,8 +8,13 @@
       display: grid;
       grid-template-columns: 3fr 1fr;
       gap: 0.5rem;
-      padding-top: 1rem;
     }
+
+    .btn-delete {
+      justify-self: end;
+    }
+
+    /* uses global .btn-delete */
 
     ul {
       list-style: none;

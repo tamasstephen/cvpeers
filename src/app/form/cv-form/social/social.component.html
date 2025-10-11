@@ -8,15 +8,13 @@
       @for (social of socialForm.controls.social.controls; track $index) {
         <li class="list-card">
           <div class="card-body h-stack justify-between w-100">
-            <div class="h-stack gap-8">
+            <div class="h-stack gap-8 social-item">
               <img [src]="social.value.src" alt="social icon" class="card-icon" />
               <span class="card-title">{{ social.value.type | titlecase }}</span>
             </div>
-            <div class="h-stack gap-8">
-              <button mat-button color="warn" type="button" (click)="removeSocial($index)">
-                Delete
-              </button>
-            </div>
+            <button mat-button class="btn-delete" type="button" (click)="removeSocial($index)">
+              Delete
+            </button>
           </div>
         </li>
       }

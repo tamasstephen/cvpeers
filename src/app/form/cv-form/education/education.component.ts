@@ -79,6 +79,18 @@ export class EducationComponent extends ComponentBaseComponent implements OnInit
     this.#afterCloseSubscription = null;
   }
 
+  #openEditDialog(index: number): void {
+    const dialogRef = this.dialog.open(EducationDialogComponent, {
+      data: this.educationControls[index].value,
+    });
+    dialogRef.afterClosed().subscribe((result: EducationItemFormValues | null): void => {
+      if (result) {
+        const educationArray = this.educationForm.get('education') as FormArray;
+        educationArray.at(index).patchValue(result);
+      }
+    });
+  }
+
   protected openDialog(): void {
     const dialogRef = this.dialog.open(EducationDialogComponent);
 
@@ -111,5 +123,9 @@ export class EducationComponent extends ComponentBaseComponent implements OnInit
   protected removeEducation(index: number): void {
     const educationArray = this.educationForm.get('education') as FormArray;
     educationArray.removeAt(index);
+  }
+
+  protected editEducation(index: number): void {
+    this.#openEditDialog(index);
   }
 }

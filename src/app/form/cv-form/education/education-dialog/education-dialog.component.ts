@@ -1,14 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ComponentBaseComponent } from '../../../../shared/core/component-base/component-base.component';
-import { EducationItemForm } from '../../../../types/education-form';
+import { EducationItemForm, EducationItemFormValues } from '../../../../types/education-form';
 
 @Component({
   selector: 'app-education-dialog',
@@ -27,7 +27,7 @@ import { EducationItemForm } from '../../../../types/education-form';
   ],
   providers: [provideNativeDateAdapter()],
 })
-export class EducationDialogComponent extends ComponentBaseComponent {
+export class EducationDialogComponent extends ComponentBaseComponent implements OnInit {
   protected educationItemForm = new FormGroup<EducationItemForm>({
     degree: new FormControl('', [Validators.required]),
     institution: new FormControl('', [Validators.required]),
@@ -36,6 +36,14 @@ export class EducationDialogComponent extends ComponentBaseComponent {
   });
 
   readonly #dialogRef = inject(MatDialogRef<EducationDialogComponent>);
+
+  readonly #data = inject<EducationItemFormValues>(MAT_DIALOG_DATA);
+
+  public ngOnInit(): void {
+    if (this.#data.degree) {
+      this.educationItemForm.patchValue(this.#data);
+    }
+  }
 
   protected saveEducation(): void {
     this.#dialogRef.close(this.educationItemForm.getRawValue());
