@@ -1,74 +1,62 @@
-h2 {
-  padding-bottom: 1rem;
-}
+:host {
+  h2 {
+    padding-bottom: 1rem;
+  }
 
-fieldset {
-  display: grid;
-  gap: 1rem;
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
-section {
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  fieldset {
     display: grid;
     gap: 1rem;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
 
-    .education-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
+  section {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 1rem;
 
-      .education-details {
-        h3 {
-          margin: 0;
-          font-size: 1.1rem;
-          color: var(--primary-color);
-        }
+      .education-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
 
-        p {
-          margin: 0.25rem 0;
-          color: var(--text-color-secondary);
+        .education-details {
+          h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #1976d2;
+          }
+
+          p {
+            margin: 0.25rem 0;
+            color: #616161;
+          }
         }
       }
     }
   }
-}
 
-.dialog {
   .dialog-content {
     display: grid;
     gap: 1rem;
-    min-width: 400px;
     padding: 1rem 0;
-    overflow: visible;
 
-    .form-row {
+    .dates {
       display: grid;
-      gap: 0.5rem;
-      width: 100%;
-
-      input,
-      ::ng-deep p-datePicker > span.p-datepicker {
-        width: 100%;
-      }
-
-      ::ng-deep p-iftalabel {
-        width: 100%;
-      }
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
+  }
 
-    .button-row {
-      display: grid;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
+  .button-row {
+    display: flex;
+    gap: 0.75rem;
   }
 }

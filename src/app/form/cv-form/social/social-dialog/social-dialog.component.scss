@@ -1,0 +1,14 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 2rem;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  margin-top: 0.25rem;
+}
+
+.dialog-content > .mat-mdc-form-field:first-of-type {
+  margin-top: 0.5rem;
+}

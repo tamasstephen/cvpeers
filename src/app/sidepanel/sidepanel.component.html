@@ -1,11 +1,12 @@
 <div [class.hidden]="isHidden()" class="sidepanel" [class.closed]="!isOpen()">
   <button
-    aria-label="open"
+    mat-mini-fab
+    color="primary"
+    aria-label="Toggle sidepanel"
     (click)="isOpen() ? close() : open()"
     class="sidepanel-arrow"
-    [class.close]="isOpen()"
-  >
-    <i class="pi pi-chevron-left"></i>
+    [class.close]="isOpen()">
+    <mat-icon>{{ isOpen() ? 'chevron_right' : 'chevron_left' }}</mat-icon>
   </button>
   <div class="sidepanel-content">
     <ng-container #dynamicContent></ng-container>

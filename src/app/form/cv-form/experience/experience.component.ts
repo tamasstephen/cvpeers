@@ -1,29 +1,40 @@
 import { CvForm } from '@/types/cv-form';
-import { ExperienceForm, ExperienceFormArray, ExperienceItemForm } from '@/types/experience-form';
-import { DatePipe } from '@angular/common';
-import { Component, input, OnInit, signal } from '@angular/core';
+import {
+  ExperienceForm,
+  ExperienceFormArray,
+  ExperienceItemForm,
+  ExperienceItemFormValues,
+} from '@/types/experience-form';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
-import { DatePickerModule } from 'primeng/datepicker';
-import { DialogModule } from 'primeng/dialog';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
+import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
+import { ExperienceDialogComponent } from './experience-dialog/experience-dialog.component';
 
 @Component({
   selector: 'app-experience',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    IftaLabelModule,
-    DialogModule,
-    DatePickerModule,
-    CalendarModule,
+    MatButtonModule,
+    MatInputModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatSnackBarModule,
+    MatIconModule,
+    MatFormFieldModule,
     DatePipe,
+    CommonModule,
+    SectionHeaderComponent,
   ],
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss',
@@ -45,10 +56,12 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     title: new FormControl('', [Validators.required]),
     company: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
-    startDate: new FormControl('', [Validators.required]),
-    endDate: new FormControl(''),
+    startDate: new FormControl<Date | null>(null, [Validators.required]),
+    endDate: new FormControl<Date | null>(null),
     description: new FormArray([new FormControl('', [Validators.required])]),
   });
+
+  #dialog = inject(MatDialog);
 
   public ngOnInit(): void {
     this.parentForm()?.addControl(
@@ -69,41 +82,54 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
   }
 
   protected openDialog(): void {
-    this.isDialogOpen.set(true);
-    this.experienceItemForm.reset();
-    // Ensure there's at least one description field
-    const descriptionArray = this.experienceItemForm.get('description') as FormArray;
-    while (descriptionArray.length > 1) {
-      descriptionArray.removeAt(descriptionArray.length - 1);
-    }
+    const dialogRef = this.#dialog.open(ExperienceDialogComponent);
+    dialogRef.afterClosed().subscribe((result: ExperienceItemFormValues | null): void => {
+      if (result) {
+        this.saveExperience(result);
+      }
+    });
   }
 
-  protected closeDialog(): void {
-    this.isDialogOpen.set(false);
+  #openDialog(index: number): void {
+    const dialogRef = this.#dialog.open(ExperienceDialogComponent, {
+      data: this.experienceControls[index].value,
+    });
+    dialogRef.afterClosed().subscribe((result: ExperienceItemFormValues | null): void => {
+      if (result) {
+        this.updateExperience(result, index);
+      }
+    });
   }
 
-  protected addExperience(): void {
-    if (this.experienceItemForm.valid) {
-      const experienceArray = this.experienceForm.get('experience') as FormArray;
-      const value = this.experienceItemForm.value;
-      const itemGroup = new FormGroup({
-        title: new FormControl(value.title || '', { nonNullable: true }),
-        company: new FormControl(value.company || '', { nonNullable: true }),
-        location: new FormControl(value.location || '', { nonNullable: true }),
-        startDate: new FormControl(value.startDate || '', {
-          nonNullable: true,
-        }),
-        endDate: new FormControl(value.endDate || ''),
-        description: new FormArray(
-          (value.description || []).map(
-            (desc: string | null): FormControl<string | null> =>
-              new FormControl(desc || '', { nonNullable: true })
-          )
-        ),
-      });
-      experienceArray.push(itemGroup);
-      this.closeDialog();
-    }
+  protected saveExperience(result: ExperienceItemFormValues): void {
+    const experienceArray = this.experienceForm.get('experience') as FormArray;
+    const itemGroup = new FormGroup({
+      title: new FormControl(result.title || '', { nonNullable: true }),
+      company: new FormControl(result.company || '', { nonNullable: true }),
+      location: new FormControl(result.location || '', { nonNullable: true }),
+      startDate: new FormControl<Date | null>(result.startDate || null, {
+        nonNullable: true,
+      }),
+      endDate: new FormControl<Date | null>(result.endDate || null, {
+        nonNullable: true,
+      }),
+      description: new FormArray(
+        result.description.map(
+          (desc: string | null): FormControl<string | null> =>
+            new FormControl(desc || '', { nonNullable: true })
+        )
+      ),
+    });
+    experienceArray.push(itemGroup);
+  }
+
+  protected editExperience(index: number): void {
+    this.#openDialog(index);
+  }
+
+  protected updateExperience(result: ExperienceItemFormValues, index: number): void {
+    const experienceArray = this.experienceForm.get('experience') as FormArray;
+    experienceArray.at(index).patchValue(result);
   }
 
   protected removeExperience(index: number): void {

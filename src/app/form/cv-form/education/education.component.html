@@ -1,84 +1,27 @@
 <fieldset>
-  <h2>Education</h2>
-  <div>
-    <p-button
-      severity="secondary"
-      variant="outlined"
-      fluid
-      (click)="openDialog()"
-      label="Add Education" />
-  </div>
-  <section>
+  <app-section-header
+    [title]="'Education'"
+    [addLabel]="'Add Education'"
+    (add)="openDialog()"></app-section-header>
+  <section class="v-stack gap-12">
     <ul>
       @for (education of educationControls; track $index) {
-        <li class="education-item">
-          <div class="education-details">
-            <h3>{{ education.value.degree }}</h3>
-            <p>{{ education.value.institution }}</p>
-            <p>{{ education.value.location }}</p>
-            <p>{{ education.value.graduationDate | date: 'MM/yyyy' }}</p>
+        <li class="list-card">
+          <div class="card-body">
+            <div class="v-stack gap-8">
+              <h3 class="card-title">{{ education.value.degree }}</h3>
+              <p class="card-subtitle">{{ education.value.institution }}</p>
+            </div>
           </div>
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            variant="outlined"
-            (click)="removeEducation($index)" />
+          <div class="card-divider"></div>
+          <div class="card-actions">
+            <button mat-button color="primary" (click)="editEducation($index)">Edit</button>
+            <button mat-button class="btn-delete" type="button" (click)="removeEducation($index)">
+              Delete
+            </button>
+          </div>
         </li>
       }
     </ul>
   </section>
 </fieldset>
-
-<p-dialog
-  class="dialog"
-  [modal]="true"
-  [visible]="isDialogOpen"
-  (onHide)="closeDialog()"
-  [closable]="false"
-  header="Add Education">
-  <div class="dialog-content" [formGroup]="educationItemForm">
-    <div class="form-row">
-      <div class="form-row">
-        <p-iftalabel variant="in">
-          <p-datePicker
-            id="graduationDate"
-            formControlName="graduationDate"
-            dateFormat="mm/yy"
-            view="month"
-            [showIcon]="true"
-            [readonlyInput]="true"
-            [yearNavigator]="true"
-            [yearRange]="'1900:2050'"
-            [showButtonBar]="true"
-            required />
-          <label for="graduationDate">Graduation Date</label>
-        </p-iftalabel>
-      </div>
-      <p-iftalabel>
-        <label for="degree">Degree</label>
-        <input pInputText id="degree" formControlName="degree" required />
-      </p-iftalabel>
-    </div>
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="institution">Institution</label>
-        <input pInputText id="institution" formControlName="institution" required />
-      </p-iftalabel>
-    </div>
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="location">Location</label>
-        <input pInputText id="location" formControlName="location" required />
-      </p-iftalabel>
-    </div>
-    <div class="button-row">
-      <p-button
-        class="save-button"
-        [disabled]="!educationItemForm.valid"
-        (click)="addEducation()"
-        label="Save"
-        fluid="true" />
-      <p-button fluid="true" variant="outlined" (click)="closeDialog()" label="Cancel" />
-    </div>
-  </div>
-</p-dialog>

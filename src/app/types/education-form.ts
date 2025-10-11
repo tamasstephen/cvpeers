@@ -17,7 +17,7 @@ export type EducationItemFormValues = {
   degree: string | null;
   institution: string | null;
   location: string | null;
-  graduationDate: string | null;
+  graduationDate: Date | null;
 };
 
 export type EducationFormValues = EducationItemFormValues[];

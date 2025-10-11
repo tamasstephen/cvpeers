@@ -1,66 +1,59 @@
 <fieldset>
-  <h2>Languages</h2>
-  <div>
-    <p-button
-      severity="secondary"
-      variant="outlined"
-      fluid
-      (click)="openDialog()"
-      label="Add Language" />
-  </div>
-  <section>
+  <app-section-header
+    [title]="'Languages'"
+    [addLabel]="'Add Language'"
+    (add)="openDialog()"></app-section-header>
+  <section class="v-stack gap-12">
     <ul>
       @for (language of languageControls; track $index) {
-        <li class="language-item">
-          <div class="language-details">
-            <h3>{{ language.value.name }}</h3>
-            <p>{{ language.value.level }}</p>
+        <li class="list-card list-card--dark">
+          <div class="card-body">
+            <div class="v-stack gap-8">
+              <h3 class="card-title">{{ language.value.name }}</h3>
+              <p class="card-subtitle">{{ language.value.level }}</p>
+            </div>
           </div>
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            variant="outlined"
-            (click)="removeLanguage($index)" />
+          <div class="card-divider"></div>
+          <div class="card-actions">
+            <button mat-button class="btn-delete" type="button" (click)="removeLanguage($index)">
+              Delete
+            </button>
+          </div>
         </li>
       }
     </ul>
   </section>
 </fieldset>
 
-<p-dialog
-  class="dialog"
-  [modal]="true"
-  [visible]="isDialogOpen()"
-  (onHide)="closeDialog()"
-  [closable]="false"
-  header="Add Language">
-  <div class="dialog-content" [formGroup]="languageItemForm">
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="name">Language</label>
-        <input pInputText id="name" formControlName="name" required />
-      </p-iftalabel>
-    </div>
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="level">Proficiency Level</label>
-        <p-selectButton
-          id="level"
-          [options]="proficiencyLevels"
-          formControlName="level"
-          optionLabel="label"
-          optionValue="value"
-          required />
-      </p-iftalabel>
-    </div>
-    <div class="button-row">
-      <p-button
-        class="save-button"
-        [disabled]="!languageItemForm.valid"
-        (click)="addLanguage()"
-        label="Save"
-        fluid="true" />
-      <p-button fluid="true" variant="outlined" (click)="closeDialog()" label="Cancel" />
-    </div>
-  </div>
-</p-dialog>
+<ng-template #languageDialog>
+  <h2 mat-dialog-title class="dialog-header">Add Language</h2>
+  <mat-dialog-content class="dialog-content v-stack gap-12" [formGroup]="dialogForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Language</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="dialogForm.controls.name.invalid">Language name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Proficiency Level</mat-label>
+      <mat-select formControlName="level" required>
+        @for (option of proficiencyLevels; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+      <mat-error *ngIf="dialogForm.controls.level.invalid">Proficiency level is required</mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end" class="dialog-actions h-stack gap-8">
+    <button mat-stroked-button type="button" class="btn-outlined" (click)="closeDialog()">
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      class="btn-filled"
+      (click)="addLanguage()">
+      Save
+    </button>
+  </mat-dialog-actions>
+</ng-template>

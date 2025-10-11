@@ -1,0 +1,64 @@
+.h-stack {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.v-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
+.gap-12 {
+  gap: var(--space-12);
+}
+.gap-16 {
+  gap: var(--space-16);
+}
+.gap-24 {
+  gap: var(--space-24);
+}
+
+.ml-4 {
+  margin-left: var(--space-4);
+}
+.ml-8 {
+  margin-left: var(--space-8);
+}
+.ml-12 {
+  margin-left: var(--space-12);
+}
+.ml-16 {
+  margin-left: var(--space-16);
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+/* Dialog structure helpers */
+.dialog-header {
+  padding: var(--space-16);
+}
+.dialog-content {
+  padding: var(--space-16);
+}
+.dialog-actions {
+  padding: var(--space-12) var(--space-16);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+}

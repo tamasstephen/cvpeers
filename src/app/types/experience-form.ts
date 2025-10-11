@@ -19,8 +19,8 @@ export type ExperienceItemFormValues = {
   title: string | null;
   company: string | null;
   location: string | null;
-  startDate: string | null;
-  endDate: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
   description: (string | null)[];
 };
 

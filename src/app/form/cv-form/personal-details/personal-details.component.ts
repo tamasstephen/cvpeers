@@ -1,7 +1,7 @@
 import { Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Subject } from 'rxjs';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
@@ -10,7 +10,7 @@ import { PersonalDetailsForm } from '../../../types/personal-details-form';
 @Component({
   selector: 'app-personal-details',
   standalone: true,
-  imports: [IftaLabelModule, ReactiveFormsModule, InputTextModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './personal-details.component.html',
   styleUrl: './personal-details.component.scss',
 })

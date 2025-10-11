@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'primeicons/primeicons.css';
+@use '@angular/material' as mat;
+@import './styles/_tokens.scss';
+@import './styles/_utilities.scss';
 
 @font-face {
   font-family: 'geist';
@@ -11,64 +13,271 @@
   src: url('./app/assets/fonts/Geist-SemiBold.ttf') format('truetype');
 }
 
+html {
+  @include mat.theme(
+    (
+      typograpy: 'Geist',
+    )
+  );
+
+  @include mat.chips-overrides(
+    (
+      outline-color: rgba(255, 255, 255, 0.3),
+    )
+  );
+}
+
 html,
 body {
-  margin: 0;
-  padding: 0;
   height: 100%;
 }
 
-body {
-  font-family:
-    'Geist',
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol';
-  min-height: 100vh;
+button.mdc-button {
+  border-radius: 8px;
 }
 
-app-root {
+/* Unified card style for list items (experience, language, social) */
+.list-card {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  align-items: stretch;
+  padding: var(--space-12);
+  border-radius: var(--radius-8);
+  background: rgba(80, 80, 80, 0.16);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-clip: padding-box;
+  color: #0f172a;
+}
+.list-card .card-subtitle {
+  font-size: 0.875rem;
+  color: #475569;
+}
+.list-card a {
+  color: #2563eb;
 }
 
-main {
-  flex: 1;
+.list-card .card-body {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+}
+.list-card .card-actions {
+  display: flex;
+  justify-content: flex-end; /* right align even with single action */
+  gap: var(--space-12);
+  padding-top: var(--space-8);
+}
+.list-card .card-divider {
+  height: 1px;
+  margin-top: var(--space-12);
+  background: rgba(15, 23, 42, 0.12); /* visible on light bg */
 }
 
-p,
-span,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'geist';
+.list-card .card-title {
+  margin: 0;
+  font-size: 1rem;
+}
+.list-card .card-subtitle {
+  margin: 0;
+}
+.list-card .card-icon {
+  width: 24px;
+  height: 24px;
+}
+.list-card .truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
+/* Make Material text buttons not uppercase for cleaner look */
+.mat-mdc-button .mdc-button__label {
+  text-transform: none;
 }
 
-.p-button-label {
-  font-weight: 400;
+/* Unified button styles (aligned with docs/css-enhancements.md) */
+.btn-filled {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: var(--radius-8);
+  min-height: var(--control-height);
+}
+.btn-filled:hover {
+  background-color: var(--gray-700);
+}
+
+.mdc-button--outlined.mat-mdc-outlined-button:not(:disabled) {
+  background-color: transparent;
+  color: var(--color-black);
+  font-family: var(--font-family);
+  border: 1px solid var(--color-black);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  border-radius: var(--radius-8);
+  min-height: var(--control-height);
+}
+.btn-outlined:hover {
+  background-color: var(--gray-200);
+}
+
+/* Global delete button style */
+.btn-delete {
+  color: var(--color-error);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: none;
+  margin: 0;
+  max-width: 100px;
+}
+.btn-delete:hover {
+  background-color: var(--red-300);
+  color: var(--color-white);
+}
+
+/* Ensure styles apply to Angular Material buttons */
+.btn-delete.mat-mdc-button .mdc-button__label,
+.btn-delete.mat-mdc-outlined-button .mdc-button__label,
+.btn-delete.mat-mdc-unelevated-button .mdc-button__label {
+  color: var(--color-error);
+}
+
+.btn-delete.mat-mdc-button:hover,
+.btn-delete.mat-mdc-outlined-button:hover,
+.btn-delete.mat-mdc-unelevated-button:hover {
+  background-color: var(--red-300);
+}
+
+.btn-delete.mat-mdc-button:hover .mdc-button__label,
+.btn-delete.mat-mdc-outlined-button:hover .mdc-button__label,
+.btn-delete.mat-mdc-unelevated-button:hover .mdc-button__label {
+  color: var(--color-white);
+}
+
+/* MatDialog defaults via panel class */
+.app-dialog .mdc-dialog__surface {
+  border-radius: var(--radius-8);
+}
+/* Ensure first field is not clipped under the title */
+.app-dialog .dialog-content > .mat-mdc-form-field:first-child {
+  margin-top: var(--space-8);
+}
+
+@media (max-width: 360px) {
+  .app-dialog .dialog-content {
+    padding: var(--space-12);
+  }
+  .app-dialog .dialog-actions {
+    padding: var(--space-12);
+  }
+}
+
+:host {
+  :root {
+    --primary-color: #0f172a;
+    --text-color: #0f172a;
+    --text-color-secondary: #475569;
+    --secondary-color: #c026d3;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --border-color: #e2e8f0;
+    --muted-color: #64748b;
+    --font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  html,
+  body {
+    font-family:
+      'Geist',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  body {
+    font-family:
+      'Geist',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  main {
+    min-height: 100vh;
+  }
+
+  .page-container {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    min-height: 100vh;
+    /* subtle background gradients to reveal backdrop-filter blur */
+    background-image:
+      radial-gradient(600px 400px at -10% -10%, rgba(2, 6, 23, 0.06) 0%, rgba(0, 0, 0, 0) 70%),
+      radial-gradient(700px 500px at 110% 0%, rgba(29, 78, 216, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+    background-repeat: no-repeat;
+  }
+
+  .page-layout {
+    width: min(1200px, 100%);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (max-width: 960px) {
+    .page-container {
+      padding: 2rem 1rem;
+    }
+
+    .page-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media print {
+    body,
+    .page-container,
+    .page-layout {
+      background: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .page-layout {
+      grid-template-columns: 1fr;
+    }
+  }
 }
 
 input.ng-invalid.ng-touched {
@@ -95,4 +304,13 @@ h5,
 h6 {
   margin: 0;
   padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }

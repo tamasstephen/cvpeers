@@ -11,7 +11,40 @@ export class PdfGeneratorService {
   /**
    * The jsPDF instance used to generate the PDF
    */
-  #pdfGenerator: jsPDF = new jsPDF();
+  #pdfGenerator: jsPDF = new jsPDF({ unit: 'mm', format: 'a4' });
+
+  /**
+   * Creates a deep clone of the provided element and copies the computed styles of the
+   * original tree into inline styles on the clone so layout is preserved during PDF rendering.
+   * @param element The HTMLElement to clone together with its computed styles.
+   * @returns A cloned HTMLElement with computed styles applied inline.
+   */
+  #cloneNodeWithInlineStyles(element: HTMLElement): HTMLElement {
+    const clone = element.cloneNode(true) as HTMLElement;
+
+    const sourceElements: Element[] = [element, ...Array.from(element.querySelectorAll('*'))];
+    const clonedElements: Element[] = [clone, ...Array.from(clone.querySelectorAll('*'))];
+
+    sourceElements.forEach((source, index): void => {
+      const target = clonedElements[index];
+      if (!(source instanceof HTMLElement) || !(target instanceof HTMLElement)) {
+        return;
+      }
+
+      const computedStyle = window.getComputedStyle(source);
+      const styleDeclaration = Array.from(computedStyle)
+        .map((property): string => `${property}: ${computedStyle.getPropertyValue(property)};`)
+        .join(' ');
+
+      const existingStyle = target.getAttribute('style');
+      target.setAttribute(
+        'style',
+        existingStyle ? `${styleDeclaration} ${existingStyle}` : styleDeclaration
+      );
+    });
+
+    return clone;
+  }
 
   /**
    * Adds Geist font to all HTML tags in a string
@@ -244,30 +277,54 @@ export class PdfGeneratorService {
   }
 
   /**
-   * Creates a PDF from an HTML string
-   * @param html The HTML element to create a PDF from
+   * Generates a PDF that mirrors the provided HTML element, including its computed layout.
+   * The method clones the element with inline styles, renders it off-screen for html2canvas,
+   * and streams the result to a new browser window as a Data URL.
+   * @param html The HTML element to convert into a PDF document.
    */
   public async createPdfFromHtml(html: Element): Promise<void> {
+    const target = html as HTMLElement;
+    this.#pdfGenerator = new jsPDF({ unit: 'mm', format: 'a4' });
     this.#pdfGenerator.setFillColor(255, 253, 248);
     this.#pdfGenerator.setFont('Geist');
     this.#pdfGenerator.setFont('Geist-SemiBold');
     this.#pdfGenerator.setFont('GeistMono-SemiBold');
-    this.#pdfGenerator.setCharSpace(0);
 
-    const target = html as HTMLElement;
-    const computedWidth = Math.min(180, target.scrollWidth || 650);
+    const clonedTarget = this.#cloneNodeWithInlineStyles(target);
+    const container = document.createElement('div');
+    const originalWidth = target.scrollWidth || target.getBoundingClientRect().width || 650;
+    const margin = 10;
+    const pageWidth = this.#pdfGenerator.internal.pageSize.getWidth();
+    const pdfContentWidth = Math.max(pageWidth - margin * 2, 10);
 
-    await this.#pdfGenerator.html(target, {
-      callback: (doc: jsPDF): void => {
-        doc.output('dataurlnewwindow');
-      },
-      margin: [10, 10, 10, 10],
-      html2canvas: {
-        letterRendering: true,
-      },
-      autoPaging: 'text',
-      width: computedWidth,
-      windowWidth: target.scrollWidth || 650,
-    });
+    clonedTarget.style.maxWidth = 'none';
+    clonedTarget.style.width = `${originalWidth}px`;
+
+    container.style.position = 'fixed';
+    container.style.top = '-10000px';
+    container.style.left = '-10000px';
+    container.style.width = `${originalWidth}px`;
+    container.style.pointerEvents = 'none';
+    container.style.opacity = '0';
+    container.appendChild(clonedTarget);
+    document.body.appendChild(container);
+
+    try {
+      await this.#pdfGenerator.html(clonedTarget, {
+        callback: (doc: jsPDF): void => {
+          doc.output('dataurlnewwindow');
+        },
+        margin: [margin, margin, margin, margin],
+        html2canvas: {
+          letterRendering: true,
+          //scale: 2,
+        },
+        autoPaging: 'text',
+        width: pdfContentWidth,
+        windowWidth: originalWidth || 650,
+      });
+    } finally {
+      document.body.removeChild(container);
+    }
   }
 }

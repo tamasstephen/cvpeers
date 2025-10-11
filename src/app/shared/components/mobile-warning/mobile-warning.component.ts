@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-mobile-warning',
   standalone: true,
-  imports: [ButtonModule, RouterLink],
+  imports: [MatButtonModule, RouterLink],
   template: `
     <div class="mobile-warning">
       <div class="warning-content">
@@ -15,7 +15,7 @@ import { ButtonModule } from 'primeng/button';
           possible experience.
         </p>
         <p>Please visit us on your desktop computer to create your CV.</p>
-        <p-button label="Go to Home" routerLink="/" styleClass="p-button-primary"></p-button>
+        <button mat-flat-button color="primary" routerLink="/">Go to Home</button>
       </div>
     </div>
   `,
@@ -27,32 +27,36 @@ import { ButtonModule } from 'primeng/button';
         justify-content: center;
         min-height: 100vh;
         padding: 1rem;
-        background-color: var(--surface-ground);
+        background-color: #f5f5f5;
       }
 
       .warning-content {
         text-align: center;
-        background-color: var(--surface-card);
+        background-color: #ffffff;
         padding: 2rem;
-        border-radius: var(--border-radius);
-        box-shadow: var(--card-shadow);
+        border-radius: 12px;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
         max-width: 400px;
         width: 100%;
 
         h1 {
           margin: 0 0 1.5rem;
           font-size: 1.5rem;
-          color: var(--primary-color);
+          color: #1976d2;
         }
 
         p {
           margin: 0 0 1rem;
           line-height: 1.5;
-          color: var(--text-color);
+          color: #424242;
 
           &:last-of-type {
             margin-bottom: 1.5rem;
           }
+        }
+
+        button {
+          margin-top: 0.5rem;
         }
       }
     `,

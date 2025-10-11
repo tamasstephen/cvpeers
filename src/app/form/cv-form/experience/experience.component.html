@@ -1,132 +1,34 @@
 <fieldset>
-  <h2>Experience</h2>
-  <div>
-    <p-button
-      severity="secondary"
-      variant="outlined"
-      fluid
-      (click)="openDialog()"
-      label="Add Experience" />
-  </div>
-  <section>
+  <app-section-header
+    [title]="'Experience'"
+    [addLabel]="'Add Experience'"
+    (add)="openDialog()"></app-section-header>
+  <section class="v-stack gap-12">
     <ul>
       @for (experience of experienceControls; track $index) {
-        <li class="experience-item">
-          <div class="experience-header">
-            <h4>{{ experience.get('title')?.value }}</h4>
-            <p class="company">{{ experience.get('company')?.value }}</p>
-            <p class="period">
-              {{ experience.get('startDate')?.value | date: 'MM/yyyy' }} -
-              {{
-                experience.get('endDate')?.value
-                  ? (experience.get('endDate')?.value | date: 'MM/yyyy')
-                  : 'Present'
-              }}
-              <span class="location">{{ experience.get('location')?.value }}</span>
-            </p>
+        <li class="list-card">
+          <div class="card-body">
+            <div class="v-stack gap-8">
+              <h4 class="card-title">{{ experience.get('title')?.value }}</h4>
+              <p class="card-subtitle company">{{ experience.get('company')?.value }}</p>
+              <p class="card-subtitle period">
+                {{ experience.get('startDate')?.value | date: 'MM/yyyy' }} -
+                {{
+                  experience.get('endDate')?.value
+                    ? (experience.get('endDate')?.value | date: 'MM/yyyy')
+                    : 'Present'
+                }}
+                <span class="location">{{ experience.get('location')?.value }}</span>
+              </p>
+            </div>
           </div>
-          <ul class="description-list">
-            @for (description of getDescriptionControls(experience); track $index) {
-              <li>{{ description.value }}</li>
-            }
-          </ul>
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            variant="outlined"
-            (click)="removeExperience($index)" />
+          <div class="card-divider"></div>
+          <div class="card-actions">
+            <button mat-button color="primary" (click)="editExperience($index)">Edit</button>
+            <button mat-button class="btn-delete" (click)="removeExperience($index)">Delete</button>
+          </div>
         </li>
       }
     </ul>
   </section>
 </fieldset>
-
-<p-dialog
-  class="dialog"
-  [modal]="true"
-  [visible]="isDialogOpen()"
-  (onHide)="closeDialog()"
-  [closable]="false"
-  header="Add Experience">
-  <div class="dialog-content" [formGroup]="experienceItemForm">
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="title">Job Title</label>
-        <input pInputText id="title" formControlName="title" required />
-      </p-iftalabel>
-    </div>
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="company">Company</label>
-        <input pInputText id="company" formControlName="company" required />
-      </p-iftalabel>
-    </div>
-    <div class="form-row dates">
-      <p-iftalabel variant="in">
-        <p-datePicker
-          id="startDate"
-          formControlName="startDate"
-          dateFormat="mm/yy"
-          view="month"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          [yearNavigator]="true"
-          [yearRange]="'1900:2050'"
-          [showButtonBar]="true"
-          required />
-        <label for="startDate">Start Date</label>
-      </p-iftalabel>
-      <p-iftalabel variant="in">
-        <p-datePicker
-          id="endDate"
-          formControlName="endDate"
-          dateFormat="mm/yy"
-          view="month"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          [yearNavigator]="true"
-          [yearRange]="'1900:2050'"
-          [showButtonBar]="true" />
-        <label for="endDate">End Date</label>
-      </p-iftalabel>
-    </div>
-    <div class="form-row">
-      <p-iftalabel>
-        <label for="location">Location</label>
-        <input pInputText id="location" formControlName="location" required />
-      </p-iftalabel>
-    </div>
-    <div class="form-row" formArrayName="description">
-      <label for="description">Description</label>
-      @for (description of descriptionControls; track $index) {
-        <div class="description-item">
-          <p-iftalabel>
-            <input id="description" pInputText [formControlName]="$index" required />
-          </p-iftalabel>
-          @if ($index === 0) {
-            <p-button
-              icon="pi pi-plus"
-              severity="secondary"
-              variant="outlined"
-              (click)="addDescriptionField()" />
-          } @else {
-            <p-button
-              icon="pi pi-trash"
-              severity="danger"
-              variant="outlined"
-              (click)="removeDescriptionField($index)" />
-          }
-        </div>
-      }
-    </div>
-    <div class="button-row">
-      <p-button
-        class="save-button"
-        [disabled]="!experienceItemForm.valid"
-        (click)="addExperience()"
-        label="Save"
-        fluid="true" />
-      <p-button fluid="true" variant="outlined" (click)="closeDialog()" label="Cancel" />
-    </div>
-  </div>
-</p-dialog>

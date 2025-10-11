@@ -1,46 +1,51 @@
-.dialog-content {
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 3fr 1fr 1fr;
-}
-
-fieldset {
-  div {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 0.5rem;
-    padding-top: 1rem;
+:host {
+  ::ng-deep div.list-card.card-body.h-stack {
+    padding-top: 0;
   }
 
-  ul {
-    list-style: none;
-    padding: 0;
-
-    li {
-      display: flex;
-      align-items: center;
+  fieldset {
+    div {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
       gap: 0.5rem;
+    }
 
-      &.social-item {
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        border: 1px solid var(--p-slate-200);
-      }
+    .btn-delete {
+      justify-self: end;
+    }
 
-      p {
+    /* uses global .btn-delete */
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        width: 100%;
 
-        a {
-          text-decoration: none;
-          color: #000;
+        &.social-item {
+          padding: 0.5rem;
+          border-radius: 0.5rem;
+          border: 1px solid var(--p-slate-200);
+        }
+
+        p {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          width: 100%;
+
+          a {
+            text-decoration: none;
+            color: #000;
+          }
         }
       }
-    }
-    li + li {
-      margin-top: 0.5rem;
+      li + li {
+        margin-top: 0.5rem;
+      }
     }
   }
 }

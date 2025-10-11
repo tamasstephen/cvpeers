@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
 import { StructuredDataService } from '../services/seo/structured-data.service';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [ButtonModule, RouterLink],
+  imports: [MatButtonModule, RouterLink],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })

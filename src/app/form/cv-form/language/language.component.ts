@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { IftaLabelModule } from 'primeng/iftalabel';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectButtonModule } from 'primeng/selectbutton';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
+import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../types/language-form';
@@ -16,22 +18,26 @@ import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../type
   standalone: true,
   imports: [
     CommonModule,
-    IftaLabelModule,
     ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    DialogModule,
-    SelectButtonModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatIconModule,
+    SectionHeaderComponent,
   ],
   templateUrl: './language.component.html',
   styleUrl: './language.component.scss',
 })
-export class LanguageComponent extends ComponentBaseComponent implements OnInit {
+export class LanguageComponent extends ComponentBaseComponent implements OnInit, OnDestroy {
+  @ViewChild('languageDialog') protected languageDialogTemplate!: TemplateRef<unknown>;
+
   public parentForm = input<CvForm>();
 
   public reset$ = input.required<Subject<boolean>>();
 
-  protected isDialogOpen = signal(false);
+  protected dialog = inject(MatDialog);
 
   protected languageForm: LanguageForm = new FormGroup({
     languages: new FormArray<LanguageItemForm>([]),
@@ -49,9 +55,21 @@ export class LanguageComponent extends ComponentBaseComponent implements OnInit 
     { label: 'Native', value: 'Native' },
   ];
 
+  protected dialogForm = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    level: new FormControl<string | null>(null, {
+      validators: [Validators.required],
+    }),
+  });
+
   protected get languageControls(): LanguageItemForm[] {
     return (this.languageForm.get('languages') as FormArray<LanguageItemForm>).controls;
   }
+
+  #dialogRef: MatDialogRef<unknown> | null = null;
 
   public ngOnInit(): void {
     this.parentForm()?.addControl(
@@ -71,25 +89,39 @@ export class LanguageComponent extends ComponentBaseComponent implements OnInit 
     );
   }
 
+  public override ngOnDestroy(): void {
+    this.dialogForm.reset({ name: '', level: null });
+  }
+
   protected openDialog(): void {
-    this.isDialogOpen.set(true);
-    this.languageItemForm.reset();
+    this.dialogForm.reset({ name: '', level: null });
+    this.#dialogRef = this.dialog.open(this.languageDialogTemplate, {
+      width: '420px',
+      disableClose: true,
+    });
   }
 
   protected closeDialog(): void {
-    this.isDialogOpen.set(false);
+    this.#dialogRef?.close();
+    this.#dialogRef = null;
   }
 
   protected addLanguage(): void {
-    if (this.languageItemForm.valid) {
-      const languageArray = this.languageForm.get('languages') as FormArray;
-      const newLanguage = new FormGroup({
-        name: new FormControl(this.languageItemForm.get('name')?.value),
-        level: new FormControl(this.languageItemForm.get('level')?.value),
-      });
-      languageArray.push(newLanguage);
-      this.closeDialog();
+    if (this.dialogForm.invalid) {
+      this.dialogForm.markAllAsTouched();
+      return;
     }
+
+    const { name, level } = this.dialogForm.getRawValue();
+    const languageArray = this.languageForm.get('languages') as FormArray;
+    languageArray.push(
+      new FormGroup({
+        name: new FormControl(name, { nonNullable: true }),
+        level: new FormControl(level, { nonNullable: true }),
+      })
+    );
+
+    this.closeDialog();
   }
 
   protected removeLanguage(index: number): void {

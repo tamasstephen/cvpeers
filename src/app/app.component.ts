@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { PrimeNG } from 'primeng/config';
 import { SidepanelProviderService } from './services/sidepanel-provider/sidepanel-provider.service';
 import { CookieConsentComponent } from './shared/components/cookie-consent/cookie-consent.component';
 import { PrivacyLinkComponent } from './shared/components/privacy-link/privacy-link.component';
@@ -36,13 +35,9 @@ export class AppComponent extends ComponentBaseComponent implements AfterViewIni
 
   protected router = inject(Router);
 
-  protected primeng = inject(PrimeNG);
-
   protected sidepanelProvider = inject(SidepanelProviderService);
 
   public ngOnInit(): void {
-    this.primeng.ripple.set(true);
-
     this.addSubscription(
       this.router.events.subscribe((event): void => {
         if (event instanceof NavigationEnd && this.router.url.includes('/cv')) {

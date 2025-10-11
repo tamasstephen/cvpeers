@@ -15,6 +15,14 @@ import { LanguageFormValues } from '../types/language-form.js';
 import { PersonalDetailsFormValues } from '../types/personal-details-form.js';
 import { SocialFormValues } from '../types/social.js';
 
+const placeholderPersonalDetails: PersonalDetailsFormValues = {
+  fullName: 'John Doe',
+  email: 'john.doe@example.com',
+  phone: '+1 (555) 123-4567',
+  website: 'https://johndoe.com',
+  headline: 'Senior Software Engineer',
+};
+
 @Component({
   selector: 'app-cv',
   standalone: true,
@@ -31,7 +39,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
    * The personal details of the CV
    */
-  protected personalDetails = signal<PersonalDetailsFormValues | undefined>(undefined);
+  protected personalDetails = signal<PersonalDetailsFormValues>(placeholderPersonalDetails);
 
   /**
    * The social links of the CV
@@ -85,13 +93,6 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
 
   public constructor() {
     super();
-    this.personalDetails.set({
-      fullName: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 (555) 123-4567',
-      website: 'https://johndoe.com',
-      headline: 'Senior Software Engineer',
-    });
   }
 
   public ngOnInit(): void {
@@ -105,7 +106,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
         )
         .subscribe((value): void => {
           this.personalDetails.set(value.personalDetailsForm as PersonalDetailsFormValues);
-          this.socialLinks.set((value.socialForm?.social as SocialFormValues) ?? []);
+          this.socialLinks.set(value.socialForm?.social as SocialFormValues);
           if (value.summary !== this.summary()) {
             this.summary.set(value.summary);
 
@@ -114,11 +115,21 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
             const withFonts = this.pdfGeneratorService.addGeistFontToHtml(parsedForPdf);
             this.parsedSummary.set(this.sanitizer.bypassSecurityTrustHtml(withFonts));
           }
-          this.experience.set((value.experienceForm as unknown as ExperienceFormValues) ?? []);
-          this.education.set((value.educationForm as unknown as EducationFormValues) ?? []);
-          this.expertise.set((value.expertiseForm as unknown as string[]) ?? []);
-          this.strengths.set((value.strengthsForm as unknown as string[]) ?? []);
-          this.languages.set((value.languagesForm as unknown as LanguageFormValues) ?? []);
+          if (value.experienceForm) {
+            this.experience.set(value.experienceForm as ExperienceFormValues);
+          }
+          if (value.educationForm) {
+            this.education.set(value.educationForm as EducationFormValues);
+          }
+          if (value.expertiseForm) {
+            this.expertise.set(value.expertiseForm as string[]);
+          }
+          if (value.strengthsForm) {
+            this.strengths.set(value.strengthsForm as string[]);
+          }
+          if (value.languagesForm) {
+            this.languages.set(value.languagesForm as LanguageFormValues);
+          }
         })
     );
   }
