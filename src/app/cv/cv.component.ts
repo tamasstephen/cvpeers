@@ -1,8 +1,10 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import DOMPurify from 'dompurify';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, startWith } from 'rxjs';
 import '../assets/fonts/Geist-SemiBold-normal.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
@@ -27,7 +29,7 @@ const placeholderPersonalDetails: PersonalDetailsFormValues = {
 @Component({
   selector: 'app-cv',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, MatFormFieldModule, MatSelectModule],
   templateUrl: './cv.component.html',
   styleUrl: './cv.component.scss',
 })
@@ -108,11 +110,13 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
     this.addSubscription(
       this.cvForm.valueChanges
         .pipe(
+          startWith(this.cvForm.value),
           filter((): boolean => !!this.cvForm), // Only proceed if form exists
           debounceTime(300),
           distinctUntilChanged()
         )
         .subscribe((value): void => {
+          this.selectedTemplate.set(value.templateForm as Template);
           this.personalDetails.set(value.personalDetailsForm as PersonalDetailsFormValues);
           this.socialLinks.set(value.socialForm?.social as SocialFormValues);
           if (value.summary !== this.summary()) {
@@ -145,7 +149,4 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   /**
    * Handles template selection change
    */
-  protected onTemplateChange(template: Template): void {
-    this.selectedTemplate.set(template);
-  }
 }

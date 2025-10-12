@@ -1,11 +1,3 @@
-<div class="template-selector">
-  <label for="template-select">Template: </label>
-  <select id="template-select" (change)="onTemplateChange($any($event.target).value)">
-    <option [value]="templates.MINIMAL">Default Template</option>
-    <option [value]="templates.MODERN">Modern Template</option>
-  </select>
-</div>
-
 <!-- MINIMAL Template (Default) -->
 @if (selectedTemplate() === templates.MINIMAL) {
   <div style="font-family: 'Geist', sans-serif" class="cv-container" id="cv">
@@ -199,7 +191,7 @@
 }
 
 <!-- MODERN Template (Professional) -->
-@if (selectedTemplate() === templates.MODERN) {
+@if (selectedTemplate() === templates.CLASSIC) {
   <div style="font-family: 'Geist', sans-serif" class="cv-container cv-container-modern" id="cv">
     <!-- Header Section -->
     <header class="header-section-modern">

@@ -1,4 +1,6 @@
 :host {
+  margin-bottom: 1rem;
+
   .template-selector {
     margin-bottom: 1rem;
     padding: 1rem;
@@ -39,6 +41,7 @@
     padding: 1rem;
     box-sizing: border-box;
     max-width: 100%;
+    padding-bottom: 2rem;
 
     * {
       box-sizing: border-box;
@@ -503,6 +506,7 @@
 
   // Modern Template Styles
   .cv-container-modern {
+    padding-bottom: 2rem;
     background-color: #fff;
     padding: 2rem 2.5rem;
     max-width: 210mm;
