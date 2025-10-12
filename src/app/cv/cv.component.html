@@ -272,18 +272,10 @@
             ">
             EXPERIENCE
           </h3>
-          <div *ngFor="let job of experience()" class="experience-item-modern">
-            <div class="job-header-modern">
-              <h4
-                style="
-                  font-family: 'Geist-SemiBold', sans-serif;
-                  font-size: 0.875rem;
-                  color: #000;
-                  margin: 0 0 4px 0;
-                ">
-                {{ job.title }}
-              </h4>
+          @for (job of experience(); track $index) {
+            <div class="experience-item-modern">
               <div
+                class="job-header-modern"
                 style="
                   display: flex;
                   justify-content: space-between;
@@ -292,35 +284,47 @@
                   font-size: 0.75rem;
                   margin-bottom: 8px;
                 ">
-                <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
-                  {{ job.company }}, {{ job.location }}
-                </span>
+                <h4
+                  style="
+                    font-family: 'Geist-SemiBold', sans-serif;
+                    font-size: 0.875rem;
+                    color: #000;
+                    margin: 0;
+                  ">
+                  {{ job.title }}
+                </h4>
+
                 <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #8b6b47">
                   {{ job.startDate | date: 'MM/yyyy' }} -
                   {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}
                 </span>
               </div>
-            </div>
-            <ul
-              class="job-description-modern"
-              style="
-                font-family: 'Geist', sans-serif;
-                font-size: 0.75rem;
-                margin: 8px 0 0 0;
-                padding-left: 16px;
-              ">
-              <li
-                *ngFor="let point of job.description"
+              <div style="font-family: 'Geist', sans-serif; font-size: 0.75rem; margin-bottom: 8px">
+                <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+                  {{ job.company }}, {{ job.location }}
+                </span>
+              </div>
+              <ul
+                class="job-description-modern"
                 style="
                   font-family: 'Geist', sans-serif;
                   font-size: 0.75rem;
-                  line-height: 1.5;
-                  margin-bottom: 6px;
+                  margin: 8px 0 0 0;
+                  padding-left: 16px;
                 ">
-                {{ point }}
-              </li>
-            </ul>
-          </div>
+                <li
+                  *ngFor="let point of job.description"
+                  style="
+                    font-family: 'Geist', sans-serif;
+                    font-size: 0.75rem;
+                    line-height: 1.5;
+                    margin-bottom: 6px;
+                  ">
+                  {{ point }}
+                </li>
+              </ul>
+            </div>
+          }
         </section>
       </div>
 
