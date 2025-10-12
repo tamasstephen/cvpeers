@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  signal,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -42,6 +51,8 @@ export class LanguageComponent extends ComponentBaseComponent implements OnInit,
   protected languageForm: LanguageForm = new FormGroup({
     languages: new FormArray<LanguageItemForm>([]),
   });
+
+  protected isEditing = signal<boolean>(false);
 
   protected languageItemForm: LanguageItemForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -99,11 +110,15 @@ export class LanguageComponent extends ComponentBaseComponent implements OnInit,
       width: '420px',
       disableClose: true,
     });
+    this.#dialogRef.afterClosed().subscribe((): void => {
+      this.isEditing.set(false);
+    });
   }
 
   protected closeDialog(): void {
     this.#dialogRef?.close();
     this.#dialogRef = null;
+    this.isEditing.set(false);
   }
 
   protected addLanguage(): void {
@@ -114,14 +129,40 @@ export class LanguageComponent extends ComponentBaseComponent implements OnInit,
 
     const { name, level } = this.dialogForm.getRawValue();
     const languageArray = this.languageForm.get('languages') as FormArray;
-    languageArray.push(
-      new FormGroup({
-        name: new FormControl(name, { nonNullable: true }),
-        level: new FormControl(level, { nonNullable: true }),
-      })
-    );
+    if (this.isEditing()) {
+      this.closeDialog();
+      return;
+    } else {
+      languageArray.push(
+        new FormGroup({
+          name: new FormControl(name, { nonNullable: true }),
+          level: new FormControl(level, { nonNullable: true }),
+        })
+      );
 
-    this.closeDialog();
+      this.closeDialog();
+    }
+  }
+
+  protected editLanguage(index: number): void {
+    this.isEditing.set(true);
+
+    const { name, level } = this.languageControls[index].value;
+    this.dialogForm.patchValue({ name: name ?? '', level: level ?? '' });
+    this.#dialogRef = this.dialog.open(this.languageDialogTemplate, {
+      width: '420px',
+      disableClose: true,
+    });
+
+    this.#dialogRef.afterClosed().subscribe((): void => {
+      this.#dialogRef = null;
+      const dialogFormResults = this.dialogForm.getRawValue();
+      const isDiff = dialogFormResults.name !== name || dialogFormResults.level !== level;
+      if (isDiff) {
+        this.languageForm.controls.languages.at(index).patchValue(dialogFormResults);
+      }
+      this.isEditing.set(false);
+    });
   }
 
   protected removeLanguage(index: number): void {
