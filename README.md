@@ -1,6 +1,7 @@
 # CV Generator
 
 A lightweight web application for creating CVs/resumes built with Angular. This tool helps users create, edit, and export professional-looking CVs with ease.
+You can take a look at the working app on: https://cvpeers.com
 
 ## Features
 
