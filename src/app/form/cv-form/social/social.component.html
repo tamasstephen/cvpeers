@@ -12,9 +12,14 @@
               <img [src]="social.value.src" alt="social icon" class="card-icon" />
               <span class="card-title">{{ social.value.type | titlecase }}</span>
             </div>
-            <button mat-button class="btn-delete" type="button" (click)="removeSocial($index)">
-              Delete
-            </button>
+            <div class="h-stack gap-8">
+              <button mat-button class="btn-edit" type="button" (click)="editSocial($index)">
+                Edit
+              </button>
+              <button mat-button class="btn-delete" type="button" (click)="removeSocial($index)">
+                Delete
+              </button>
+            </div>
           </div>
         </li>
       }
