@@ -36,6 +36,7 @@ import { LanguageComponent } from './language/language.component';
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 import { SocialComponent } from './social/social.component';
 import { StrengthsComponent } from './strengths/strengths.component';
+import { TemplateSelectorComponent } from './template-selector/template-selector.component';
 
 interface StoredFormData {
   personalDetailsForm: PersonalDetailsFormValues;
@@ -66,6 +67,7 @@ interface StoredFormData {
     EducationComponent,
     LanguageComponent,
     MobileWarningComponent,
+    TemplateSelectorComponent,
   ],
   templateUrl: './cv-form.component.html',
   styleUrl: './cv-form.component.scss',

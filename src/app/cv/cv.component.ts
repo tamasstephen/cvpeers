@@ -1,11 +1,14 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import DOMPurify from 'dompurify';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, startWith } from 'rxjs';
 import '../assets/fonts/Geist-SemiBold-normal.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
+import { Template } from '../enums/template.enum.js';
 import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import { CvForm } from '../types/cv-form';
@@ -26,7 +29,7 @@ const placeholderPersonalDetails: PersonalDetailsFormValues = {
 @Component({
   selector: 'app-cv',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, MatFormFieldModule, MatSelectModule],
   templateUrl: './cv.component.html',
   styleUrl: './cv.component.scss',
 })
@@ -35,6 +38,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The form group of the CV
    */
   @Input() public cvForm!: CvForm;
+
+  protected templates = Template;
 
   /**
    * The personal details of the CV
@@ -82,6 +87,11 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
   protected languages = signal<LanguageFormValues>([]);
 
   /**
+   * The selected template
+   */
+  protected selectedTemplate = signal<Template>(Template.MINIMAL);
+
+  /**
    * The PDF generator service
    */
   protected pdfGeneratorService = inject(PdfGeneratorService);
@@ -100,11 +110,13 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
     this.addSubscription(
       this.cvForm.valueChanges
         .pipe(
+          startWith(this.cvForm.value),
           filter((): boolean => !!this.cvForm), // Only proceed if form exists
           debounceTime(300),
           distinctUntilChanged()
         )
         .subscribe((value): void => {
+          this.selectedTemplate.set(value.templateForm as Template);
           this.personalDetails.set(value.personalDetailsForm as PersonalDetailsFormValues);
           this.socialLinks.set(value.socialForm?.social as SocialFormValues);
           if (value.summary !== this.summary()) {
@@ -133,4 +145,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
         })
     );
   }
+
+  /**
+   * Handles template selection change
+   */
 }

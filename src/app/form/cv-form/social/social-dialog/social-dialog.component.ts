@@ -1,12 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Social, SOCIAL_OPTIONS_PROVIDER, SOCIAL_OPTIONS_TOKEN } from '../../../../types/social';
+import {
+  Social,
+  SOCIAL_OPTIONS_PROVIDER,
+  SOCIAL_OPTIONS_TOKEN,
+  SocialItem,
+} from '../../../../types/social';
 
 @Component({
   selector: 'app-social-dialog',
@@ -24,7 +29,7 @@ import { Social, SOCIAL_OPTIONS_PROVIDER, SOCIAL_OPTIONS_TOKEN } from '../../../
   templateUrl: './social-dialog.component.html',
   styleUrl: './social-dialog.component.scss',
 })
-export class SocialDialogComponent {
+export class SocialDialogComponent implements OnInit {
   protected socialOptions = inject(SOCIAL_OPTIONS_TOKEN);
 
   protected dialogForm = new FormGroup({
@@ -38,6 +43,14 @@ export class SocialDialogComponent {
   });
 
   #dialogRef = inject(MatDialogRef<SocialDialogComponent>);
+
+  #data = inject<SocialItem>(MAT_DIALOG_DATA);
+
+  public ngOnInit(): void {
+    if (this.#data.src) {
+      this.dialogForm.patchValue(this.#data);
+    }
+  }
 
   protected addSocialFromDialog(): void {
     this.#dialogRef.close(this.dialogForm.getRawValue());

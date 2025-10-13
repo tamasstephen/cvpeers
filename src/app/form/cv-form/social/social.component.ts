@@ -77,6 +77,22 @@ export class SocialComponent extends ComponentBaseComponent implements OnInit, O
     );
   }
 
+  #openEditDialog(index: number): void {
+    const dialogRef = this.#dialog.open(SocialDialogComponent, {
+      data: this.socialForm.controls.social.at(index).value,
+    });
+
+    dialogRef.afterClosed().subscribe((result: { url: string; type: Social } | null): void => {
+      if (result) {
+        this.socialForm.controls.social.at(index).patchValue({
+          url: result.url,
+          type: result.type,
+          src: this.getSocialOptionSrc(result.type),
+        });
+      }
+    });
+  }
+
   /**
    * Add a social link
    * @param url The URL of the social link
@@ -124,5 +140,9 @@ export class SocialComponent extends ComponentBaseComponent implements OnInit, O
    */
   protected removeSocial(index: number): void {
     this.socialForm.controls.social.removeAt(index);
+  }
+
+  protected editSocial(index: number): void {
+    this.#openEditDialog(index);
   }
 }
