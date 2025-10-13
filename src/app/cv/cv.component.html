@@ -42,10 +42,9 @@
             {{ personalDetails().email }}
           </a>
         </div>
-        <div>
+        <div *ngFor="let social of socialLinks()">
           <!-- Social Links -->
           <a
-            *ngFor="let social of socialLinks()"
             [href]="social.url"
             target="_blank"
             class="contact-item"
