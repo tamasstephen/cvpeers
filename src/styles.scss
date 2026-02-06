@@ -48,6 +48,7 @@ button.mdc-button:hover {
 
 .mat-mdc-form-field {
   width: 100%;
+  --mdc-shape-small: var(--radius-2);
 }
 
 .mat-mdc-form-field .mdc-text-field--outlined {
@@ -65,6 +66,14 @@ button.mdc-button:hover {
 .mat-mdc-form-field .mdc-notched-outline__notch {
   border-width: 2px;
   border-color: var(--color-border);
+}
+
+.mat-mdc-form-field .mdc-notched-outline__leading {
+  border-radius: var(--radius-2) 0 0 var(--radius-2);
+}
+
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-radius: 0 var(--radius-2) var(--radius-2) 0;
 }
 
 .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
@@ -342,4 +351,6 @@ body {
 body {
   margin: 0;
   font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }

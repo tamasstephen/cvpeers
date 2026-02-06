@@ -1,7 +1,13 @@
 :host {
+  display: block;
+  background: var(--color-bg);
+  margin: -2rem;
+  padding: 2rem 0;
+
   .landing {
-    background: var(--color-bg);
     color: var(--color-text);
+    width: min(1200px, 100%);
+    margin: 0 auto;
     padding: 0 2.5rem 6rem;
   }
 
@@ -196,6 +202,14 @@
 
   .bento-card.wide {
     grid-column: span 2;
+    background: var(--color-accent-strong);
+    color: var(--color-black);
+  }
+
+  .bento-card.wide h3,
+  .bento-card.wide p,
+  .bento-card.wide .bento-kicker {
+    color: var(--color-black);
   }
 
   .bento-kicker {
