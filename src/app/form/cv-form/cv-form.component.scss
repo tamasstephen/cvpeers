@@ -5,30 +5,29 @@
   }
 
   .btn-filled {
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: var(--color-accent);
+    color: var(--color-black);
     font-family: 'Geist', sans-serif;
   }
 
   .cv-form {
     display: grid;
     width: 100%;
-    max-width: 600px;
+    max-width: 620px;
     padding: 0 2rem 2rem 2rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   form {
     display: grid;
     gap: 2rem;
 
-    .divider {
-      height: 1px;
-      background-color: #e0e0e0;
-    }
-
     button {
       width: 100%;
       text-transform: none;
+      font-weight: 600;
     }
   }
 

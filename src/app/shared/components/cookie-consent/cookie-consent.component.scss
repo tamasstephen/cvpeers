@@ -13,11 +13,9 @@
     transform: translateX(-50%);
     width: min(600px, calc(100% - 2rem));
     background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow:
-      0 24px 38px rgba(0, 0, 0, 0.14),
-      0 9px 46px rgba(0, 0, 0, 0.12),
-      0 11px 15px rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-2);
+    border: var(--border-strong);
+    box-shadow: var(--card-shadow-lg);
     padding: 1.5rem;
     z-index: 999;
   }
@@ -35,11 +33,11 @@
     p {
       margin: 0;
       line-height: 1.5;
-      color: #424242;
+      color: var(--color-muted);
     }
 
     a {
-      color: #1976d2;
+      color: var(--color-text);
       text-decoration: none;
 
       &:hover {
