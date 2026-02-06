@@ -1,9 +1,12 @@
 :host {
+  --sidepanel-padding: 20px;
+  --a4-width: 210mm;
+
   .sidepanel {
     position: fixed;
     top: 0;
     right: 0;
-    width: clamp(320px, 35vw, 560px);
+    width: min(100vw, calc(var(--a4-width) + (var(--sidepanel-padding) * 2)));
     height: 100vh;
     background-color: var(--color-surface);
     border-left: var(--border-strong);
@@ -52,9 +55,16 @@
     }
 
     &-content {
-      padding: 20px;
+      padding: var(--sidepanel-padding);
       height: 100%;
       overflow-y: auto;
+      display: flex;
+      justify-content: center;
+
+      > * {
+        width: var(--a4-width);
+        max-width: 100%;
+      }
     }
   }
 }
