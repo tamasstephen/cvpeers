@@ -175,7 +175,8 @@ button.mdc-button:hover {
   box-shadow: var(--card-shadow);
   font-weight: 600;
 }
-.btn-outlined:hover {
+.btn-outlined:hover,
+.mdc-button--outlined.mat-mdc-outlined-button:not(:disabled):hover {
   background-color: var(--gray-200);
   transform: translate(2px, 2px);
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);

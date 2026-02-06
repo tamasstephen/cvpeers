@@ -1,7 +1,7 @@
 :host {
   h2 {
     padding-bottom: 1rem;
-    font-size: 1.25rem;
+    font-size: var(--font-size-18);
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -38,19 +38,19 @@
 
     .experience-header {
       h4 {
-        font-size: 1rem;
+        font-size: var(--font-size-16);
         font-weight: 600;
         margin: 0;
       }
 
       .company {
-        font-size: 0.875rem;
+        font-size: var(--font-size-14);
         color: var(--color-muted);
         margin: 0.25rem 0;
       }
 
       .period {
-        font-size: 0.75rem;
+        font-size: var(--font-size-12);
         color: var(--color-muted);
         margin: 0;
 
@@ -71,7 +71,7 @@
       padding-left: 1.25rem;
 
       li {
-        font-size: 0.875rem;
+        font-size: var(--font-size-14);
         margin-bottom: 0.25rem;
         color: var(--color-muted);
       }
