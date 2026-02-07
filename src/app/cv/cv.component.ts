@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, OnInit, signal, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -33,7 +33,7 @@ const placeholderPersonalDetails: PersonalDetailsFormValues = {
   templateUrl: './cv.component.html',
   styleUrl: './cv.component.scss',
 })
-export class CvComponent extends ComponentBaseComponent implements OnInit {
+export class CvComponent extends ComponentBaseComponent implements OnInit, AfterViewInit {
   /**
    * The form group of the CV
    */
@@ -60,6 +60,16 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The parsed summary of the CV
    */
   protected parsedSummary = signal<SafeHtml | undefined>(undefined);
+
+  /**
+   * Preview HTML cloned from the raw CV markup.
+   */
+  protected previewHtml = signal<SafeHtml | null>(null);
+
+  /**
+   * Preview pages with vertical offsets.
+   */
+  protected previewPages = signal<{ offset: number }[]>([{ offset: 0 }]);
 
   /**
    * The experience of the CV
@@ -100,6 +110,12 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
    * The sanitizer service
    */
   protected sanitizer = inject(DomSanitizer);
+
+  @ViewChild('cvRaw') protected cvRaw?: ElementRef<HTMLElement>;
+
+  #previewReady = false;
+
+  #previewUpdateHandle: number | null = null;
 
   public constructor() {
     super();
@@ -142,11 +158,94 @@ export class CvComponent extends ComponentBaseComponent implements OnInit {
           if (value.languagesForm) {
             this.languages.set(value.languagesForm as LanguageFormValues);
           }
+
+          this.#schedulePreviewUpdate();
         })
     );
+  }
+
+  public ngAfterViewInit(): void {
+    this.#previewReady = true;
+    this.#schedulePreviewUpdate();
   }
 
   /**
    * Handles template selection change
    */
+
+  #schedulePreviewUpdate(): void {
+    if (!this.#previewReady) return;
+    if (this.#previewUpdateHandle !== null) {
+      window.cancelAnimationFrame(this.#previewUpdateHandle);
+    }
+    this.#previewUpdateHandle = window.requestAnimationFrame((): void => {
+      this.#previewUpdateHandle = null;
+      void this.#updatePreviewPages();
+    });
+  }
+
+  async #updatePreviewPages(): Promise<void> {
+    const raw = this.cvRaw?.nativeElement;
+    if (!raw) return;
+
+    await this.#waitForAssets(raw);
+
+    const previewSource = raw.cloneNode(true) as HTMLElement;
+    previewSource.removeAttribute('id');
+    previewSource.classList.remove('cv-raw');
+    previewSource.classList.add('cv-preview-source');
+    previewSource.style.width = '210mm';
+    previewSource.style.padding = '10mm';
+    previewSource.style.boxSizing = 'border-box';
+    previewSource.style.margin = '0';
+    previewSource.style.position = 'relative';
+
+    const measureContainer = document.createElement('div');
+    measureContainer.style.position = 'fixed';
+    measureContainer.style.top = '-10000px';
+    measureContainer.style.left = '-10000px';
+    measureContainer.style.pointerEvents = 'none';
+    measureContainer.style.opacity = '0';
+    measureContainer.style.width = '210mm';
+    measureContainer.appendChild(previewSource);
+    document.body.appendChild(measureContainer);
+
+    await this.#waitForAssets(previewSource);
+
+    const pageHeightPx = this.#mmToPx(297);
+    const totalHeight = previewSource.scrollHeight;
+    const pageCount = Math.max(1, Math.ceil(totalHeight / pageHeightPx));
+
+    this.previewPages.set(
+      Array.from({ length: pageCount }, (_: unknown, index: number) => ({
+        offset: index * pageHeightPx,
+      }))
+    );
+    this.previewHtml.set(this.sanitizer.bypassSecurityTrustHtml(previewSource.outerHTML));
+
+    document.body.removeChild(measureContainer);
+  }
+
+  async #waitForAssets(container: HTMLElement): Promise<void> {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+    const images = Array.from(container.querySelectorAll('img'));
+    await Promise.all(
+      images.map(
+        (img): Promise<void> =>
+          img.complete && img.naturalWidth > 0
+            ? Promise.resolve()
+            : new Promise((resolve): void => {
+                img.addEventListener('load', (): void => resolve(), { once: true });
+                img.addEventListener('error', (): void => resolve(), { once: true });
+              })
+      )
+    );
+  }
+
+  #mmToPx(mm: number): number {
+    const pxPerMm = 96 / 25.4;
+    return Math.floor(mm * pxPerMm);
+  }
 }

@@ -1,6 +1,16 @@
 <!-- MINIMAL Template (Default) -->
 @if (selectedTemplate() === templates.MINIMAL) {
-  <div style="font-family: 'Geist', sans-serif" class="cv-container" id="cv">
+  <div class="cv-preview">
+    @for (page of previewPages(); track $index) {
+      <div class="cv-preview-page">
+        <div
+          class="cv-preview-slice"
+          [style.transform]="'translateY(-' + page.offset + 'px)'"
+          [innerHTML]="previewHtml() ?? ''"></div>
+      </div>
+    }
+  </div>
+  <div style="font-family: 'Geist', sans-serif" class="cv-container cv-raw" id="cv-raw" #cvRaw>
     <!-- Header Section -->
     <header class="header-section">
       <div class="name-title">
@@ -165,7 +175,21 @@
 
 <!-- MODERN Template (Professional) -->
 @if (selectedTemplate() === templates.CLASSIC) {
-  <div style="font-family: 'Geist', sans-serif" class="cv-container cv-container-modern" id="cv">
+  <div class="cv-preview">
+    @for (page of previewPages(); track $index) {
+      <div class="cv-preview-page">
+        <div
+          class="cv-preview-slice"
+          [style.transform]="'translateY(-' + page.offset + 'px)'"
+          [innerHTML]="previewHtml() ?? ''"></div>
+      </div>
+    }
+  </div>
+  <div
+    style="font-family: 'Geist', sans-serif"
+    class="cv-container cv-container-modern cv-raw"
+    id="cv-raw"
+    #cvRaw>
     <!-- Header Section -->
     <header class="header-section-modern">
       <div class="name-title-modern">
