@@ -301,13 +301,14 @@ export class PdfGeneratorService {
 
     clonedTarget.style.maxWidth = 'none';
     clonedTarget.style.width = `${originalWidth}px`;
+    clonedTarget.style.visibility = 'visible';
 
     container.style.position = 'fixed';
     container.style.top = '-10000px';
     container.style.left = '-10000px';
     container.style.width = `${originalWidth}px`;
     container.style.pointerEvents = 'none';
-    container.style.opacity = '0';
+    container.style.opacity = '1';
     container.appendChild(clonedTarget);
     document.body.appendChild(container);
 
