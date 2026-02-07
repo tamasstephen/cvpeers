@@ -19,8 +19,12 @@ export class PdfGeneratorService {
    * @param element The HTMLElement to clone together with its computed styles.
    * @returns A cloned HTMLElement with computed styles applied inline.
    */
-  #cloneNodeWithInlineStyles(element: HTMLElement): HTMLElement {
+  #cloneNodeWithInlineStyles(
+    element: HTMLElement,
+    options?: { stripHiddenStyles?: boolean }
+  ): HTMLElement {
     const clone = element.cloneNode(true) as HTMLElement;
+    const stripHiddenStyles = options?.stripHiddenStyles ?? false;
 
     const sourceElements: Element[] = [element, ...Array.from(element.querySelectorAll('*'))];
     const clonedElements: Element[] = [clone, ...Array.from(clone.querySelectorAll('*'))];
@@ -32,7 +36,25 @@ export class PdfGeneratorService {
       }
 
       const computedStyle = window.getComputedStyle(source);
+      const isRoot = index === 0;
       const styleDeclaration = Array.from(computedStyle)
+        .filter((property): boolean => {
+          if (!stripHiddenStyles) return true;
+          if (property === 'visibility') return false;
+          if (
+            isRoot &&
+            (property === 'position' ||
+              property === 'left' ||
+              property === 'top' ||
+              property === 'right' ||
+              property === 'bottom' ||
+              property === 'transform' ||
+              property === 'opacity')
+          ) {
+            return false;
+          }
+          return true;
+        })
         .map((property): string => `${property}: ${computedStyle.getPropertyValue(property)};`)
         .join(' ');
 
@@ -290,7 +312,9 @@ export class PdfGeneratorService {
     this.#pdfGenerator.setFont('Geist-SemiBold');
     this.#pdfGenerator.setFont('GeistMono-SemiBold');
 
-    const clonedTarget = this.#cloneNodeWithInlineStyles(target);
+    const clonedTarget = this.#cloneNodeWithInlineStyles(target, {
+      stripHiddenStyles: true,
+    });
     const container = document.createElement('div');
     const originalWidth = target.getBoundingClientRect().width || target.clientWidth || 650;
     const margin = 10;
@@ -302,6 +326,15 @@ export class PdfGeneratorService {
     clonedTarget.style.maxWidth = 'none';
     clonedTarget.style.width = `${originalWidth}px`;
     clonedTarget.style.visibility = 'visible';
+    clonedTarget.style.position = 'static';
+    clonedTarget.style.left = '0';
+    clonedTarget.style.top = '0';
+    clonedTarget.style.transform = 'none';
+    clonedTarget.style.opacity = '1';
+    clonedTarget.querySelectorAll('*').forEach((node): void => {
+      if (!(node instanceof HTMLElement)) return;
+      node.style.visibility = 'visible';
+    });
 
     container.style.position = 'fixed';
     container.style.top = '-10000px';
