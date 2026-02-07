@@ -1,6 +1,10 @@
 :host {
   h2 {
     padding-bottom: 1rem;
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
 
   section {
@@ -12,35 +16,42 @@
   }
 
   fieldset {
-    border: none;
+    border-top: var(--border-strong);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 1.25rem 0 0;
     margin: 0;
-    padding: 0;
   }
 
   .experience-item {
     padding: 1rem;
-    border: 1px solid var(--p-slate-200);
-    border-radius: 0.5rem;
+    border: var(--border-strong-sm);
+    border-radius: var(--radius-2);
     margin-bottom: 1rem;
     display: grid;
     gap: 1rem;
+    box-shadow: var(--card-shadow-sm);
 
     .experience-header {
       h4 {
-        font-size: 1rem;
+        font-size: var(--font-size-16);
         font-weight: 600;
         margin: 0;
       }
 
       .company {
-        font-size: 0.875rem;
-        color: var(--p-slate-700);
+        font-size: var(--font-size-14);
+        color: var(--color-muted);
         margin: 0.25rem 0;
       }
 
       .period {
-        font-size: 0.75rem;
-        color: var(--p-slate-500);
+        font-size: var(--font-size-12);
+        color: var(--color-muted);
         margin: 0;
 
         .location {
@@ -60,9 +71,9 @@
       padding-left: 1.25rem;
 
       li {
-        font-size: 0.875rem;
+        font-size: var(--font-size-14);
         margin-bottom: 0.25rem;
-        color: var(--p-slate-700);
+        color: var(--color-muted);
       }
     }
   }

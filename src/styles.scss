@@ -16,7 +16,7 @@
 html {
   @include mat.theme(
     (
-      typograpy: 'Geist',
+      typography: 'Geist, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
     )
   );
 
@@ -33,7 +33,53 @@ body {
 }
 
 button.mdc-button {
-  border-radius: 8px;
+  border-radius: var(--radius-2);
+  border: var(--border-strong-sm);
+  box-shadow: var(--card-shadow-sm);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+button.mdc-button:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+  --mdc-shape-small: var(--radius-2);
+}
+
+.mat-mdc-form-field .mdc-text-field--outlined {
+  background: var(--color-white);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+  border-radius: var(--radius-2);
+}
+
+.mat-mdc-form-field .mdc-text-field__input {
+  border-radius: var(--radius-2);
+}
+
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__trailing,
+.mat-mdc-form-field .mdc-notched-outline__notch {
+  border-width: 2px;
+  border-color: var(--color-border);
+}
+
+.mat-mdc-form-field .mdc-notched-outline__leading {
+  border-radius: var(--radius-2) 0 0 var(--radius-2);
+}
+
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-radius: 0 var(--radius-2) var(--radius-2) 0;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
+  border-color: var(--color-border);
 }
 
 /* Unified card style for list items (experience, language, social) */
@@ -42,21 +88,18 @@ button.mdc-button {
   flex-direction: column;
   align-items: stretch;
   padding: var(--space-12);
-  border-radius: var(--radius-8);
-  background: rgba(80, 80, 80, 0.16);
-  box-shadow: var(--card-shadow);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background-clip: padding-box;
-  color: #0f172a;
+  border-radius: var(--radius-2);
+  background: var(--color-surface);
+  box-shadow: var(--card-shadow-sm);
+  border: var(--border-strong-sm);
+  color: var(--color-text);
 }
 .list-card .card-subtitle {
   font-size: 0.875rem;
-  color: #475569;
+  color: var(--color-muted);
 }
 .list-card a {
-  color: #2563eb;
+  color: var(--color-text);
 }
 
 .list-card .card-body {
@@ -71,9 +114,9 @@ button.mdc-button {
   padding-top: var(--space-8);
 }
 .list-card .card-divider {
-  height: 1px;
+  height: 2px;
   margin-top: var(--space-12);
-  background: rgba(15, 23, 42, 0.12); /* visible on light bg */
+  background: var(--color-border);
 }
 
 .list-card .card-title {
@@ -96,56 +139,76 @@ button.mdc-button {
 /* Make Material text buttons not uppercase for cleaner look */
 .mat-mdc-button .mdc-button__label {
   text-transform: none;
+  font-weight: 600;
 }
 
 /* Unified button styles (aligned with docs/css-enhancements.md) */
 .btn-filled {
-  background-color: var(--color-black);
-  color: var(--color-white);
-  font-family: var(--font-family);
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-radius: var(--radius-8);
-  min-height: var(--control-height);
-}
-.btn-filled:hover {
-  background-color: var(--gray-700);
-}
-
-.mdc-button--outlined.mat-mdc-outlined-button:not(:disabled) {
-  background-color: transparent;
+  background-color: var(--color-accent);
   color: var(--color-black);
   font-family: var(--font-family);
-  border: 1px solid var(--color-black);
+  border: var(--border-strong);
   padding: 10px 20px;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
-    color 0.2s ease;
-  border-radius: var(--radius-8);
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+  border-radius: var(--radius-2);
   min-height: var(--control-height);
+  box-shadow: var(--card-shadow);
+  font-weight: 600;
 }
-.btn-outlined:hover {
+.btn-filled:hover {
+  background-color: var(--color-accent-strong);
+  color: var(--color-white);
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+}
+
+.mdc-button--outlined.mat-mdc-outlined-button:not(:disabled) {
+  background-color: transparent;
+  color: var(--color-text);
+  font-family: var(--font-family);
+  border: var(--border-strong);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+  border-radius: var(--radius-2);
+  min-height: var(--control-height);
+  box-shadow: var(--card-shadow);
+  font-weight: 600;
+}
+.btn-outlined:hover,
+.mdc-button--outlined.mat-mdc-outlined-button:not(:disabled):hover {
   background-color: var(--gray-200);
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
 }
 
 /* Global delete button style */
 .btn-delete {
   color: var(--color-error);
   background-color: transparent;
-  border: none;
+  border: var(--border-strong-sm);
   padding: 0;
   font-size: 0.875rem;
   font-weight: 500;
   text-transform: none;
   margin: 0;
   max-width: 100px;
+  box-shadow: var(--card-shadow-sm);
 }
 .btn-delete:hover {
   background-color: var(--red-300);
   color: var(--color-white);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
 }
 
 /* Ensure styles apply to Angular Material buttons */
@@ -169,7 +232,9 @@ button.mdc-button {
 
 /* MatDialog defaults via panel class */
 .app-dialog .mdc-dialog__surface {
-  border-radius: var(--radius-8);
+  border-radius: var(--radius-2);
+  border: var(--border-strong);
+  box-shadow: var(--card-shadow-lg);
 }
 /* Ensure first field is not clipped under the title */
 .app-dialog .dialog-content > .mat-mdc-form-field:first-child {
@@ -186,40 +251,17 @@ button.mdc-button {
 }
 
 :host {
-  :root {
-    --primary-color: #0f172a;
-    --text-color: #0f172a;
-    --text-color-secondary: #475569;
-    --secondary-color: #c026d3;
-    --background-color: #f8fafc;
-    --card-background: #ffffff;
-    --border-color: #e2e8f0;
-    --muted-color: #64748b;
-    --font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-
   html,
   body {
     font-family:
-      'Geist',
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      Roboto,
-      sans-serif;
+      var(--font-family);
     margin: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 
   body {
-    font-family:
-      'Geist',
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      Roboto,
-      sans-serif;
+    font-family: var(--font-family);
   }
 
   * {
@@ -240,11 +282,7 @@ button.mdc-button {
     justify-content: center;
     padding: 4rem 1.5rem;
     min-height: 100vh;
-    /* subtle background gradients to reveal backdrop-filter blur */
-    background-image:
-      radial-gradient(600px 400px at -10% -10%, rgba(2, 6, 23, 0.06) 0%, rgba(0, 0, 0, 0) 70%),
-      radial-gradient(700px 500px at 110% 0%, rgba(29, 78, 216, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
-    background-repeat: no-repeat;
+    background: var(--color-bg);
   }
 
   .page-layout {
@@ -281,12 +319,12 @@ button.mdc-button {
 }
 
 input.ng-invalid.ng-touched {
-  color: red;
-  border: 1px solid red;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
 }
 
 label:has(+ input.ng-invalid.ng-touched) {
-  color: red;
+  color: var(--color-error);
 }
 
 fieldset {
@@ -312,5 +350,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }

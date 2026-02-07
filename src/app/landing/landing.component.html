@@ -1,92 +1,114 @@
-<div class="landing-container">
-  <!-- Hero Section -->
+<div class="landing">
   <section class="hero">
-    <div class="hero-content">
-      <h1>The better way to create your CV</h1>
+    <div class="hero-copy">
+      <div class="eyebrow">CV Builder</div>
+      <h1>Build a CV that reads like a clear story, not a cluttered list.</h1>
       <p class="subtitle">
-        A fully customizable CV generator for professionals, helping you create stunning resumes
-        that stand out from the crowd.
+        A focused, professional editor that helps you organize experience with a live preview and
+        one-click PDF export.
       </p>
-      <div class="cta-group">
-        <button mat-raised-button color="primary" routerLink="/cv" class="cta-button">
-          Get Started
+      <div class="cta-row">
+        <button mat-raised-button color="primary" routerLink="/cv" class="cta-primary">
+          Start building
         </button>
-        <span class="no-credit">No credit card required</span>
+        <button mat-stroked-button color="primary" routerLink="/cv" class="cta-secondary">
+          View templates
+        </button>
+      </div>
+      <div class="hero-meta">
+        <span>Free to use</span>
+        <span>Live preview</span>
+        <span>PDF export</span>
       </div>
     </div>
-    <div class="hero-image">
-      <div class="preview-container">
+    <div class="hero-media">
+      <div class="preview-shell">
         <img src="assets/images/cv_example.png" alt="CV Preview" class="preview-image" />
       </div>
+      <div class="preview-caption">Live preview updates as you type.</div>
     </div>
   </section>
 
-  <!-- How it Works Section -->
-  <section class="how-it-works">
-    <div class="section-header">
-      <h2>How it works</h2>
-      <p>With us, CV creation is easy</p>
+  <section class="proof">
+    <div class="proof-card">
+      <div class="proof-number">03</div>
+      <div class="proof-label">Steps to export</div>
     </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-number">01</div>
-        <h3>Fill your details</h3>
-        <p>Input your professional information with our intuitive form interface.</p>
+    <div class="proof-card">
+      <div class="proof-number">02</div>
+      <div class="proof-label">Templates</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-number">01</div>
+      <div class="proof-label">Focused editor</div>
+    </div>
+  </section>
+
+  <section class="bento">
+    <div class="bento-header">
+      <h2>Designed to scan fast.</h2>
+      <p>Clear sections, consistent spacing, and export-ready formatting.</p>
+    </div>
+    <div class="bento-grid">
+      <article class="bento-card tall">
+        <div class="bento-kicker">Structure</div>
+        <h3>Organize experience with section-first inputs.</h3>
+        <p>Every field maps to the final CV. No guesswork or hidden formatting.</p>
+      </article>
+      <article class="bento-card">
+        <div class="bento-kicker">Clarity</div>
+        <h3>Live preview while you write.</h3>
+        <p>Spot weak bullets and fix them before exporting.</p>
+      </article>
+      <article class="bento-card">
+        <div class="bento-kicker">Export</div>
+        <h3>Clean PDF in one click.</h3>
+        <p>Ready for email, ATS uploads, and print.</p>
+      </article>
+      <article class="bento-card wide">
+        <div class="bento-kicker">Control</div>
+        <h3>Pick a template, keep your content consistent.</h3>
+        <p>Two templates, one clear hierarchy. Your story stays readable.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="steps">
+    <div class="steps-header">
+      <h2>Three clean entry points.</h2>
+      <p>Choose a starting path based on how complete your info is.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-index">01</div>
+        <h3>Start from scratch</h3>
+        <p>Fill your details in order and build the first draft.</p>
       </div>
-      <div class="step">
-        <div class="step-number">02</div>
-        <h3>Preview in real-time</h3>
-        <p>See your CV take shape instantly as you type with live preview.</p>
+      <div class="step-card">
+        <div class="step-index">02</div>
+        <h3>Refine your bullets</h3>
+        <p>Focus on experience and strengths while previewing structure.</p>
       </div>
-      <div class="step">
-        <div class="step-number">03</div>
-        <h3>Download PDF</h3>
-        <p>Export your professionally formatted CV ready for applications.</p>
+      <div class="step-card">
+        <div class="step-index">03</div>
+        <h3>Export immediately</h3>
+        <p>Make small edits and download a PDF that is ready to share.</p>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="features">
-    <div class="section-header">
-      <h2>Simple and effective CV creation</h2>
-      <p>Focus on your content while we handle the formatting</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <mat-icon fontIcon="edit"></mat-icon>
-        <h3>Clean Professional Template</h3>
-        <p>
-          A carefully designed template that presents your experience clearly and professionally
-        </p>
+  <section class="cta">
+    <div class="cta-panel">
+      <div class="cta-copy">
+        <h2>Ready to ship your CV?</h2>
+        <p>Build it once, export it fast, and keep it updated.</p>
       </div>
-      <div class="feature-card">
-        <mat-icon fontIcon="visibility"></mat-icon>
-        <h3>Real-time Preview</h3>
-        <p>See your CV take shape instantly as you type with our live preview</p>
+      <div class="cta-actions">
+        <button mat-raised-button color="primary" routerLink="/cv" class="cta-primary">
+          Start building
+        </button>
+        <div class="cta-note">No sign up required.</div>
       </div>
-      <div class="feature-card">
-        <mat-icon fontIcon="download"></mat-icon>
-        <h3>Easy PDF Export</h3>
-        <p>Download your CV in professional PDF format with one click</p>
-      </div>
-      <div class="feature-card">
-        <mat-icon fontIcon="access_time"></mat-icon>
-        <h3>Time-Saving Format</h3>
-        <p>Focus on your content without worrying about layout and formatting details</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Call to Action Section -->
-  <section class="cta-section">
-    <div class="section-header">
-      <h2>Create your CV today</h2>
-      <p>Get started in minutes with our simple and professional CV generator</p>
-    </div>
-    <div class="cta-group">
-      <button mat-flat-button routerLink="/cv" class="cta-button">Get Started</button>
-      <span class="no-credit">Free to use</span>
     </div>
   </section>
 </div>

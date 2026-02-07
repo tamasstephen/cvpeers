@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
   styles: [
     `
       .footer {
+        background: var(--color-bg);
         padding: 1rem 2rem;
         display: flex;
         justify-content: flex-end;
@@ -20,13 +21,13 @@ import { RouterModule } from '@angular/router';
       }
 
       .privacy-link {
-        color: var(--text-color-secondary);
+        color: var(--color-muted);
         text-decoration: none;
         font-size: 0.875rem;
         transition: color 0.2s ease;
 
         &:hover {
-          color: var(--primary-color);
+          color: var(--color-text);
         }
       }
     `,

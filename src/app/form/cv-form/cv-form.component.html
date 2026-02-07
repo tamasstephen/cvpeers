@@ -6,25 +6,17 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit($event)" (keydown.enter)="onSubmit($event)">
         <app-template-selector [parentForm]="form" [reset$]="$any(reset$)" />
         <app-personal-details [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <app-social [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <app-experience [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <app-education [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <app-expertise [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <app-strengths [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <app-language [parentForm]="form" [reset$]="$any(reset$)" />
-        <div class="divider"></div>
         <div>
           <app-rich-text
             [parentForm]="form"
             [reset$]="$any(reset$)"
             [initialValues]="richTextInitialValue$" />
-          <div class="divider"></div>
         </div>
         <button
           mat-raised-button

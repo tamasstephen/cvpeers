@@ -1,26 +1,22 @@
 :host {
   .header {
-    background: white;
-    margin-bottom: 2rem;
+    background: var(--color-surface);
+    border-bottom: var(--border-strong);
 
     .logo-background {
       width: 52px;
       height: 52px;
-      border-radius: 5px;
+      border-radius: var(--radius-2);
       position: relative;
-      box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--card-shadow-sm);
       transform: rotate(0);
       transition: all 0.4s ease;
-      background: #833ab4;
-      background: linear-gradient(
-        90deg,
-        rgba(131, 58, 180, 1) 0%,
-        rgba(253, 29, 29, 1) 50%,
-        rgba(252, 176, 69, 1) 100%
-      );
+      background: var(--color-surface);
+      border: var(--border-strong-sm);
 
       &:hover {
-        transform: scale(1.05) rotate(-3deg);
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
       }
     }
 
@@ -30,7 +26,7 @@
       left: 2px;
       width: 48px;
       height: 48px;
-      border-radius: 5px;
+      border-radius: var(--radius-6);
     }
   }
 
@@ -52,10 +48,9 @@
     font-size: 1.25rem;
     color: #000000;
     transition: all 0.2s ease;
-    padding: 0.5rem;
-    margin: -0.5rem;
-    border-radius: 8px;
     padding: 0.5rem 0;
+    margin: -0.5rem;
+    border-radius: var(--radius-2);
   }
 
   @media (max-width: 768px) {

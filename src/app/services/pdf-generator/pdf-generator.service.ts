@@ -292,10 +292,12 @@ export class PdfGeneratorService {
 
     const clonedTarget = this.#cloneNodeWithInlineStyles(target);
     const container = document.createElement('div');
-    const originalWidth = target.scrollWidth || target.getBoundingClientRect().width || 650;
+    const originalWidth = target.getBoundingClientRect().width || target.clientWidth || 650;
     const margin = 10;
     const pageWidth = this.#pdfGenerator.internal.pageSize.getWidth();
     const pdfContentWidth = Math.max(pageWidth - margin * 2, 10);
+    const pxPerMm = 96 / 25.4;
+    const pdfContentWidthPx = Math.floor(pdfContentWidth * pxPerMm);
 
     clonedTarget.style.maxWidth = 'none';
     clonedTarget.style.width = `${originalWidth}px`;
@@ -310,6 +312,23 @@ export class PdfGeneratorService {
     document.body.appendChild(container);
 
     try {
+      if (document.fonts?.ready) {
+        await document.fonts.ready;
+      }
+
+      const images = Array.from(clonedTarget.querySelectorAll('img'));
+      await Promise.all(
+        images.map(
+          (img): Promise<void> =>
+            img.complete && img.naturalWidth > 0
+              ? Promise.resolve()
+              : new Promise((resolve): void => {
+                  img.addEventListener('load', (): void => resolve(), { once: true });
+                  img.addEventListener('error', (): void => resolve(), { once: true });
+                })
+        )
+      );
+
       await this.#pdfGenerator.html(clonedTarget, {
         callback: (doc: jsPDF): void => {
           doc.output('dataurlnewwindow');
@@ -317,11 +336,10 @@ export class PdfGeneratorService {
         margin: [margin, margin, margin, margin],
         html2canvas: {
           letterRendering: true,
-          //scale: 2,
         },
         autoPaging: 'text',
         width: pdfContentWidth,
-        windowWidth: originalWidth || 650,
+        windowWidth: pdfContentWidthPx,
       });
     } finally {
       document.body.removeChild(container);
