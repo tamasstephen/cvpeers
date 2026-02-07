@@ -4,13 +4,18 @@
 @import './styles/_utilities.scss';
 
 @font-face {
-  font-family: 'geist';
+  font-family: 'Geist';
   src: url('./app/assets/fonts/Geist.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Geist-SemiBold';
   src: url('./app/assets/fonts/Geist-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GeistMono-SemiBold';
+  src: url('./app/assets/fonts/GeistMono-SemiBold.ttf') format('truetype');
 }
 
 html {

@@ -4,6 +4,9 @@ import '../../assets/fonts/Geist-SemiBold-normal.js';
 import '../../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../../assets/fonts/GeistMono-SemiBold-bold.js';
 
+const A4_WIDTH_PX = Math.round((210 * 96) / 25.4);
+const A4_HEIGHT_PX = Math.round((297 * 96) / 25.4);
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +14,11 @@ export class PdfGeneratorService {
   /**
    * The jsPDF instance used to generate the PDF
    */
-  #pdfGenerator: jsPDF = new jsPDF({ unit: 'mm', format: 'a4' });
+  #pdfGenerator: jsPDF = new jsPDF({
+    unit: 'px',
+    format: [A4_WIDTH_PX, A4_HEIGHT_PX],
+    hotfixes: ['px_scaling'],
+  });
 
   /**
    * Creates a deep clone of the provided element and copies the computed styles of the
@@ -305,8 +312,20 @@ export class PdfGeneratorService {
    * @param html The HTML element to convert into a PDF document.
    */
   public async createPdfFromHtml(html: Element): Promise<void> {
+    const previewPages = Array.from(
+      document.querySelectorAll('.cv-preview-page')
+    ) as HTMLElement[];
+    if (previewPages.length > 0) {
+      await this.#createPdfFromPreview(previewPages);
+      return;
+    }
+
     const target = html as HTMLElement;
-    this.#pdfGenerator = new jsPDF({ unit: 'mm', format: 'a4' });
+    this.#pdfGenerator = new jsPDF({
+      unit: 'px',
+      format: [A4_WIDTH_PX, A4_HEIGHT_PX],
+      hotfixes: ['px_scaling'],
+    });
     this.#pdfGenerator.setFillColor(255, 253, 248);
     this.#pdfGenerator.setFont('Geist');
     this.#pdfGenerator.setFont('Geist-SemiBold');
@@ -317,14 +336,13 @@ export class PdfGeneratorService {
     });
     const container = document.createElement('div');
     const originalWidth = target.getBoundingClientRect().width || target.clientWidth || 650;
-    const margin = 10;
     const pageWidth = this.#pdfGenerator.internal.pageSize.getWidth();
-    const pdfContentWidth = Math.max(pageWidth - margin * 2, 10);
-    const pxPerMm = 96 / 25.4;
-    const pdfContentWidthPx = Math.floor(pdfContentWidth * pxPerMm);
+    const baseScale = Math.min(1, pageWidth / Math.max(1, originalWidth));
 
     clonedTarget.style.maxWidth = 'none';
-    clonedTarget.style.width = `${originalWidth}px`;
+    clonedTarget.style.width = `${pageWidth}px`;
+    clonedTarget.style.padding = '10mm';
+    clonedTarget.style.boxSizing = 'border-box';
     clonedTarget.style.visibility = 'visible';
     clonedTarget.style.position = 'static';
     clonedTarget.style.left = '0';
@@ -335,19 +353,41 @@ export class PdfGeneratorService {
       if (!(node instanceof HTMLElement)) return;
       node.style.visibility = 'visible';
     });
+    clonedTarget.querySelectorAll('.cv-section-title, .cv-modern-section-title').forEach((node) => {
+      if (!(node instanceof HTMLElement)) return;
+      node.style.fontFamily = "'GeistMono-SemiBold', monospace";
+      node.style.fontWeight = '700';
+      if (!node.style.letterSpacing) {
+        node.style.letterSpacing = '0.2px';
+      }
+    });
 
     container.style.position = 'fixed';
     container.style.top = '-10000px';
     container.style.left = '-10000px';
-    container.style.width = `${originalWidth}px`;
+    container.style.width = `${pageWidth}px`;
     container.style.pointerEvents = 'none';
     container.style.opacity = '1';
-    container.appendChild(clonedTarget);
+    const wrapper = document.createElement('div');
+    wrapper.style.width = `${pageWidth}px`;
+    wrapper.style.padding = '10mm';
+    wrapper.style.boxSizing = 'border-box';
+    wrapper.style.overflowX = 'hidden';
+    wrapper.style.overflowY = 'visible';
+    wrapper.appendChild(clonedTarget);
+    container.appendChild(wrapper);
     document.body.appendChild(container);
 
     try {
       if (document.fonts?.ready) {
         await document.fonts.ready;
+      }
+      if (document.fonts?.load) {
+        await Promise.all([
+          document.fonts.load("normal 14px 'Geist'"),
+          document.fonts.load("600 32px 'Geist-SemiBold'"),
+          document.fonts.load("700 14px 'GeistMono-SemiBold'"),
+        ]);
       }
 
       const images = Array.from(clonedTarget.querySelectorAll('img'));
@@ -363,20 +403,125 @@ export class PdfGeneratorService {
         )
       );
 
-      await this.#pdfGenerator.html(clonedTarget, {
+      const measuredWidthPx = Math.floor(wrapper.getBoundingClientRect().width);
+      const renderWidthPx = measuredWidthPx > 100 ? measuredWidthPx : Math.floor(pageWidth);
+      await this.#pdfGenerator.html(wrapper, {
         callback: (doc: jsPDF): void => {
           doc.output('dataurlnewwindow');
         },
-        margin: [margin, margin, margin, margin],
+        margin: [0, 0, 0, 0],
         html2canvas: {
           letterRendering: true,
+          scale: baseScale,
         },
-        autoPaging: 'text',
-        width: pdfContentWidth,
-        windowWidth: pdfContentWidthPx,
+        autoPaging: 'slice',
+        width: pageWidth,
+        windowWidth: renderWidthPx,
       });
     } finally {
       document.body.removeChild(container);
+    }
+  }
+
+  async #createPdfFromPreview(previewPages: HTMLElement[]): Promise<void> {
+    const firstPage = previewPages[0];
+    const pageRect = firstPage.getBoundingClientRect();
+    const pageWidth = Math.max(1, Math.floor(pageRect.width));
+    const pageHeight = Math.max(1, Math.floor(pageRect.height));
+
+    this.#pdfGenerator = new jsPDF({
+      unit: 'px',
+      format: [pageWidth, pageHeight],
+      hotfixes: ['px_scaling'],
+    });
+
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+    if (document.fonts?.load) {
+      await Promise.all([
+        document.fonts.load("normal 14px 'Geist'"),
+        document.fonts.load("600 32px 'Geist-SemiBold'"),
+        document.fonts.load("700 14px 'GeistMono-SemiBold'"),
+      ]);
+    }
+
+    for (let index = 0; index < previewPages.length; index += 1) {
+      const page = previewPages[index];
+      const pageClone = this.#cloneNodeWithInlineStyles(page);
+      pageClone.style.boxShadow = 'none';
+      pageClone.style.border = 'none';
+      pageClone.style.background = '#fff';
+      pageClone.style.margin = '0';
+      pageClone.style.position = 'static';
+      pageClone.style.transform = 'none';
+      pageClone.style.overflow = 'hidden';
+
+      pageClone.querySelectorAll('.cv-section-title, .cv-modern-section-title').forEach((node) => {
+        if (!(node instanceof HTMLElement)) return;
+        node.style.fontFamily = "'GeistMono-SemiBold', monospace";
+        node.style.fontWeight = '700';
+        if (!node.style.letterSpacing) {
+          node.style.letterSpacing = '0.2px';
+        }
+      });
+
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.top = '-10000px';
+      container.style.left = '-10000px';
+      container.style.width = `${pageWidth}px`;
+      container.style.pointerEvents = 'none';
+      container.style.opacity = '1';
+      container.appendChild(pageClone);
+      document.body.appendChild(container);
+
+      const images = Array.from(pageClone.querySelectorAll('img'));
+      await Promise.all(
+        images.map(
+          (img): Promise<void> =>
+            img.complete && img.naturalWidth > 0
+              ? Promise.resolve()
+              : new Promise((resolve): void => {
+                  img.addEventListener('load', (): void => resolve(), { once: true });
+                  img.addEventListener('error', (): void => resolve(), { once: true });
+                })
+        )
+      );
+
+      await new Promise<void>((resolve): void => {
+        this.#pdfGenerator.html(pageClone, {
+          callback: (): void => resolve(),
+          margin: [0, 0, 0, 0],
+          html2canvas: {
+            letterRendering: true,
+            scale: 1,
+          },
+          autoPaging: false,
+          width: pageWidth,
+          windowWidth: pageWidth,
+        });
+      });
+
+      document.body.removeChild(container);
+      if (index < previewPages.length - 1) {
+        this.#pdfGenerator.addPage();
+      }
+    }
+
+    this.#removeLeadingBlankPage(previewPages.length);
+    this.#pdfGenerator.output('dataurlnewwindow');
+  }
+
+  #removeLeadingBlankPage(expectedPages: number): void {
+    const totalPages =
+      (this.#pdfGenerator as unknown as { getNumberOfPages?: () => number }).getNumberOfPages?.() ??
+      (this.#pdfGenerator.internal as unknown as { getNumberOfPages?: () => number })
+        .getNumberOfPages?.();
+
+    if (typeof totalPages !== 'number') return;
+    if (totalPages === expectedPages + 1) {
+      this.#pdfGenerator.deletePage(1);
     }
   }
 }
