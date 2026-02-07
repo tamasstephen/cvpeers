@@ -4,20 +4,15 @@
     <!-- Header Section -->
     <header class="header-section">
       <div class="name-title">
-        <h1 style="font-family: 'Geist-SemiBold', serif; letter-spacing: -0.1px">
-          {{ personalDetails().fullName }}
-        </h1>
-        <h2 style="font-family: 'Geist', sans-serif; font-size: 1.25rem">
-          {{ personalDetails().headline ?? '' }}
-        </h2>
+        <h1 class="cv-title">{{ personalDetails().fullName }}</h1>
+        <h2 class="cv-headline">{{ personalDetails().headline ?? '' }}</h2>
       </div>
       <div class="contact-links">
         <div>
           <a
             *ngIf="personalDetails().website"
             [href]="personalDetails().website"
-            class="contact-item"
-            style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+            class="contact-item cv-link">
             <img src="assets/images/global-line.png" alt="Website" class="contact-icon" />
             {{ personalDetails().website }}
           </a>
@@ -26,8 +21,7 @@
           <a
             *ngIf="personalDetails().phone"
             [href]="personalDetails().phone"
-            class="contact-item"
-            style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+            class="contact-item cv-link">
             <img src="assets/images/phone.png" alt="phone" class="contact-icon" />
             {{ personalDetails().phone }}
           </a>
@@ -36,8 +30,7 @@
           <a
             *ngIf="personalDetails().email"
             [href]="'mailto:' + personalDetails().email"
-            class="contact-item"
-            style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+            class="contact-item cv-link">
             <img src="assets/images/mail-fill.png" alt="Email" class="contact-icon" />
             {{ personalDetails().email }}
           </a>
@@ -47,8 +40,7 @@
           <a
             [href]="social.url"
             target="_blank"
-            class="contact-item"
-            style="font-family: 'Geist', sans-serif; letter-spacing: -0.1px">
+            class="contact-item cv-link">
             <img [src]="social.src" [alt]="social.type" class="contact-icon" />
             {{ social.url }}
           </a>
@@ -63,41 +55,33 @@
         <!-- Summary/Bio Section -->
         @if (summary()) {
           <section class="summary-section" *ngIf="summary()">
-            <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">BIO —</h3>
+            <h3 class="cv-section-title">BIO —</h3>
             <div [innerHTML]="parsedSummary()"></div>
           </section>
         }
         <!-- Experience Section -->
         <section class="experience-section">
-          <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">
-            EXPERIENCE —
-          </h3>
+          <h3 class="cv-section-title">EXPERIENCE —</h3>
           <div *ngFor="let job of experience()" class="experience-item">
             <div class="job-header">
-              <h4 style="font-family: 'Geist-SemiBold', sans-serif; font-weight: bold">
-                {{ job.title }}
-              </h4>
-              <span class="company" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              <h4 class="cv-role">{{ job.title }}</h4>
+              <span class="company cv-body">
                 {{ job.company }}
               </span>
-              <div class="job-period" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-                <span style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              <div class="job-period cv-meta">
+                <span class="cv-meta">
                   {{ job.startDate | date: 'MM/yyyy' }} -
                   {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}
                 </span>
-                <span
-                  class="location"
-                  style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+                <span class="location cv-meta">
                   {{ job.location }}
                 </span>
               </div>
             </div>
-            <ul
-              class="job-description"
-              style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+            <ul class="job-description cv-body">
               <li
                 *ngFor="let point of job.description"
-                style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+                class="cv-body">
                 {{ point }}
               </li>
             </ul>
@@ -110,11 +94,11 @@
         @if (expertise().length) {
           <!-- Design Skills Section -->
           <section class="skills-section">
-            <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">SKILLS —</h3>
+            <h3 class="cv-section-title">SKILLS —</h3>
             <ul class="skills-list">
               <li
                 *ngFor="let skill of expertise()"
-                style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+                class="cv-body">
                 {{ skill }}
               </li>
             </ul>
@@ -123,42 +107,34 @@
         <!-- Education Section -->
         @if (education().length) {
           <section class="education-section">
-            <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">
-              EDUCATION —
-            </h3>
+            <h3 class="cv-section-title">EDUCATION —</h3>
             <div *ngFor="let edu of education()" class="education-item">
-              <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">{{ edu.degree }}</p>
-              <p style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+              <p class="cv-body">{{ edu.degree }}</p>
+              <p class="cv-body">
                 @if (edu.graduationDate) {
                   {{ edu.graduationDate | date: 'MM/yyyy' }}, {{ edu.institution }}
                 } @else {
                   {{ edu.institution }}
                 }
               </p>
-              <p class="location" style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
-                {{ edu.location }}
-              </p>
+              <p class="location cv-meta">{{ edu.location }}</p>
             </div>
           </section>
         }
 
         @if (languages().length) {
           <section class="languages-section">
-            <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">
-              LANGUAGES —
-            </h3>
+            <h3 class="cv-section-title">LANGUAGES —</h3>
             <div class="languages-grid">
-              <div *ngFor="let language of languages()" style="font-family: 'Geist', sans-serif">
+              <div *ngFor="let language of languages()" class="cv-body">
                 <span
                   class="language-name"
-                  style="font-family: 'Geist', sans-serif; font-size: 0.875rem; display: block">
+                  style="display: block">
                   {{ language.name }}
                 </span>
                 <span
                   class="language-level"
                   style="
-                    font-family: 'Geist', sans-serif;
-                    font-size: 0.875rem;
                     color: #789;
                     display: block;
                   ">
@@ -172,13 +148,11 @@
         @if (strengths().length) {
           <!-- Soft Skills Section -->
           <section class="soft-skills-section">
-            <h3 style="font-family: GeistMono-SemiBold, monospace; font-weight: bold">
-              STRENGTHS —
-            </h3>
+            <h3 class="cv-section-title">STRENGTHS —</h3>
             <ul class="skills-list">
               <li
                 *ngFor="let strength of strengths()"
-                style="font-family: 'Geist', sans-serif; font-size: 0.875rem">
+                class="cv-body">
                 {{ strength }}
               </li>
             </ul>
@@ -195,37 +169,23 @@
     <!-- Header Section -->
     <header class="header-section-modern">
       <div class="name-title-modern">
-        <h1
-          style="
-            font-family: 'Geist-SemiBold', serif;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #8b6b47;
-          ">
+        <h1 class="cv-title cv-modern-title">
           {{ personalDetails().fullName }}
         </h1>
-        <h2 style="font-family: 'Geist', sans-serif; font-size: 1rem; color: #666">
-          {{ personalDetails().headline ?? '' }}
-        </h2>
+        <h2 class="cv-headline cv-modern-headline">{{ personalDetails().headline ?? '' }}</h2>
       </div>
       <div class="contact-info-modern">
         <div *ngIf="personalDetails().phone" class="contact-item-modern">
-          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{
-            personalDetails().phone
-          }}</span>
+          <span class="cv-meta">{{ personalDetails().phone }}</span>
         </div>
         <div *ngIf="personalDetails().email" class="contact-item-modern">
-          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{
-            personalDetails().email
-          }}</span>
+          <span class="cv-meta">{{ personalDetails().email }}</span>
         </div>
         <div *ngIf="personalDetails().website" class="contact-item-modern">
-          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{
-            personalDetails().website
-          }}</span>
+          <span class="cv-meta">{{ personalDetails().website }}</span>
         </div>
         <div *ngFor="let social of socialLinks()" class="contact-item-modern">
-          <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem">{{ social.url }}</span>
+          <span class="cv-meta">{{ social.url }}</span>
         </div>
       </div>
     </header>
@@ -239,86 +199,42 @@
         <!-- Summary/Bio Section -->
         @if (summary()) {
           <section class="section-modern">
-            <h3
-              style="
-                font-family: 'Geist-SemiBold', sans-serif;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b6b47;
-              ">
-              BIO
-            </h3>
+            <h3 class="cv-section-title cv-modern-section-title">BIO</h3>
             <div
               [innerHTML]="parsedSummary()"
-              style="
-                font-family: 'Geist', sans-serif;
-                font-size: 0.75rem;
-                line-height: 1.6;
-                color: #333;
-              "></div>
+              class="cv-body cv-modern-body"></div>
           </section>
           <div class="divider-modern"></div>
         }
 
         <!-- Experience Section -->
-        <section class="section-modern">
-          <h3
-            style="
-              font-family: 'Geist-SemiBold', sans-serif;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              color: #8b6b47;
-            ">
-            EXPERIENCE
-          </h3>
+          <section class="section-modern">
+          <h3 class="cv-section-title cv-modern-section-title">EXPERIENCE</h3>
           @for (job of experience(); track $index) {
             <div class="experience-item-modern">
               <div
                 class="job-header-modern"
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  font-family: 'Geist', sans-serif;
-                  font-size: 0.75rem;
-                  margin-bottom: 8px;
-                ">
-                <h4
-                  style="
-                    font-family: 'Geist-SemiBold', sans-serif;
-                    font-size: 0.875rem;
-                    color: #000;
-                    margin: 0;
-                  ">
+                style="display: flex; justify-content: space-between; align-items: center">
+                <h4 class="cv-role cv-modern-role">
                   {{ job.title }}
                 </h4>
 
-                <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #8b6b47">
+                <span class="cv-meta cv-modern-accent">
                   {{ job.startDate | date: 'MM/yyyy' }} -
                   {{ (job.endDate | date: 'MM/yyyy') || 'Current' }}
                 </span>
               </div>
-              <div style="font-family: 'Geist', sans-serif; font-size: 0.75rem; margin-bottom: 8px">
-                <span style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+              <div class="cv-meta cv-modern-body" style="margin-bottom: 8px">
+                <span class="cv-meta cv-modern-body">
                   {{ job.company }}, {{ job.location }}
                 </span>
               </div>
               <ul
                 class="job-description-modern"
-                style="
-                  font-family: 'Geist', sans-serif;
-                  font-size: 0.75rem;
-                  margin: 8px 0 0 0;
-                  padding-left: 16px;
-                ">
+                style="margin: 8px 0 0 0; padding-left: 16px">
                 <li
                   *ngFor="let point of job.description"
-                  style="
-                    font-family: 'Geist', sans-serif;
-                    font-size: 0.75rem;
-                    line-height: 1.5;
-                    margin-bottom: 6px;
-                  ">
+                  class="cv-body cv-modern-body">
                   {{ point }}
                 </li>
               </ul>
@@ -334,16 +250,7 @@
         <!-- Education Section -->
         @if (education().length) {
           <section class="section-modern">
-            <h3
-              style="
-                font-family: 'Geist-SemiBold', sans-serif;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b6b47;
-                font-size: 0.875rem;
-              ">
-              EDUCATION
-            </h3>
+            <h3 class="cv-section-title cv-modern-section-title">EDUCATION</h3>
             <div *ngFor="let edu of education()" class="education-item-modern">
               <div
                 style="
@@ -352,29 +259,12 @@
                   align-items: center;
                   margin-bottom: 4px;
                 ">
-                <p
-                  style="
-                    font-family: 'Geist-SemiBold', sans-serif;
-                    font-size: 0.75rem;
-                    font-weight: bold;
-                    margin: 0;
-                  ">
-                  {{ edu.degree }}
-                </p>
+                <p class="cv-role cv-modern-role" style="margin: 0">{{ edu.degree }}</p>
                 @if (edu.graduationDate) {
-                  <span
-                    style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #8b6b47">
-                    {{ edu.graduationDate | date: 'MM/yyyy' }}
-                  </span>
+                  <span class="cv-meta cv-modern-accent">{{ edu.graduationDate | date: 'MM/yyyy' }}</span>
                 }
               </div>
-              <p
-                style="
-                  font-family: 'Geist', sans-serif;
-                  font-size: 0.75rem;
-                  color: #333;
-                  margin: 0;
-                ">
+              <p class="cv-meta cv-modern-body" style="margin: 0">
                 {{ edu.institution }}, {{ edu.location }}
               </p>
             </div>
@@ -385,36 +275,18 @@
         <!-- Languages Section -->
         @if (languages().length) {
           <section class="section-modern">
-            <h3
-              style="
-                font-family: 'Geist-SemiBold', sans-serif;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b6b47;
-                font-size: 0.875rem;
-              ">
-              LANGUAGES
-            </h3>
+            <h3 class="cv-section-title cv-modern-section-title">LANGUAGES</h3>
             <div class="languages-grid-modern">
-              <div *ngFor="let language of languages()" style="font-family: 'Geist', sans-serif">
+              <div *ngFor="let language of languages()" class="cv-body cv-modern-body">
                 <span
                   class="language-name"
-                  style="
-                    font-family: 'Geist-SemiBold', sans-serif;
-                    font-size: 0.75rem;
-                    font-weight: bold;
-                    display: block;
-                  ">
+                  style="display: block">
                   {{ language.name }}
                 </span>
                 <span
                   class="language-level"
-                  style="
-                    font-family: 'Geist', sans-serif;
-                    font-size: 0.75rem;
-                    color: #8b6b47;
-                    display: block;
-                  ">
+                  class="cv-meta cv-modern-accent"
+                  style="display: block">
                   {{ language.level }}
                 </span>
               </div>
@@ -426,20 +298,11 @@
         <!-- Skills Section -->
         @if (expertise().length) {
           <section class="section-modern">
-            <h3
-              style="
-                font-family: 'Geist-SemiBold', sans-serif;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b6b47;
-                font-size: 0.875rem;
-              ">
-              SKILLS
-            </h3>
+            <h3 class="cv-section-title cv-modern-section-title">SKILLS</h3>
             <div class="skills-grid-three-column">
               <div
                 *ngFor="let skill of expertise()"
-                style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+                class="cv-meta cv-modern-body">
                 • {{ skill }}
               </div>
             </div>
@@ -450,20 +313,11 @@
         <!-- Strengths Section -->
         @if (strengths().length) {
           <section class="section-modern">
-            <h3
-              style="
-                font-family: 'Geist-SemiBold', sans-serif;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b6b47;
-                font-size: 0.875rem;
-              ">
-              STRENGTHS
-            </h3>
+            <h3 class="cv-section-title cv-modern-section-title">STRENGTHS</h3>
             <div class="skills-grid-three-column">
               <div
                 *ngFor="let strength of strengths()"
-                style="font-family: 'Geist', sans-serif; font-size: 0.75rem; color: #333">
+                class="cv-meta cv-modern-body">
                 • {{ strength }}
               </div>
             </div>

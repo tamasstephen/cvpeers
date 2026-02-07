@@ -9,6 +9,8 @@
     <mat-icon>{{ isOpen() ? 'chevron_right' : 'chevron_left' }}</mat-icon>
   </button>
   <div class="sidepanel-content">
-    <ng-container #dynamicContent></ng-container>
+    <div class="page-preview">
+      <ng-container #dynamicContent></ng-container>
+    </div>
   </div>
 </div>
