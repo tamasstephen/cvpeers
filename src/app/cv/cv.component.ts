@@ -212,13 +212,13 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
 
     await this.#waitForAssets(previewSource);
 
-    const pageHeightPx = this.#mmToPx(297);
+    const pageHeightPx = this.#getPageHeightPx(measureContainer);
     const totalHeight = previewSource.scrollHeight;
     const pageCount = Math.max(1, Math.ceil(totalHeight / pageHeightPx));
 
     this.previewPages.set(
       Array.from({ length: pageCount }, (_: unknown, index: number) => ({
-        offset: index * pageHeightPx,
+        offset: Math.round(index * pageHeightPx),
       }))
     );
     this.previewHtml.set(this.sanitizer.bypassSecurityTrustHtml(previewSource.outerHTML));
@@ -246,6 +246,20 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
 
   #mmToPx(mm: number): number {
     const pxPerMm = 96 / 25.4;
-    return Math.floor(mm * pxPerMm);
+    return Math.round(mm * pxPerMm);
+  }
+
+  #getPageHeightPx(container: HTMLElement): number {
+    const probe = document.createElement('div');
+    probe.style.position = 'absolute';
+    probe.style.top = '0';
+    probe.style.left = '0';
+    probe.style.width = '210mm';
+    probe.style.height = '297mm';
+    probe.style.visibility = 'hidden';
+    container.appendChild(probe);
+    const measured = probe.getBoundingClientRect().height;
+    container.removeChild(probe);
+    return measured > 0 ? measured : this.#mmToPx(297);
   }
 }

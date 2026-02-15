@@ -1,33 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CvFormComponent } from './cv-form.component';
-import { ActivatedRoute } from '@angular/router';
-import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-@Component({
-  selector: 'app-rich-text',
-  template: '',
-})
-class RichTextStubComponent {}
+import { ActivatedRoute } from '@angular/router';
+import { CvFormComponent } from './cv-form.component';
 
-@Component({
-  selector: 'app-personal-details',
-  template: '',
-})
-class PersonalDetailsStubComponent {}
-
-@Component({
-  selector: 'app-social',
-  template: '',
-})
-class SocialStubComponent {}
-
-describe('CvFormComponent', () => {
+describe('CvFormComponent', (): void => {
   let component: CvFormComponent;
   let fixture: ComponentFixture<CvFormComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async (): Promise<void> => {
     const mockActivatedRoute = {
       snapshot: {
         data: {
@@ -35,17 +16,10 @@ describe('CvFormComponent', () => {
         },
       },
     };
+
     await TestBed.configureTestingModule({
-      imports: [
-        CvFormComponent,
-        PersonalDetailsStubComponent,
-        SocialStubComponent,
-        RichTextStubComponent,
-      ],
-      providers: [
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        provideAnimations(),
-      ],
+      imports: [CvFormComponent],
+      providers: [{ provide: ActivatedRoute, useValue: mockActivatedRoute }, provideAnimations()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CvFormComponent);
@@ -53,25 +27,27 @@ describe('CvFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', (): void => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a form', () => {
-    expect(component.form).toBeDefined();
+  it('should render the form element', (): void => {
+    const formElement = fixture.debugElement.query(By.css('form'));
+    expect(formElement).toBeTruthy();
   });
 
-  it('should have a submit button', () => {
-    const submitButton = fixture.debugElement.query(By.css('button'));
-    expect(submitButton).toBeTruthy();
+  it('should render download and reset buttons', (): void => {
+    const actionButtons = fixture.debugElement.queryAll(By.css('button[type="button"]'));
+    expect(actionButtons.length).toBe(2);
   });
 
-  it('should submit the form', async () => {
-    const spy = spyOn(component, 'onSubmit');
-    const form = fixture.debugElement.query(By.css('form'));
-    form.triggerEventHandler('ngSubmit', null);
+  it('should submit the form', async (): Promise<void> => {
+    const submitSpy = spyOn(component, 'onSubmit');
+    const formElement = fixture.debugElement.query(By.css('form'));
+    formElement.triggerEventHandler('ngSubmit', new Event('submit'));
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(spy).toHaveBeenCalled();
+
+    expect(submitSpy).toHaveBeenCalled();
   });
 });
