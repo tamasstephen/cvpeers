@@ -181,7 +181,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected async downloadPdf(): Promise<void> {
-    const element = document.querySelector('#cv');
+    const element = document.querySelector('#cv-raw');
     if (!element) return;
     await this.pdfService.createPdfFromHtml(element);
   }

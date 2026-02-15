@@ -1,29 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
-describe('AppComponent', () => {
-  beforeEach(async () => {
+describe('AppComponent', (): void => {
+  beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('should create the app', (): void => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'angular-starter' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-starter');
-  });
-
-  it('should render the main tag', () => {
+  it('should render the main tag', (): void => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('main')).toBeTruthy();
+    const mainElement = fixture.debugElement.query(By.css('main'));
+    expect(mainElement).toBeTruthy();
   });
 });

@@ -1,14 +1,17 @@
 :host {
   display: block;
   background: var(--color-bg);
-  margin: -2rem;
   padding: 2rem 0;
+  width: 100%;
+  overflow-x: clip;
 
   .landing {
     color: var(--color-text);
-    width: min(1200px, 100%);
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2.5rem 6rem;
+    box-sizing: border-box;
   }
 
   button {
@@ -325,13 +328,44 @@
   }
 
   @media (max-width: 780px) {
+    padding: 1.5rem 0;
+
     .landing {
       padding: 0 1.5rem 4rem;
+    }
+
+    .hero {
+      padding: 3rem 0 2rem;
+      gap: 2rem;
+    }
+
+    .hero-copy {
+      h1 {
+        font-size: clamp(2rem, 10vw, 2.75rem);
+      }
+
+      .subtitle {
+        font-size: var(--font-size-16);
+        line-height: 1.6;
+      }
     }
 
     .cta-row {
       flex-direction: column;
       align-items: stretch;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+      width: 100%;
+    }
+
+    .preview-shell {
+      padding: 0.75rem;
+    }
+
+    .preview-caption {
+      text-align: left;
     }
 
     .proof {
@@ -357,6 +391,33 @@
     .cta-panel {
       flex-direction: column;
       align-items: flex-start;
+      padding: 1.5rem;
+    }
+
+    .cta-actions {
+      width: 100%;
+    }
+
+    .cta-actions .cta-primary {
+      width: 100%;
+    }
+
+    .bento-header h2,
+    .steps-header h2,
+    .cta-copy h2 {
+      font-size: 1.75rem;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .landing {
+      padding: 0 1rem 3rem;
+    }
+
+    .proof-card,
+    .bento-card,
+    .step-card {
+      padding: 1.25rem;
     }
   }
 }
