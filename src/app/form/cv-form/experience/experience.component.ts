@@ -81,6 +81,16 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     );
   }
 
+  public saveExperience(result: ExperienceItemFormValues): void {
+    const experienceArray = this.experienceForm.get('experience') as FormArray;
+    experienceArray.push(this.#createExperienceGroup(result));
+  }
+
+  public updateExperience(result: ExperienceItemFormValues, index: number): void {
+    const experienceArray = this.experienceForm.get('experience') as FormArray;
+    experienceArray.setControl(index, this.#createExperienceGroup(result));
+  }
+
   protected openDialog(): void {
     const dialogRef = this.#dialog.open(ExperienceDialogComponent);
     dialogRef.afterClosed().subscribe((result: ExperienceItemFormValues | null): void => {
@@ -101,35 +111,8 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     });
   }
 
-  protected saveExperience(result: ExperienceItemFormValues): void {
-    const experienceArray = this.experienceForm.get('experience') as FormArray;
-    const itemGroup = new FormGroup({
-      title: new FormControl(result.title || '', { nonNullable: true }),
-      company: new FormControl(result.company || '', { nonNullable: true }),
-      location: new FormControl(result.location || '', { nonNullable: true }),
-      startDate: new FormControl<Date | null>(result.startDate || null, {
-        nonNullable: true,
-      }),
-      endDate: new FormControl<Date | null>(result.endDate || null, {
-        nonNullable: true,
-      }),
-      description: new FormArray(
-        result.description.map(
-          (desc: string | null): FormControl<string | null> =>
-            new FormControl(desc || '', { nonNullable: true })
-        )
-      ),
-    });
-    experienceArray.push(itemGroup);
-  }
-
   protected editExperience(index: number): void {
     this.#openDialog(index);
-  }
-
-  protected updateExperience(result: ExperienceItemFormValues, index: number): void {
-    const experienceArray = this.experienceForm.get('experience') as FormArray;
-    experienceArray.at(index).patchValue(result);
   }
 
   protected removeExperience(index: number): void {
@@ -155,12 +138,28 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     >[];
   }
 
-  protected get experienceControls(): FormGroup<ExperienceItemForm>[] {
+  public get experienceControls(): FormGroup<ExperienceItemForm>[] {
     return (this.experienceForm.get('experience') as FormArray)
       .controls as FormGroup<ExperienceItemForm>[];
   }
 
   protected getDescriptionControls(experience: FormGroup): FormControl<string | null>[] {
     return (experience.get('description') as FormArray).controls as FormControl<string | null>[];
+  }
+
+  #createExperienceGroup(result: ExperienceItemFormValues): FormGroup<ExperienceItemForm> {
+    return new FormGroup<ExperienceItemForm>({
+      title: new FormControl<ExperienceItemFormValues['title']>(result.title || ''),
+      company: new FormControl<ExperienceItemFormValues['company']>(result.company || ''),
+      location: new FormControl<ExperienceItemFormValues['location']>(result.location || ''),
+      startDate: new FormControl<ExperienceItemFormValues['startDate']>(result.startDate || null),
+      endDate: new FormControl<ExperienceItemFormValues['endDate']>(result.endDate || null),
+      description: new FormArray(
+        result.description.map(
+          (desc: string | null): FormControl<string | null> =>
+            new FormControl<ExperienceItemFormValues['description'][number]>(desc || '')
+        )
+      ),
+    });
   }
 }

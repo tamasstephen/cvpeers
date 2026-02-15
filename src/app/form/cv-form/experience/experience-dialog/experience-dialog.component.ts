@@ -28,7 +28,7 @@ import { ExperienceItemForm, ExperienceItemFormValues } from '../../../../types/
   styleUrl: './experience-dialog.component.scss',
 })
 export class ExperienceDialogComponent extends ComponentBaseComponent implements OnInit {
-  protected experienceItemForm = new FormGroup<ExperienceItemForm>({
+  public experienceItemForm = new FormGroup<ExperienceItemForm>({
     title: new FormControl('', [Validators.required]),
     company: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
@@ -37,13 +37,21 @@ export class ExperienceDialogComponent extends ComponentBaseComponent implements
     description: new FormArray([new FormControl('', [Validators.required])]),
   });
 
-  readonly #data = inject<ExperienceItemFormValues>(MAT_DIALOG_DATA);
+  readonly #data = inject<ExperienceItemFormValues | null>(MAT_DIALOG_DATA, { optional: true });
 
   #dialogRef = inject(MatDialogRef<ExperienceDialogComponent>);
 
   public ngOnInit(): void {
-    if (this.#data.title) {
-      this.experienceItemForm.patchValue(this.#data);
+    if (this.#data?.title) {
+      const descriptionArray = this.#createDescriptionArray(this.#data.description);
+      this.experienceItemForm.setControl('description', descriptionArray);
+      this.experienceItemForm.patchValue({
+        title: this.#data.title,
+        company: this.#data.company,
+        location: this.#data.location,
+        startDate: this.#data.startDate,
+        endDate: this.#data.endDate,
+      });
     }
   }
 
@@ -65,5 +73,15 @@ export class ExperienceDialogComponent extends ComponentBaseComponent implements
 
   protected closeDialog(): void {
     this.#dialogRef.close();
+  }
+
+  #createDescriptionArray(descriptions: (string | null)[]): FormArray<FormControl<string | null>> {
+    const normalized = descriptions.length > 0 ? descriptions : [''];
+    return new FormArray(
+      normalized.map(
+        (description): FormControl<string | null> =>
+          new FormControl(description || '', [Validators.required])
+      )
+    );
   }
 }

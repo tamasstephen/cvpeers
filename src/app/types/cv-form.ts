@@ -1,7 +1,7 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { Template } from '../enums/template.enum';
 import { EducationFormArray } from './education-form';
-import { ExperienceForm } from './experience-form';
+import { ExperienceFormArray } from './experience-form';
 import { LanguageForm } from './language-form';
 import { PersonalDetailsForm } from './personal-details-form';
 import { SocialForm } from './social';
@@ -12,7 +12,7 @@ export type CvForm = FormGroup<{
   personalDetailsForm?: PersonalDetailsForm;
   socialForm?: SocialForm;
   summary?: FormControl<string>;
-  experienceForm?: ExperienceForm;
+  experienceForm?: ExperienceFormArray;
   educationForm?: EducationFormArray;
   expertiseForm?: TagListForm;
   strengthsForm?: TagListForm;
