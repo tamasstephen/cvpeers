@@ -8,15 +8,16 @@ import { debounceTime, distinctUntilChanged, filter, startWith } from 'rxjs';
 import '../assets/fonts/Geist-SemiBold-normal.js';
 import '../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../assets/fonts/GeistMono-SemiBold-bold.js';
-import { Template } from '../enums/template.enum.js';
+import { Template } from '../enums/template.enum';
 import { PdfGeneratorService } from '../services/pdf-generator/pdf-generator.service';
 import { ComponentBaseComponent } from '../shared/core/component-base/component-base.component';
 import { CvForm } from '../types/cv-form';
-import { EducationFormValues } from '../types/education-form.js';
-import { ExperienceFormValues } from '../types/experience-form.js';
-import { LanguageFormValues } from '../types/language-form.js';
-import { PersonalDetailsFormValues } from '../types/personal-details-form.js';
-import { SocialFormValues } from '../types/social.js';
+import { EducationFormValues } from '../types/education-form';
+import { ExperienceFormValues } from '../types/experience-form';
+import { LanguageFormValues } from '../types/language-form';
+import { PersonalDetailsFormValues } from '../types/personal-details-form';
+import { SocialFormValues } from '../types/social';
+import { KeepTogetherBlockMeasurement, resolveSemanticPageSlices } from './preview-pagination.util';
 
 const placeholderPersonalDetails: PersonalDetailsFormValues = {
   fullName: 'John Doe',
@@ -25,6 +26,43 @@ const placeholderPersonalDetails: PersonalDetailsFormValues = {
   website: 'https://johndoe.com',
   headline: 'Senior Software Engineer',
 };
+
+const PREVIEW_PAGE_WIDTH_MM = 210;
+const PREVIEW_PAGE_HEIGHT_MM = 297;
+const PREVIEW_PAGE_MARGIN_MM = 10;
+const PREVIEW_PAGE_CONTENT_WIDTH_MM = PREVIEW_PAGE_WIDTH_MM - PREVIEW_PAGE_MARGIN_MM * 2;
+const PREVIEW_PAGE_CONTENT_HEIGHT_MM = PREVIEW_PAGE_HEIGHT_MM - PREVIEW_PAGE_MARGIN_MM * 2;
+
+const PREVIEW_KEEP_TOGETHER_SELECTOR = [
+  '.header-section',
+  '.header-section-modern',
+  '.summary-section',
+  '.summary-section p',
+  '.summary-section li',
+  '.experience-item',
+  '.experience-item .job-header',
+  '.education-item',
+  '.skills-section',
+  '.skills-section li',
+  '.languages-section',
+  '.languages-grid > div',
+  '.soft-skills-section',
+  '.soft-skills-section li',
+  '.section-modern',
+  '.section-modern p',
+  '.section-modern li',
+  '.experience-item-modern',
+  '.experience-item-modern .job-header-modern',
+  '.education-item-modern',
+  '.job-description li',
+  '.job-description-modern li',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'p',
+  'li',
+].join(', ');
 
 @Component({
   selector: 'app-cv',
@@ -38,6 +76,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
    * The form group of the CV
    */
   @Input() public cvForm!: CvForm;
+
+  @ViewChild('cvRaw') protected cvRaw?: ElementRef<HTMLElement>;
 
   protected templates = Template;
 
@@ -69,7 +109,7 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
   /**
    * Preview pages with vertical offsets.
    */
-  protected previewPages = signal<{ offset: number }[]>([{ offset: 0 }]);
+  protected previewPages = signal<{ offset: number; height: number }[]>([{ offset: 0, height: 0 }]);
 
   /**
    * The experience of the CV
@@ -110,8 +150,6 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
    * The sanitizer service
    */
   protected sanitizer = inject(DomSanitizer);
-
-  @ViewChild('cvRaw') protected cvRaw?: ElementRef<HTMLElement>;
 
   #previewReady = false;
 
@@ -194,8 +232,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
     previewSource.removeAttribute('id');
     previewSource.classList.remove('cv-raw');
     previewSource.classList.add('cv-preview-source');
-    previewSource.style.width = '210mm';
-    previewSource.style.padding = '10mm';
+    previewSource.style.width = '100%';
+    previewSource.style.padding = '0';
     previewSource.style.boxSizing = 'border-box';
     previewSource.style.margin = '0';
     previewSource.style.position = 'relative';
@@ -206,30 +244,85 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
     measureContainer.style.left = '-10000px';
     measureContainer.style.pointerEvents = 'none';
     measureContainer.style.opacity = '0';
-    measureContainer.style.width = '210mm';
+    measureContainer.style.width = `${PREVIEW_PAGE_CONTENT_WIDTH_MM}mm`;
     measureContainer.appendChild(previewSource);
     document.body.appendChild(measureContainer);
 
     await this.#waitForAssets(previewSource);
 
-    const pageHeightPx = this.#getPageHeightPx(measureContainer);
+    const pageContentHeightPx = this.#getPageContentHeightPx(measureContainer);
     const totalHeight = previewSource.scrollHeight;
-    const pageCount = Math.max(1, Math.ceil(totalHeight / pageHeightPx));
+    const semanticBlocks = this.#measureSemanticBlocks(previewSource, pageContentHeightPx);
+    const pageSlices = resolveSemanticPageSlices({
+      pageHeight: pageContentHeightPx,
+      totalHeight,
+      blocks: semanticBlocks,
+    });
+    const fallbackSliceHeight = pageContentHeightPx > 0 ? pageContentHeightPx : totalHeight;
 
     this.previewPages.set(
-      Array.from({ length: pageCount }, (_: unknown, index: number) => ({
-        offset: Math.round(index * pageHeightPx),
-      }))
+      pageSlices.length > 0
+        ? pageSlices
+        : [
+            {
+              offset: 0,
+              height: fallbackSliceHeight,
+            },
+          ]
     );
     this.previewHtml.set(this.sanitizer.bypassSecurityTrustHtml(previewSource.outerHTML));
 
     document.body.removeChild(measureContainer);
   }
 
-  async #waitForAssets(container: HTMLElement): Promise<void> {
-    if (document.fonts?.ready) {
-      await document.fonts.ready;
+  #measureSemanticBlocks(
+    previewSource: HTMLElement,
+    pageHeightPx: number
+  ): KeepTogetherBlockMeasurement[] {
+    const keepTogetherElements = Array.from(
+      new Set(previewSource.querySelectorAll(PREVIEW_KEEP_TOGETHER_SELECTOR))
+    ).filter((element): element is HTMLElement => element instanceof HTMLElement);
+
+    if (keepTogetherElements.length === 0 || pageHeightPx <= 0) {
+      return [];
     }
+
+    const rootTop = previewSource.getBoundingClientRect().top;
+    const blocks = keepTogetherElements
+      .map((element): KeepTogetherBlockMeasurement => {
+        const blockRect = element.getBoundingClientRect();
+        return {
+          top: blockRect.top - rootTop,
+          height: blockRect.height,
+        };
+      })
+      .filter((block): boolean => block.height >= 8 && block.top >= 0)
+      .sort((first, second): number => first.top - second.top);
+
+    if (blocks.length === 0) {
+      return [];
+    }
+
+    return blocks.reduce<KeepTogetherBlockMeasurement[]>((accumulator, block): KeepTogetherBlockMeasurement[] => {
+      const previous = accumulator.at(-1);
+      if (previous === undefined) {
+        accumulator.push(block);
+        return accumulator;
+      }
+
+      const sameTop = Math.abs(previous.top - block.top) < 0.5;
+      const sameHeight = Math.abs(previous.height - block.height) < 0.5;
+      if (sameTop && sameHeight) {
+        return accumulator;
+      }
+
+      accumulator.push(block);
+      return accumulator;
+    }, []);
+  }
+
+  async #waitForAssets(container: HTMLElement): Promise<void> {
+    await document.fonts.ready;
     const images = Array.from(container.querySelectorAll('img'));
     await Promise.all(
       images.map(
@@ -249,17 +342,17 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
     return Math.round(mm * pxPerMm);
   }
 
-  #getPageHeightPx(container: HTMLElement): number {
+  #getPageContentHeightPx(container: HTMLElement): number {
     const probe = document.createElement('div');
     probe.style.position = 'absolute';
     probe.style.top = '0';
     probe.style.left = '0';
-    probe.style.width = '210mm';
-    probe.style.height = '297mm';
+    probe.style.width = `${PREVIEW_PAGE_CONTENT_WIDTH_MM}mm`;
+    probe.style.height = `${PREVIEW_PAGE_CONTENT_HEIGHT_MM}mm`;
     probe.style.visibility = 'hidden';
     container.appendChild(probe);
     const measured = probe.getBoundingClientRect().height;
     container.removeChild(probe);
-    return measured > 0 ? measured : this.#mmToPx(297);
+    return measured > 0 ? measured : this.#mmToPx(PREVIEW_PAGE_CONTENT_HEIGHT_MM);
   }
 }
