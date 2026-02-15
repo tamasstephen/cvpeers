@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { CvComponent } from '../../cv/cv.component';
+import { Template } from '../../enums/template.enum';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
@@ -49,6 +50,157 @@ interface StoredFormData {
   summary: string;
 }
 
+const DUMMY_CV_DATA: StoredFormData = {
+  personalDetailsForm: {
+    fullName: 'Alex Morgan',
+    email: 'alex.morgan@example.com',
+    phone: '+1 (415) 555-0142',
+    website: 'https://alexmorgan.dev',
+    headline: 'Senior Product Engineer | Frontend Platform & AI-assisted UX',
+  },
+  socialForm: {
+    social: [
+      {
+        type: 'github',
+        url: 'https://github.com/alexmorgan',
+        src: 'assets/images/github-fill.png',
+      },
+      {
+        type: 'linkedin',
+        url: 'https://www.linkedin.com/in/alexmorgan',
+        src: 'assets/images/linkedin-box-fill.png',
+      },
+    ],
+  },
+  experienceForm: [
+    {
+      title: 'Senior Product Engineer',
+      company: 'Northstar Labs',
+      location: 'San Francisco, CA',
+      startDate: new Date('2023-01-01'),
+      endDate: null,
+      description: [
+        'Led architecture and delivery of a multi-tenant CV platform used by over 120,000 active professionals.',
+        'Built server-driven rendering flows that reduced preview mismatch issues by 67% across multiple templates.',
+        'Designed and shipped robust form persistence with conflict-safe restore logic and deterministic section hydration.',
+        'Partnered with design and growth to launch onboarding experiments that improved completion rate from 54% to 72%.',
+      ],
+    },
+    {
+      title: 'Staff Frontend Engineer',
+      company: 'Orbit Commerce',
+      location: 'Remote, US',
+      startDate: new Date('2020-03-01'),
+      endDate: new Date('2022-12-01'),
+      description: [
+        'Created a component platform with strict accessibility and performance budgets used by four product squads.',
+        'Migrated legacy forms to typed reactive patterns and reduced production form defects by more than 40%.',
+        'Implemented analytics guardrails and release controls that enabled faster iteration without regression spikes.',
+        'Mentored engineers on test-first workflows, review rigor, and instrumentation-first debugging techniques.',
+      ],
+    },
+    {
+      title: 'Senior Software Engineer',
+      company: 'Cobalt Health',
+      location: 'Seattle, WA',
+      startDate: new Date('2017-06-01'),
+      endDate: new Date('2020-02-01'),
+      description: [
+        'Delivered patient-facing onboarding journeys that handled high-volume traffic during seasonal enrollment peaks.',
+        'Refactored client state handling to lower time-to-interactive and simplify cross-team feature ownership.',
+        'Introduced API contract testing that prevented breaking changes across dependent mobile and web clients.',
+        'Worked with compliance and legal teams to align workflows with evolving regulatory requirements.',
+      ],
+    },
+    {
+      title: 'Software Engineer II',
+      company: 'Brightline Media',
+      location: 'Austin, TX',
+      startDate: new Date('2015-02-01'),
+      endDate: new Date('2017-05-01'),
+      description: [
+        'Owned content workflow tooling and built publishing automation for distributed editorial teams.',
+        'Improved CMS rendering performance through bundle splitting and lazy loading strategies.',
+        'Created preview and revision tooling that reduced editorial QA turnaround by nearly half.',
+        'Automated smoke-test coverage in CI to catch critical regressions before release windows.',
+      ],
+    },
+    {
+      title: 'Frontend Engineer',
+      company: 'Atlas Mobility',
+      location: 'Denver, CO',
+      startDate: new Date('2013-07-01'),
+      endDate: new Date('2015-01-01'),
+      description: [
+        'Built route planning and trip-summary interfaces for both desktop dispatchers and mobile operators.',
+        'Collaborated with backend teams to design resilient retry and offline synchronization experiences.',
+        'Introduced observability dashboards that surfaced top rendering bottlenecks and crash vectors.',
+        'Drove refactors that replaced duplicate view logic with shared and testable UI primitives.',
+      ],
+    },
+    {
+      title: 'Junior Software Engineer',
+      company: 'Pixel Forge',
+      location: 'Portland, OR',
+      startDate: new Date('2011-08-01'),
+      endDate: new Date('2013-06-01'),
+      description: [
+        'Implemented customer-facing account and billing flows with clear validation and transactional safeguards.',
+        'Maintained template systems and created reusable modules for marketing and product launch pages.',
+        'Reduced CSS and rendering inconsistencies by introducing a shared design token strategy.',
+        'Coordinated release checklists with QA to stabilize launch quality across multiple browsers.',
+      ],
+    },
+  ],
+  educationForm: [
+    {
+      degree: 'M.S. Computer Science',
+      institution: 'University of Washington',
+      location: 'Seattle, WA',
+      graduationDate: new Date('2011-06-01'),
+    },
+    {
+      degree: 'B.S. Software Engineering',
+      institution: 'Oregon State University',
+      location: 'Corvallis, OR',
+      graduationDate: new Date('2009-06-01'),
+    },
+  ],
+  expertiseForm: [
+    'Angular',
+    'TypeScript',
+    'Reactive Forms',
+    'Frontend Architecture',
+    'Design Systems',
+    'Accessibility',
+    'Performance Optimization',
+    'Unit Testing',
+    'Contract Testing',
+    'CI/CD',
+    'Experimentation',
+    'Observability',
+    'UX Writing',
+    'Product Discovery',
+  ],
+  strengthsForm: [
+    'Systems Thinking',
+    'Cross-functional Communication',
+    'Mentoring',
+    'Technical Planning',
+    'Root Cause Analysis',
+    'Delivery Discipline',
+    'User Empathy',
+    'Stakeholder Management',
+  ],
+  languagesForm: [
+    { name: 'English', level: 'Native' },
+    { name: 'Spanish', level: 'Advanced' },
+    { name: 'German', level: 'Intermediate' },
+  ],
+  summary:
+    '<p>Senior product engineer with 12+ years of experience designing and shipping reliable web applications across platform, growth, and workflow-heavy domains. I focus on architecting user-facing systems that remain fast under load, maintainable under pressure, and observable in production so teams can iterate safely.</p><p>My recent work centers on form-heavy interfaces, document-generation pipelines, and preview systems where consistency and trust matter. I combine typed frontend patterns, pragmatic testing strategy, and strong collaboration with design, QA, and product to deliver outcomes that are measurable and durable.</p><p>I enjoy improving engineering leverage: creating reusable abstractions, clarifying ownership boundaries, and mentoring teams toward test-first thinking. I optimize for clarity in architecture, reliability in delivery, and user confidence in every interaction.</p>',
+};
+
 @Component({
   selector: 'app-cv-form',
   standalone: true,
@@ -76,7 +228,7 @@ interface StoredFormData {
 export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cvForm') protected cvForm!: ElementRef<HTMLDivElement>;
 
-  @ViewChild('portrait') protected portrait!: ElementRef<HTMLImageElement>;
+  @ViewChild('portrait') protected portrait?: ElementRef<HTMLImageElement>;
 
   @ViewChild('resetDialog') protected resetDialogTemplate!: TemplateRef<unknown>;
 
@@ -158,6 +310,10 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
+    if (!this.portrait) {
+      return;
+    }
+
     // Crop the image to keep the aspect ratio on the pdf
     this.portrait.nativeElement.onload = (): void => {
       this.cropImage();
@@ -180,6 +336,10 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  public useDummyDataForTests(): void {
+    this.useDummyData();
+  }
+
   protected async downloadPdf(): Promise<void> {
     const element = document.querySelector('#cv-raw');
     if (!element) return;
@@ -188,11 +348,104 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected resetForm(): void {
     this.form.reset();
+    const templateControl = this.form.get('templateForm');
+    if (templateControl instanceof FormControl) {
+      templateControl.setValue(Template.MINIMAL);
+    }
     localStorage.removeItem(this.#STORAGE_KEY);
     this.closeResetFormDialog();
     this.reset$.next(true);
     this.#cdRef.detectChanges();
     this.showToast();
+  }
+
+  protected useDummyData(): void {
+    this.form.reset();
+    localStorage.removeItem(this.#STORAGE_KEY);
+    this.reset$.next(true);
+
+    const templateControl = this.form.get('templateForm');
+    if (templateControl instanceof FormControl) {
+      templateControl.setValue(Template.MINIMAL);
+    }
+
+    const personalDetails = this.form.get('personalDetailsForm');
+    if (personalDetails instanceof FormGroup) {
+      personalDetails.patchValue(DUMMY_CV_DATA.personalDetailsForm);
+    }
+
+    const socialControl = this.form.get('socialForm.social');
+    if (socialControl instanceof FormArray) {
+      DUMMY_CV_DATA.socialForm.social.forEach((item): void => {
+        socialControl.push(new FormControl(item, { nonNullable: true }));
+      });
+    }
+
+    const experienceControl = this.form.get('experienceForm');
+    if (experienceControl instanceof FormArray) {
+      DUMMY_CV_DATA.experienceForm.forEach((experience): void => {
+        const descriptionArray = new FormArray(
+          experience.description
+            .filter((item): item is string => item !== null)
+            .map((item): FormControl<string> => new FormControl(item, { nonNullable: true }))
+        );
+        const experienceGroup = new FormGroup({
+          title: new FormControl(experience.title, { nonNullable: true }),
+          company: new FormControl(experience.company, { nonNullable: true }),
+          location: new FormControl(experience.location, { nonNullable: true }),
+          startDate: new FormControl(experience.startDate, { nonNullable: true }),
+          endDate: new FormControl(experience.endDate),
+          description: descriptionArray,
+        });
+        experienceControl.push(experienceGroup);
+      });
+    }
+
+    const educationControl = this.form.get('educationForm');
+    if (educationControl instanceof FormArray) {
+      DUMMY_CV_DATA.educationForm.forEach((education): void => {
+        const educationGroup = new FormGroup({
+          degree: new FormControl(education.degree, { nonNullable: true }),
+          institution: new FormControl(education.institution, { nonNullable: true }),
+          location: new FormControl(education.location, { nonNullable: true }),
+          graduationDate: new FormControl(education.graduationDate, { nonNullable: true }),
+        });
+        educationControl.push(educationGroup);
+      });
+    }
+
+    const expertiseControl = this.form.get('expertiseForm');
+    if (expertiseControl instanceof FormArray) {
+      DUMMY_CV_DATA.expertiseForm.forEach((item): void => {
+        expertiseControl.push(new FormControl(item, { nonNullable: true }));
+      });
+    }
+
+    const strengthsControl = this.form.get('strengthsForm');
+    if (strengthsControl instanceof FormArray) {
+      DUMMY_CV_DATA.strengthsForm.forEach((item): void => {
+        strengthsControl.push(new FormControl(item, { nonNullable: true }));
+      });
+    }
+
+    const languagesControl = this.form.get('languagesForm');
+    if (languagesControl instanceof FormArray) {
+      DUMMY_CV_DATA.languagesForm.forEach((language): void => {
+        const languageGroup = new FormGroup({
+          name: new FormControl(language.name, { nonNullable: true }),
+          level: new FormControl(language.level, { nonNullable: true }),
+        });
+        languagesControl.push(languageGroup);
+      });
+    }
+
+    const summaryControl = this.form.get('summary');
+    if (summaryControl instanceof FormControl) {
+      summaryControl.setValue(DUMMY_CV_DATA.summary);
+      this.richTextInitialValue.next(DUMMY_CV_DATA.summary);
+    }
+
+    this.#cdRef.detectChanges();
   }
 
   #loadFormData(): void {
@@ -311,6 +564,10 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Workaround for keeping the image aspect ratio on the pdf
   protected cropImage(): void {
+    if (!this.portrait) {
+      return;
+    }
+
     const currentImage = this.portrait.nativeElement;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');

@@ -32,6 +32,7 @@ const PREVIEW_PAGE_HEIGHT_MM = 297;
 const PREVIEW_PAGE_MARGIN_MM = 10;
 const PREVIEW_PAGE_CONTENT_WIDTH_MM = PREVIEW_PAGE_WIDTH_MM - PREVIEW_PAGE_MARGIN_MM * 2;
 const PREVIEW_PAGE_CONTENT_HEIGHT_MM = PREVIEW_PAGE_HEIGHT_MM - PREVIEW_PAGE_MARGIN_MM * 2;
+const PREVIEW_PAGE_CONTENT_HEIGHT_PX_FALLBACK = Math.round(PREVIEW_PAGE_CONTENT_HEIGHT_MM * (96 / 25.4));
 
 const PREVIEW_KEEP_TOGETHER_SELECTOR = [
   '.header-section',
@@ -109,7 +110,9 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
   /**
    * Preview pages with vertical offsets.
    */
-  protected previewPages = signal<{ offset: number; height: number }[]>([{ offset: 0, height: 0 }]);
+  protected previewPages = signal<{ offset: number; height: number }[]>([
+    { offset: 0, height: PREVIEW_PAGE_CONTENT_HEIGHT_PX_FALLBACK },
+  ]);
 
   /**
    * The experience of the CV
@@ -170,8 +173,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
           distinctUntilChanged()
         )
         .subscribe((value): void => {
-          this.selectedTemplate.set(value.templateForm as Template);
-          this.personalDetails.set(value.personalDetailsForm as PersonalDetailsFormValues);
+          this.selectedTemplate.set(value.templateForm ?? Template.MINIMAL);
+          this.personalDetails.set(this.#resolvePersonalDetails(value.personalDetailsForm));
           this.socialLinks.set(value.socialForm?.social as SocialFormValues);
           if (value.summary !== this.summary()) {
             this.summary.set(value.summary);
@@ -354,5 +357,21 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
     const measured = probe.getBoundingClientRect().height;
     container.removeChild(probe);
     return measured > 0 ? measured : this.#mmToPx(PREVIEW_PAGE_CONTENT_HEIGHT_MM);
+  }
+
+  #resolvePersonalDetails(
+    details: Partial<PersonalDetailsFormValues> | null | undefined
+  ): PersonalDetailsFormValues {
+    if (!details) {
+      return placeholderPersonalDetails;
+    }
+
+    return {
+      fullName: details.fullName ?? '',
+      email: details.email ?? '',
+      phone: details.phone ?? '',
+      website: details.website ?? '',
+      headline: details.headline ?? '',
+    };
   }
 }

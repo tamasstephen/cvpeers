@@ -3,7 +3,7 @@
   <div class="cv-preview">
     @for (page of previewPages(); track $index) {
       <div class="cv-preview-page">
-        <div class="cv-preview-viewport" [style.height.px]="page.height">
+        <div class="cv-preview-viewport" [style.height.px]="page.height" style="min-height: 100%">
           <div
             class="cv-preview-slice"
             [style.transform]="'translateY(-' + page.offset + 'px)'"
@@ -180,7 +180,7 @@
   <div class="cv-preview">
     @for (page of previewPages(); track $index) {
       <div class="cv-preview-page">
-        <div class="cv-preview-viewport" [style.height.px]="page.height">
+        <div class="cv-preview-viewport" [style.height.px]="page.height" style="min-height: 100%">
           <div
             class="cv-preview-slice"
             [style.transform]="'translateY(-' + page.offset + 'px)'"

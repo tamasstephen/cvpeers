@@ -406,8 +406,8 @@ export class PdfGeneratorService {
       const measuredWidthPx = Math.floor(wrapper.getBoundingClientRect().width);
       const renderWidthPx = measuredWidthPx > 100 ? measuredWidthPx : Math.floor(pageWidth);
       await this.#pdfGenerator.html(wrapper, {
-        callback: (doc: jsPDF): void => {
-          doc.output('dataurlnewwindow');
+        callback: (): void => {
+          this.#downloadPdfFile();
         },
         margin: [0, 0, 0, 0],
         html2canvas: {
@@ -510,7 +510,7 @@ export class PdfGeneratorService {
     }
 
     this.#removeLeadingBlankPage(previewPages.length);
-    this.#pdfGenerator.output('dataurlnewwindow');
+    this.#downloadPdfFile();
   }
 
   #removeLeadingBlankPage(expectedPages: number): void {
@@ -523,5 +523,9 @@ export class PdfGeneratorService {
     if (totalPages === expectedPages + 1) {
       this.#pdfGenerator.deletePage(1);
     }
+  }
+
+  #downloadPdfFile(): void {
+    this.#pdfGenerator.output('dataurlnewwindow');
   }
 }
