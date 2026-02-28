@@ -27,14 +27,14 @@ Complexity mapping for this plan: `low=🟢 Simple`, `medium=🟡 Medium`, `high
 | T3.7 | Orchestrator-Only Component | Reduce `CvFormComponent` to orchestration and view binding; keep behavior unchanged. | 🟡 Medium | 🟡 Medium | ✅ Completed | T3.6 |
 | T3.8 | CV Form Regression Validation | Re-run and extend component-level tests to validate no behavior drift after decomposition. | 🟡 Medium | 🟢 Easy | ✅ Completed | T3.7 |
 | T4.1 | PDF/Preview Baseline Characterization | Add failing tests for summary parsing/font injection/pagination invariants. | 🟡 Medium | 🟡 Medium | ✅ Completed | T1 |
-| T4.2 | Extract Summary Sanitizer Step | Isolate HTML sanitization and unsafe markup cleanup into a focused pure step with tests. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T4.1 |
-| T4.3 | Extract Summary List Normalizer Step | Isolate ordered/unordered list normalization logic into a pure transformer with tests. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T4.2 |
-| T4.4 | Extract Summary Typography Step | Isolate font/style normalization for summary HTML into a dedicated transformer with tests. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T4.3 |
-| T4.5 | Extract Preview Measurement Unit | Move preview page-height/semantic block measurement orchestration into dedicated utilities/services. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T4.1 |
-| T4.6 | Extract PDF Renderer Adapter | Separate jsPDF rendering orchestration from transform logic into adapter-level module boundaries. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T4.4, T4.5 |
-| T4.7 | Integrate Preview/PDF Pipeline | Reconnect extracted steps into a stable pipeline used by CV preview and export flows. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T4.6 |
-| T4.8 | Preview/PDF Regression Validation | Re-run targeted tests for preview and PDF paths to ensure output parity. | 🟡 Medium | 🟢 Easy | ⭕ Not started | T4.7 |
-| T5 | DRY Pass Across Form Sections | Deduplicate shared patterns in experience/education/language/social modules with small composable helpers. | 🟡 Medium | 🟡 Medium | ⭕ Not started | T3.8 |
+| T4.2 | Extract Summary Sanitizer Step | Isolate HTML sanitization and unsafe markup cleanup into a focused pure step with tests. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.1 |
+| T4.3 | Extract Summary List Normalizer Step | Isolate ordered/unordered list normalization logic into a pure transformer with tests. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.2 |
+| T4.4 | Extract Summary Typography Step | Isolate font/style normalization for summary HTML into a dedicated transformer with tests. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.3 |
+| T4.5 | Extract Preview Measurement Unit | Move preview page-height/semantic block measurement orchestration into dedicated utilities/services. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.1 |
+| T4.6 | Extract PDF Renderer Adapter | Separate jsPDF rendering orchestration from transform logic into adapter-level module boundaries. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.4, T4.5 |
+| T4.7 | Integrate Preview/PDF Pipeline | Reconnect extracted steps into a stable pipeline used by CV preview and export flows. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.6 |
+| T4.8 | Preview/PDF Regression Validation | Re-run targeted tests for preview and PDF paths to ensure output parity. | 🟡 Medium | 🟢 Easy | ✅ Completed | T4.7 |
+| T5 | DRY Pass Across Form Sections | Deduplicate shared patterns in experience/education/language/social modules with small composable helpers. | 🟡 Medium | 🟡 Medium | ✅ Completed | T3.8 |
 | T6 | Verification Gates | Run full validation: unit tests, lint, typecheck; block completion on failures. | 🟡 Medium | 🟢 Easy | ⭕ Not started | T2, T4.8, T5 |
 | T7 | Documentation Update | Update architecture/refactor notes and rationale in project docs. | 🟢 Simple | 🟢 Easy | ⭕ Not started | T6 |
 

@@ -17,6 +17,7 @@ import {
   EducationItemForm,
   EducationItemFormValues,
 } from '../../../types/education-form';
+import { clearFormArray } from '../form-array.utils';
 import { EducationDialogComponent } from './education-dialog/education-dialog.component';
 
 @Component({
@@ -65,10 +66,7 @@ export class EducationComponent extends ComponentBaseComponent implements OnInit
     this.addSubscription(
       this.reset$().subscribe((value: boolean): void => {
         if (value) {
-          const educationArray = this.educationForm.get('education') as FormArray;
-          while (educationArray.length) {
-            educationArray.removeAt(0);
-          }
+          clearFormArray(this.educationForm.controls.education);
         }
       })
     );

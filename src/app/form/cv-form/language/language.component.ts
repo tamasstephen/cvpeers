@@ -21,6 +21,7 @@ import { SectionHeaderComponent } from '../../../shared/components/section-heade
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
 import { CvForm } from '../../../types/cv-form';
 import { LanguageForm, LanguageFormArray, LanguageItemForm } from '../../../types/language-form';
+import { clearFormArray } from '../form-array.utils';
 
 @Component({
   selector: 'app-language',
@@ -91,10 +92,7 @@ export class LanguageComponent extends ComponentBaseComponent implements OnInit,
     this.addSubscription(
       this.reset$().subscribe((value: boolean): void => {
         if (value) {
-          const languageArray = this.languageForm.get('languages') as FormArray;
-          while (languageArray.length) {
-            languageArray.removeAt(0);
-          }
+          clearFormArray(this.languageForm.controls.languages);
         }
       })
     );

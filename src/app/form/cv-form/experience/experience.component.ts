@@ -18,6 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { ComponentBaseComponent } from '../../../shared/core/component-base/component-base.component';
+import { clearFormArray } from '../form-array.utils';
 import { ExperienceDialogComponent } from './experience-dialog/experience-dialog.component';
 
 @Component({
@@ -72,10 +73,7 @@ export class ExperienceComponent extends ComponentBaseComponent implements OnIni
     this.addSubscription(
       this.reset$().subscribe((value: boolean): void => {
         if (value) {
-          const experienceArray = this.experienceForm.get('experience') as FormArray;
-          while (experienceArray.length) {
-            experienceArray.removeAt(0);
-          }
+          clearFormArray(this.experienceForm.controls.experience);
         }
       })
     );

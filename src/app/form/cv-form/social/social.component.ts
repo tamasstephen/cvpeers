@@ -18,6 +18,7 @@ import {
   SocialForm,
   SocialItem,
 } from '../../../types/social';
+import { clearFormArray } from '../form-array.utils';
 import { SocialDialogComponent } from './social-dialog/social-dialog.component';
 
 @Component({
@@ -68,10 +69,7 @@ export class SocialComponent extends ComponentBaseComponent implements OnInit, O
     this.addSubscription(
       this.reset$().subscribe((value: boolean): void => {
         if (value) {
-          const socialArray = this.socialForm.get('social') as FormArray;
-          while (socialArray.length) {
-            socialArray.removeAt(0);
-          }
+          clearFormArray(this.socialForm.controls.social);
         }
       })
     );

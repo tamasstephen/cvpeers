@@ -3,6 +3,12 @@ import { jsPDF } from 'jspdf';
 import '../../assets/fonts/Geist-SemiBold-normal.js';
 import '../../assets/fonts/Geist-Variable_pdf-normal.js';
 import '../../assets/fonts/GeistMono-SemiBold-bold.js';
+import {
+  downloadPdfToNewWindow,
+  removeLeadingBlankPage,
+  renderHtmlPage,
+} from './pdf-renderer.adapter';
+import { transformSummaryHtml } from './summary-transform.pipeline';
 
 const A4_WIDTH_PX = Math.round((210 * 96) / 25.4);
 const A4_HEIGHT_PX = Math.round((297 * 96) / 25.4);
@@ -121,188 +127,7 @@ export class PdfGeneratorService {
    * - Replace <strong>...</strong> with <span style="font-family: 'GeistMono-SemiBold'; font-weight: bold;">...</span>
    */
   public parseSummaryHtml(htmlString: string): string {
-    if (!htmlString) return htmlString;
-
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlString;
-
-    // Remove Quill helper spans that interfere with rendering
-    tempDiv.querySelectorAll('span.ql-ui').forEach((el): void => el.remove());
-
-    // Convert bullet-marked ordered lists to unordered lists
-    const orderedLists = Array.from(tempDiv.querySelectorAll('ol'));
-    orderedLists.forEach((ol): void => {
-      const hasBulletLis = ol.querySelector('li[data-list="bullet"]') !== null;
-      if (hasBulletLis) {
-        const ul = document.createElement('ul');
-        // Preserve classes and inline style from the original <ol>
-        Array.from(ol.attributes).forEach((attr): void => {
-          ul.setAttribute(attr.name, attr.value);
-        });
-        ul.innerHTML = ol.innerHTML;
-        ol.replaceWith(ul);
-      }
-    });
-
-    // Normalise unordered lists to a static layout to avoid bullet misalignment in PDFs
-    const unorderedLists = Array.from(tempDiv.querySelectorAll('ul'));
-    unorderedLists.forEach((ul): void => {
-      const listContainer = document.createElement('div');
-      listContainer.setAttribute('style', 'display: flex; flex-direction: column; gap: 6px;');
-      Array.from(ul.attributes).forEach((attr): void => {
-        listContainer.setAttribute(attr.name, attr.value);
-      });
-
-      Array.from(ul.children).forEach((child): void => {
-        if (!(child instanceof HTMLLIElement)) {
-          listContainer.appendChild(child);
-          return;
-        }
-
-        const indentLevel =
-          Array.from(child.classList)
-            .map((cls): number | null =>
-              cls.startsWith('ql-indent-') ? Number(cls.replace('ql-indent-', '')) : null
-            )
-            .find((value): value is number => value !== null) ?? 0;
-        const indentOffset = indentLevel * 18;
-
-        const row = document.createElement('div');
-        row.setAttribute(
-          'style',
-          `position: relative; padding-left: ${indentOffset + 14}px; font-family: 'Geist'; font-size: 0.875rem; line-height: 1.5;`
-        );
-
-        const bullet = document.createElement('span');
-        bullet.innerHTML = '&#8226;';
-        bullet.setAttribute(
-          'style',
-          `position: absolute; left: ${indentOffset}px; top: 0; font-family: 'Geist-SemiBold'; font-size: 0.875rem; line-height: 1.5;`
-        );
-
-        const content = document.createElement('div');
-        content.setAttribute(
-          'style',
-          "display: block; font-family: 'Geist'; font-size: 0.875rem; line-height: 1.5; white-space: normal;"
-        );
-        content.innerHTML = child.innerHTML;
-
-        row.appendChild(bullet);
-        row.appendChild(content);
-        listContainer.appendChild(row);
-      });
-
-      ul.replaceWith(listContainer);
-    });
-
-    // Replace <strong> with inline-styled <span>
-    const strongs = Array.from(tempDiv.querySelectorAll('strong'));
-    strongs.forEach((strongEl): void => {
-      const span = document.createElement('span');
-      span.setAttribute('style', "font-family: 'Geist-SemiBold'; font-weight: bold;");
-      // Keep existing inline styles if present
-      const existingStyle = strongEl.getAttribute('style');
-      if (existingStyle) {
-        span.setAttribute('style', `${span.getAttribute('style')}; ${existingStyle}`);
-      }
-      span.innerHTML = strongEl.innerHTML;
-      strongEl.replaceWith(span);
-    });
-
-    // Sanitize inline styles to remove background colors and enforce readable text color
-    const ensureStyle = (styles: string[], property: string, value: string): void => {
-      const normalizedProperty = property.toLowerCase();
-      const hasProperty = styles.some((style): boolean =>
-        style.trim().toLowerCase().startsWith(`${normalizedProperty}:`)
-      );
-      if (!hasProperty) {
-        styles.push(`${property}: ${value}`);
-      }
-    };
-
-    const sanitizeElement = (element: Element): void => {
-      if (element instanceof HTMLElement) {
-        const style = element.getAttribute('style');
-        if (style) {
-          const sanitizedStyle = style
-            .replace(/background(-color)?:[^;]+;?/gi, '')
-            .replace(/background:[^;]+;?/gi, '')
-            .trim();
-          const styles: string[] = sanitizedStyle
-            ? sanitizedStyle
-                .split(';')
-                .map((value): string => value.trim())
-                .filter(Boolean)
-            : [];
-
-          ensureStyle(styles, 'color', '#323232');
-
-          if (element.tagName === 'UL') {
-            ensureStyle(styles, 'font-family', 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-          }
-
-          if (element.tagName === 'LI') {
-            ensureStyle(styles, 'font-family', 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-            ensureStyle(styles, 'list-style-position', 'outside');
-          }
-
-          if (element.tagName === 'SPAN') {
-            const fontWeight = element.style.fontWeight;
-            ensureStyle(styles, 'font-family', fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-          }
-
-          if (element.tagName === 'SPAN') {
-            const fontWeight = element.style.fontWeight;
-            ensureStyle(styles, 'font-family', fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-          }
-
-          if (styles.length > 0) {
-            element.setAttribute('style', `${styles.join('; ')};`);
-          } else {
-            element.removeAttribute('style');
-          }
-        } else {
-          const styles: string[] = [];
-          ensureStyle(styles, 'color', '#323232');
-          ensureStyle(
-            styles,
-            'font-family',
-            element.style.fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist'
-          );
-
-          if (element.tagName === 'UL' || element.tagName === 'OL') {
-            ensureStyle(styles, 'font-family', 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-          }
-
-          if (element.tagName === 'LI') {
-            ensureStyle(styles, 'font-family', 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-            ensureStyle(styles, 'list-style-position', 'outside');
-          }
-
-          if (element.tagName === 'SPAN') {
-            const fontWeight = element.style.fontWeight;
-            ensureStyle(styles, 'font-family', fontWeight === 'bold' ? 'Geist-SemiBold' : 'Geist');
-            ensureStyle(styles, 'font-size', '0.875rem');
-          }
-
-          if (styles.length > 0) {
-            element.setAttribute('style', `${styles.join('; ')};`);
-          }
-        }
-      }
-
-      Array.from(element.children).forEach((child): void => sanitizeElement(child));
-    };
-
-    Array.from(tempDiv.children).forEach((element): void => sanitizeElement(element));
-
-    return tempDiv.innerHTML;
+    return transformSummaryHtml(htmlString);
   }
 
   /**
@@ -405,19 +230,21 @@ export class PdfGeneratorService {
 
       const measuredWidthPx = Math.floor(wrapper.getBoundingClientRect().width);
       const renderWidthPx = measuredWidthPx > 100 ? measuredWidthPx : Math.floor(pageWidth);
-      await this.#pdfGenerator.html(wrapper, {
-        callback: (): void => {
-          this.#downloadPdfFile();
+      await renderHtmlPage({
+        pdf: this.#pdfGenerator,
+        source: wrapper,
+        options: {
+          margin: [0, 0, 0, 0],
+          html2canvas: {
+            letterRendering: true,
+            scale: baseScale,
+          },
+          autoPaging: 'slice',
+          width: pageWidth,
+          windowWidth: renderWidthPx,
         },
-        margin: [0, 0, 0, 0],
-        html2canvas: {
-          letterRendering: true,
-          scale: baseScale,
-        },
-        autoPaging: 'slice',
-        width: pageWidth,
-        windowWidth: renderWidthPx,
       });
+      downloadPdfToNewWindow(this.#pdfGenerator);
     } finally {
       document.body.removeChild(container);
     }
@@ -489,9 +316,10 @@ export class PdfGeneratorService {
         )
       );
 
-      await new Promise<void>((resolve): void => {
-        this.#pdfGenerator.html(pageClone, {
-          callback: (): void => resolve(),
+      await renderHtmlPage({
+        pdf: this.#pdfGenerator,
+        source: pageClone,
+        options: {
           margin: [0, 0, 0, 0],
           html2canvas: {
             letterRendering: true,
@@ -500,7 +328,7 @@ export class PdfGeneratorService {
           autoPaging: false,
           width: pageWidth,
           windowWidth: pageWidth,
-        });
+        },
       });
 
       document.body.removeChild(container);
@@ -509,23 +337,10 @@ export class PdfGeneratorService {
       }
     }
 
-    this.#removeLeadingBlankPage(previewPages.length);
-    this.#downloadPdfFile();
-  }
-
-  #removeLeadingBlankPage(expectedPages: number): void {
-    const totalPages =
-      (this.#pdfGenerator as unknown as { getNumberOfPages?: () => number }).getNumberOfPages?.() ??
-      (this.#pdfGenerator.internal as unknown as { getNumberOfPages?: () => number })
-        .getNumberOfPages?.();
-
-    if (typeof totalPages !== 'number') return;
-    if (totalPages === expectedPages + 1) {
-      this.#pdfGenerator.deletePage(1);
-    }
-  }
-
-  #downloadPdfFile(): void {
-    this.#pdfGenerator.output('dataurlnewwindow');
+    removeLeadingBlankPage({
+      pdf: this.#pdfGenerator,
+      expectedPages: previewPages.length,
+    });
+    downloadPdfToNewWindow(this.#pdfGenerator);
   }
 }

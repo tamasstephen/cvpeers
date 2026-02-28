@@ -17,7 +17,8 @@ import { ExperienceFormValues } from '../types/experience-form';
 import { LanguageFormValues } from '../types/language-form';
 import { PersonalDetailsFormValues } from '../types/personal-details-form';
 import { SocialFormValues } from '../types/social';
-import { KeepTogetherBlockMeasurement, resolveSemanticPageSlices } from './preview-pagination.util';
+import { getPageContentHeightPx, measureSemanticBlocks } from './preview-measurement.unit';
+import { resolveSemanticPageSlices } from './preview-pagination.util';
 
 const placeholderPersonalDetails: PersonalDetailsFormValues = {
   fullName: 'John Doe',
@@ -253,9 +254,17 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
 
     await this.#waitForAssets(previewSource);
 
-    const pageContentHeightPx = this.#getPageContentHeightPx(measureContainer);
+    const pageContentHeightPx = getPageContentHeightPx({
+      container: measureContainer,
+      pageContentWidthMm: PREVIEW_PAGE_CONTENT_WIDTH_MM,
+      pageContentHeightMm: PREVIEW_PAGE_CONTENT_HEIGHT_MM,
+    });
     const totalHeight = previewSource.scrollHeight;
-    const semanticBlocks = this.#measureSemanticBlocks(previewSource, pageContentHeightPx);
+    const semanticBlocks = measureSemanticBlocks({
+      previewSource,
+      selector: PREVIEW_KEEP_TOGETHER_SELECTOR,
+      pageHeightPx: pageContentHeightPx,
+    });
     const pageSlices = resolveSemanticPageSlices({
       pageHeight: pageContentHeightPx,
       totalHeight,
@@ -278,52 +287,6 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
     document.body.removeChild(measureContainer);
   }
 
-  #measureSemanticBlocks(
-    previewSource: HTMLElement,
-    pageHeightPx: number
-  ): KeepTogetherBlockMeasurement[] {
-    const keepTogetherElements = Array.from(
-      new Set(previewSource.querySelectorAll(PREVIEW_KEEP_TOGETHER_SELECTOR))
-    ).filter((element): element is HTMLElement => element instanceof HTMLElement);
-
-    if (keepTogetherElements.length === 0 || pageHeightPx <= 0) {
-      return [];
-    }
-
-    const rootTop = previewSource.getBoundingClientRect().top;
-    const blocks = keepTogetherElements
-      .map((element): KeepTogetherBlockMeasurement => {
-        const blockRect = element.getBoundingClientRect();
-        return {
-          top: blockRect.top - rootTop,
-          height: blockRect.height,
-        };
-      })
-      .filter((block): boolean => block.height >= 8 && block.top >= 0)
-      .sort((first, second): number => first.top - second.top);
-
-    if (blocks.length === 0) {
-      return [];
-    }
-
-    return blocks.reduce<KeepTogetherBlockMeasurement[]>((accumulator, block): KeepTogetherBlockMeasurement[] => {
-      const previous = accumulator.at(-1);
-      if (previous === undefined) {
-        accumulator.push(block);
-        return accumulator;
-      }
-
-      const sameTop = Math.abs(previous.top - block.top) < 0.5;
-      const sameHeight = Math.abs(previous.height - block.height) < 0.5;
-      if (sameTop && sameHeight) {
-        return accumulator;
-      }
-
-      accumulator.push(block);
-      return accumulator;
-    }, []);
-  }
-
   async #waitForAssets(container: HTMLElement): Promise<void> {
     await document.fonts.ready;
     const images = Array.from(container.querySelectorAll('img'));
@@ -338,25 +301,6 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
               })
       )
     );
-  }
-
-  #mmToPx(mm: number): number {
-    const pxPerMm = 96 / 25.4;
-    return Math.round(mm * pxPerMm);
-  }
-
-  #getPageContentHeightPx(container: HTMLElement): number {
-    const probe = document.createElement('div');
-    probe.style.position = 'absolute';
-    probe.style.top = '0';
-    probe.style.left = '0';
-    probe.style.width = `${PREVIEW_PAGE_CONTENT_WIDTH_MM}mm`;
-    probe.style.height = `${PREVIEW_PAGE_CONTENT_HEIGHT_MM}mm`;
-    probe.style.visibility = 'hidden';
-    container.appendChild(probe);
-    const measured = probe.getBoundingClientRect().height;
-    container.removeChild(probe);
-    return measured > 0 ? measured : this.#mmToPx(PREVIEW_PAGE_CONTENT_HEIGHT_MM);
   }
 
   #resolvePersonalDetails(
