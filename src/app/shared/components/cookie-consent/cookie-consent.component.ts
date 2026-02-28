@@ -50,15 +50,6 @@ export class CookieConsentComponent implements OnInit, OnDestroy {
     this.#subscriptions.push((): void => consentSubscription.unsubscribe());
   }
 
-  protected acceptConsent(): void {
-    this.#consentService.giveConsent();
-    this.#snackBar.open('Cookie preferences saved', 'Close', {
-      duration: 3000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-    });
-  }
-
   public ngOnDestroy(): void {
     while (this.#subscriptions.length) {
       const unsubscribe = this.#subscriptions.pop();
@@ -66,5 +57,14 @@ export class CookieConsentComponent implements OnInit, OnDestroy {
         unsubscribe();
       }
     }
+  }
+
+  protected acceptConsent(): void {
+    this.#consentService.giveConsent();
+    this.#snackBar.open('Cookie preferences saved', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
   }
 }

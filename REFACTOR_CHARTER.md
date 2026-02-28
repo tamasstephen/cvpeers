@@ -101,3 +101,36 @@
 1. Architecture boundaries are documented and reflected in code organization.
 2. High-risk refactors are validated by explicit tests before and after changes.
 3. Quality gates pass: unit tests, lint, and typecheck.
+
+## Refactor Implementation Outcome (2026-02-28)
+
+### Delivered Boundaries In Code
+- CV form persistence now uses dedicated modules:
+  - `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form/cv-form-storage.adapter.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form/cv-form-persistence.mapper.ts`
+- CV form construction and section arrays were extracted:
+  - `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form/cv-form-skeleton.factory.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form/cv-form-section-array.factory.ts`
+- CV form command/state orchestration moved behind facades:
+  - `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form/cv-form-commands.facade.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form/cv-form-state.facade.ts`
+- PDF/summary pipeline is split into pure steps + renderer adapter:
+  - `/Users/stephentamas/projects/cvpeers/src/app/services/pdf-generator/summary-sanitizer.step.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/services/pdf-generator/summary-list-normalizer.step.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/services/pdf-generator/summary-typography.step.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/services/pdf-generator/summary-transform.pipeline.ts`
+  - `/Users/stephentamas/projects/cvpeers/src/app/services/pdf-generator/pdf-renderer.adapter.ts`
+- Preview measurement logic extracted:
+  - `/Users/stephentamas/projects/cvpeers/src/app/cv/preview-measurement.unit.ts`
+
+### Validation Result
+- Full test suite passes:
+  - `npm test -- --watch=false --browsers=ChromeHeadless`
+- Lint passes:
+  - `npm run lint`
+- Typecheck passes:
+  - `npx tsc --noEmit`
+
+### Notes
+- Lifecycle inheritance via `ComponentBaseComponent` remains intentionally unchanged per Path A.
+- Refactor scope stayed behavior-preserving; no route/feature redesign was introduced.

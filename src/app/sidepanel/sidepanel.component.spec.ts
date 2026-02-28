@@ -1,23 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SidepanelComponent } from './sidepanel.component';
 
-describe('SidepanelComponent', () => {
+describe('SidepanelComponent', (): void => {
   let component: SidepanelComponent;
   let fixture: ComponentFixture<SidepanelComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
-      imports: [SidepanelComponent]
-    })
-    .compileComponents();
+      imports: [SidepanelComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SidepanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', (): void => {
     expect(component).toBeTruthy();
   });
 });

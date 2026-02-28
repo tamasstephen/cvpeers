@@ -8,4 +8,6 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  protected readonly rootPath = '/';
+}

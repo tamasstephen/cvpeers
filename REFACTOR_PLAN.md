@@ -35,8 +35,8 @@ Complexity mapping for this plan: `low=🟢 Simple`, `medium=🟡 Medium`, `high
 | T4.7 | Integrate Preview/PDF Pipeline | Reconnect extracted steps into a stable pipeline used by CV preview and export flows. | 🟡 Medium | 🟡 Medium | ✅ Completed | T4.6 |
 | T4.8 | Preview/PDF Regression Validation | Re-run targeted tests for preview and PDF paths to ensure output parity. | 🟡 Medium | 🟢 Easy | ✅ Completed | T4.7 |
 | T5 | DRY Pass Across Form Sections | Deduplicate shared patterns in experience/education/language/social modules with small composable helpers. | 🟡 Medium | 🟡 Medium | ✅ Completed | T3.8 |
-| T6 | Verification Gates | Run full validation: unit tests, lint, typecheck; block completion on failures. | 🟡 Medium | 🟢 Easy | ⭕ Not started | T2, T4.8, T5 |
-| T7 | Documentation Update | Update architecture/refactor notes and rationale in project docs. | 🟢 Simple | 🟢 Easy | ⭕ Not started | T6 |
+| T6 | Verification Gates | Run full validation: unit tests, lint, typecheck; block completion on failures. | 🟡 Medium | 🟢 Easy | ✅ Completed | T2, T4.8, T5 |
+| T7 | Documentation Update | Update architecture/refactor notes and rationale in project docs. | 🟢 Simple | 🟢 Easy | ✅ Completed | T6 |
 
 ## Hypotheses To Challenge (Medium+ Tasks)
 1. Keeping inheritance for teardown will not block modularization and testability goals.

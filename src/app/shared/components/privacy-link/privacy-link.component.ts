@@ -33,4 +33,6 @@ import { RouterModule } from '@angular/router';
     `,
   ],
 })
-export class PrivacyLinkComponent {}
+export class PrivacyLinkComponent {
+  protected readonly label = 'Privacy Policy';
+}

@@ -41,6 +41,12 @@ ng serve
 
 Navigate to `http://localhost:4200/` in your browser. The application will automatically reload when you make changes to the source files.
 
+## Architecture Notes
+
+- The CV form flow is refactored around factories, mappers, and facades in `/Users/stephentamas/projects/cvpeers/src/app/form/cv-form`.
+- Preview/PDF generation is refactored into transformation steps and a renderer adapter in `/Users/stephentamas/projects/cvpeers/src/app/services/pdf-generator`.
+- Refactor rationale, boundaries, and verification details are documented in `/Users/stephentamas/projects/cvpeers/REFACTOR_CHARTER.md`.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -62,4 +62,6 @@ import { RouterLink } from '@angular/router';
     `,
   ],
 })
-export class MobileWarningComponent {}
+export class MobileWarningComponent {
+  protected readonly title = 'Desktop Only Feature';
+}

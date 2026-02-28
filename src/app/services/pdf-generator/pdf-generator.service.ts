@@ -137,15 +137,16 @@ export class PdfGeneratorService {
    * @param html The HTML element to convert into a PDF document.
    */
   public async createPdfFromHtml(html: Element): Promise<void> {
-    const previewPages = Array.from(
-      document.querySelectorAll('.cv-preview-page')
-    ) as HTMLElement[];
+    const previewPages = Array.from(document.querySelectorAll<HTMLElement>('.cv-preview-page'));
     if (previewPages.length > 0) {
       await this.#createPdfFromPreview(previewPages);
       return;
     }
 
-    const target = html as HTMLElement;
+    if (!(html instanceof HTMLElement)) {
+      throw new Error('Expected HTMLElement target for PDF generation.');
+    }
+    const target = html;
     this.#pdfGenerator = new jsPDF({
       unit: 'px',
       format: [A4_WIDTH_PX, A4_HEIGHT_PX],
@@ -178,7 +179,9 @@ export class PdfGeneratorService {
       if (!(node instanceof HTMLElement)) return;
       node.style.visibility = 'visible';
     });
-    clonedTarget.querySelectorAll('.cv-section-title, .cv-modern-section-title').forEach((node) => {
+    clonedTarget
+      .querySelectorAll('.cv-section-title, .cv-modern-section-title')
+      .forEach((node): void => {
       if (!(node instanceof HTMLElement)) return;
       node.style.fontFamily = "'GeistMono-SemiBold', monospace";
       node.style.fontWeight = '700';
@@ -204,16 +207,12 @@ export class PdfGeneratorService {
     document.body.appendChild(container);
 
     try {
-      if (document.fonts?.ready) {
-        await document.fonts.ready;
-      }
-      if (document.fonts?.load) {
-        await Promise.all([
-          document.fonts.load("normal 14px 'Geist'"),
-          document.fonts.load("600 32px 'Geist-SemiBold'"),
-          document.fonts.load("700 14px 'GeistMono-SemiBold'"),
-        ]);
-      }
+      await document.fonts.ready;
+      await Promise.all([
+        document.fonts.load("normal 14px 'Geist'"),
+        document.fonts.load("600 32px 'Geist-SemiBold'"),
+        document.fonts.load("700 14px 'GeistMono-SemiBold'"),
+      ]);
 
       const images = Array.from(clonedTarget.querySelectorAll('img'));
       await Promise.all(
@@ -262,16 +261,12 @@ export class PdfGeneratorService {
       hotfixes: ['px_scaling'],
     });
 
-    if (document.fonts?.ready) {
-      await document.fonts.ready;
-    }
-    if (document.fonts?.load) {
-      await Promise.all([
-        document.fonts.load("normal 14px 'Geist'"),
-        document.fonts.load("600 32px 'Geist-SemiBold'"),
-        document.fonts.load("700 14px 'GeistMono-SemiBold'"),
-      ]);
-    }
+    await document.fonts.ready;
+    await Promise.all([
+      document.fonts.load("normal 14px 'Geist'"),
+      document.fonts.load("600 32px 'Geist-SemiBold'"),
+      document.fonts.load("700 14px 'GeistMono-SemiBold'"),
+    ]);
 
     for (let index = 0; index < previewPages.length; index += 1) {
       const page = previewPages[index];
@@ -284,14 +279,16 @@ export class PdfGeneratorService {
       pageClone.style.transform = 'none';
       pageClone.style.overflow = 'hidden';
 
-      pageClone.querySelectorAll('.cv-section-title, .cv-modern-section-title').forEach((node) => {
-        if (!(node instanceof HTMLElement)) return;
-        node.style.fontFamily = "'GeistMono-SemiBold', monospace";
-        node.style.fontWeight = '700';
-        if (!node.style.letterSpacing) {
-          node.style.letterSpacing = '0.2px';
-        }
-      });
+      pageClone
+        .querySelectorAll('.cv-section-title, .cv-modern-section-title')
+        .forEach((node): void => {
+          if (!(node instanceof HTMLElement)) return;
+          node.style.fontFamily = "'GeistMono-SemiBold', monospace";
+          node.style.fontWeight = '700';
+          if (!node.style.letterSpacing) {
+            node.style.letterSpacing = '0.2px';
+          }
+        });
 
       const container = document.createElement('div');
       container.style.position = 'fixed';
