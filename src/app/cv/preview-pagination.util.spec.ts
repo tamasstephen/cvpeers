@@ -121,4 +121,35 @@ describe('resolveSemanticPageSlices', (): void => {
       { offset: 200, height: 60 },
     ]);
   });
+
+  it('should always produce contiguous slices that cover totalHeight exactly', (): void => {
+    const totalHeight = 312;
+    const slices = resolveSemanticPageSlices({
+      pageHeight: 100,
+      totalHeight,
+      blocks: [
+        { top: 6, height: 16 },
+        { top: 30, height: 18 },
+        { top: 58, height: 22 },
+        { top: 88, height: 28 },
+        { top: 130, height: 24 },
+        { top: 164, height: 20 },
+        { top: 194, height: 18 },
+        { top: 226, height: 20 },
+        { top: 256, height: 24 },
+        { top: 286, height: 20 },
+      ],
+    });
+
+    const totalSliceHeight = slices.reduce(
+      (accumulator: number, slice): number => accumulator + slice.height,
+      0
+    );
+
+    expect(totalSliceHeight).toBe(totalHeight);
+    expect(slices.every((slice): boolean => slice.height > 0)).toBeTrue();
+    for (let index = 1; index < slices.length; index += 1) {
+      expect(slices[index].offset).toBe(slices[index - 1].offset + slices[index - 1].height);
+    }
+  });
 });

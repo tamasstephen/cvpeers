@@ -52,4 +52,28 @@ describe('PdfGeneratorService', (): void => {
 
     jsPDF.API.html = originalHtml;
   });
+
+  it('should add Geist font style to every html element', (): void => {
+    const html = '<p>Hello <strong>world</strong></p><ul><li>One</li></ul>';
+
+    const processed = service.addGeistFontToHtml(html);
+
+    expect(processed).toContain("font-family: 'Geist', sans-serif;");
+    expect(processed).toContain('<p');
+    expect(processed).toContain('<strong');
+    expect(processed).toContain('<li');
+  });
+
+  it('should parse summary html by removing ql helpers and replacing strong tags', (): void => {
+    const html =
+      '<p><strong>Bold</strong><span class="ql-ui" contenteditable="false"></span></p><ol><li data-list="bullet">Item</li></ol>';
+
+    const processed = service.parseSummaryHtml(html);
+
+    expect(processed).not.toContain('class="ql-ui"');
+    expect(processed).not.toContain('<strong>');
+    expect(processed).toContain("font-family: 'Geist-SemiBold'");
+    expect(processed).toContain('<div');
+    expect(processed).toContain('•');
+  });
 });

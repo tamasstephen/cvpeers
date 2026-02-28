@@ -11,25 +11,24 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { CvComponent } from '../../cv/cv.component';
-import { Template } from '../../enums/template.enum';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
 import { MobileWarningComponent } from '../../shared/components/mobile-warning/mobile-warning.component';
 import { CvForm } from '../../types/cv-form';
-import { EducationItemFormValues } from '../../types/education-form';
-import { ExperienceItemFormValues } from '../../types/experience-form';
-import { LanguageItemFormValues } from '../../types/language-form';
-import { PersonalDetailsFormValues } from '../../types/personal-details-form';
-import { SocialFormValues } from '../../types/social';
 import { RichTextComponent } from '../rich-text/rich-text.component';
+import { CvFormCommandsFacade } from './cv-form-commands.facade';
+import { CvFormPersistenceMapper, StoredFormData } from './cv-form-persistence.mapper';
+import { createCvFormSkeleton } from './cv-form-skeleton.factory';
+import { CvFormStorageAdapter } from './cv-form-storage.adapter';
+import { CvFormStateFacade } from './cv-form-state.facade';
 import { EducationComponent } from './education/education.component';
 import { ExperienceComponent } from './experience/experience.component';
 import { ExpertiseComponent } from './expertise/expertise.component';
@@ -38,17 +37,6 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { SocialComponent } from './social/social.component';
 import { StrengthsComponent } from './strengths/strengths.component';
 import { TemplateSelectorComponent } from './template-selector/template-selector.component';
-
-interface StoredFormData {
-  personalDetailsForm: PersonalDetailsFormValues;
-  socialForm: { social: SocialFormValues };
-  experienceForm: ExperienceItemFormValues[];
-  educationForm: EducationItemFormValues[];
-  expertiseForm: string[];
-  strengthsForm: string[];
-  languagesForm: LanguageItemFormValues[];
-  summary: string;
-}
 
 const DUMMY_CV_DATA: StoredFormData = {
   personalDetailsForm: {
@@ -246,7 +234,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly structuredDataService: StructuredDataService = inject(StructuredDataService);
 
-  protected form: CvForm = new FormGroup({});
+  protected form: CvForm = createCvFormSkeleton();
 
   protected currentDate = new Date();
 
@@ -260,7 +248,13 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   #image: File | null = null;
 
-  readonly #STORAGE_KEY = 'cv_form_data';
+  readonly #storageAdapter: CvFormStorageAdapter = inject(CvFormStorageAdapter);
+
+  readonly #persistenceMapper: CvFormPersistenceMapper = inject(CvFormPersistenceMapper);
+
+  readonly #commandsFacade: CvFormCommandsFacade = inject(CvFormCommandsFacade);
+
+  readonly #stateFacade: CvFormStateFacade = inject(CvFormStateFacade);
 
   readonly #MOBILE_BREAKPOINT = 768;
 
@@ -276,10 +270,10 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Subscribe to form changes to save to localStorage
     this.form.valueChanges.subscribe((value): void => {
-      if (this.#formDataHasValues(value as unknown as StoredFormData)) {
-        localStorage.setItem(this.#STORAGE_KEY, JSON.stringify(value));
+      if (this.#stateFacade.hasMeaningfulValues(value)) {
+        this.#storageAdapter.save(this.#persistenceMapper.serialize(value));
       } else {
-        localStorage.removeItem(this.#STORAGE_KEY);
+        this.#storageAdapter.clear();
       }
     });
 
@@ -295,18 +289,6 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
         },
       });
     }
-  }
-
-  #formDataHasValues(value: StoredFormData | Partial<StoredFormData>): boolean {
-    return Object.values(value).some((value): boolean => {
-      if (Array.isArray(value)) {
-        return value.length > 0;
-      }
-      if (value && typeof value === 'object') {
-        return this.#formDataHasValues(value as StoredFormData);
-      }
-      return Boolean(value);
-    });
   }
 
   public ngAfterViewInit(): void {
@@ -341,206 +323,46 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected async downloadPdf(): Promise<void> {
-    const element = document.querySelector('#cv-raw');
-    if (!element) return;
-    await this.pdfService.createPdfFromHtml(element);
+    await this.#commandsFacade.downloadPdfFromPreview();
   }
 
   protected resetForm(): void {
-    this.form.reset();
-    const templateControl = this.form.get('templateForm');
-    if (templateControl instanceof FormControl) {
-      templateControl.setValue(Template.MINIMAL);
-    }
-    localStorage.removeItem(this.#STORAGE_KEY);
-    this.closeResetFormDialog();
-    this.reset$.next(true);
-    this.#cdRef.detectChanges();
-    this.showToast();
+    this.#commandsFacade.resetForm({
+      form: this.form,
+      reset$: this.reset$,
+      closeResetDialog: (): void => this.closeResetFormDialog(),
+      detectChanges: (): void => this.#cdRef.detectChanges(),
+      showToast: (): void => this.showToast(),
+    });
   }
 
   protected useDummyData(): void {
-    this.form.reset();
-    localStorage.removeItem(this.#STORAGE_KEY);
-    this.reset$.next(true);
-
-    const templateControl = this.form.get('templateForm');
-    if (templateControl instanceof FormControl) {
-      templateControl.setValue(Template.MINIMAL);
-    }
-
-    const personalDetails = this.form.get('personalDetailsForm');
-    if (personalDetails instanceof FormGroup) {
-      personalDetails.patchValue(DUMMY_CV_DATA.personalDetailsForm);
-    }
-
-    const socialControl = this.form.get('socialForm.social');
-    if (socialControl instanceof FormArray) {
-      DUMMY_CV_DATA.socialForm.social.forEach((item): void => {
-        socialControl.push(new FormControl(item, { nonNullable: true }));
-      });
-    }
-
-    const experienceControl = this.form.get('experienceForm');
-    if (experienceControl instanceof FormArray) {
-      DUMMY_CV_DATA.experienceForm.forEach((experience): void => {
-        const descriptionArray = new FormArray(
-          experience.description
-            .filter((item): item is string => item !== null)
-            .map((item): FormControl<string> => new FormControl(item, { nonNullable: true }))
-        );
-        const experienceGroup = new FormGroup({
-          title: new FormControl(experience.title, { nonNullable: true }),
-          company: new FormControl(experience.company, { nonNullable: true }),
-          location: new FormControl(experience.location, { nonNullable: true }),
-          startDate: new FormControl(experience.startDate, { nonNullable: true }),
-          endDate: new FormControl(experience.endDate),
-          description: descriptionArray,
-        });
-        experienceControl.push(experienceGroup);
-      });
-    }
-
-    const educationControl = this.form.get('educationForm');
-    if (educationControl instanceof FormArray) {
-      DUMMY_CV_DATA.educationForm.forEach((education): void => {
-        const educationGroup = new FormGroup({
-          degree: new FormControl(education.degree, { nonNullable: true }),
-          institution: new FormControl(education.institution, { nonNullable: true }),
-          location: new FormControl(education.location, { nonNullable: true }),
-          graduationDate: new FormControl(education.graduationDate, { nonNullable: true }),
-        });
-        educationControl.push(educationGroup);
-      });
-    }
-
-    const expertiseControl = this.form.get('expertiseForm');
-    if (expertiseControl instanceof FormArray) {
-      DUMMY_CV_DATA.expertiseForm.forEach((item): void => {
-        expertiseControl.push(new FormControl(item, { nonNullable: true }));
-      });
-    }
-
-    const strengthsControl = this.form.get('strengthsForm');
-    if (strengthsControl instanceof FormArray) {
-      DUMMY_CV_DATA.strengthsForm.forEach((item): void => {
-        strengthsControl.push(new FormControl(item, { nonNullable: true }));
-      });
-    }
-
-    const languagesControl = this.form.get('languagesForm');
-    if (languagesControl instanceof FormArray) {
-      DUMMY_CV_DATA.languagesForm.forEach((language): void => {
-        const languageGroup = new FormGroup({
-          name: new FormControl(language.name, { nonNullable: true }),
-          level: new FormControl(language.level, { nonNullable: true }),
-        });
-        languagesControl.push(languageGroup);
-      });
-    }
-
-    const summaryControl = this.form.get('summary');
-    if (summaryControl instanceof FormControl) {
-      summaryControl.setValue(DUMMY_CV_DATA.summary);
-      this.richTextInitialValue.next(DUMMY_CV_DATA.summary);
-    }
-
-    this.#cdRef.detectChanges();
+    this.#commandsFacade.applyDummyData({
+      form: this.form,
+      dummyData: DUMMY_CV_DATA,
+      reset$: this.reset$,
+      richTextInitialValue: this.richTextInitialValue,
+      detectChanges: (): void => this.#cdRef.detectChanges(),
+    });
   }
 
   #loadFormData(): void {
-    const savedData = localStorage.getItem(this.#STORAGE_KEY);
+    const savedData = this.#storageAdapter.load();
     if (savedData) {
       try {
-        const formData = JSON.parse(savedData) as StoredFormData;
+        const formData = this.#persistenceMapper.deserialize(savedData);
         // Wait for next tick to ensure all form controls are initialized
         setTimeout((): void => {
-          // Handle regular form controls
-          const personalDetails = this.form.get('personalDetailsForm');
-          if (personalDetails) {
-            personalDetails.patchValue(formData.personalDetailsForm);
-          }
-
-          // Handle form arrays
-          const socialControl = this.form.get('socialForm.social');
-          if (socialControl instanceof FormArray) {
-            formData.socialForm.social.forEach((item): void => {
-              socialControl.push(new FormControl(item, { nonNullable: true }));
-            });
-          }
-
-          const experienceControl = this.form.get('experienceForm');
-          if (experienceControl instanceof FormArray) {
-            formData.experienceForm.forEach((exp): void => {
-              const descriptionArray = new FormArray(
-                exp.description
-                  .filter((desc): desc is string => desc !== null)
-                  .map((desc): FormControl<string> => new FormControl(desc, { nonNullable: true }))
-              );
-              const expGroup = new FormGroup({
-                title: new FormControl(exp.title, { nonNullable: true }),
-                company: new FormControl(exp.company, { nonNullable: true }),
-                location: new FormControl(exp.location, { nonNullable: true }),
-                startDate: new FormControl(exp.startDate, { nonNullable: true }),
-                endDate: new FormControl(exp.endDate),
-                description: descriptionArray,
-              });
-              experienceControl.push(expGroup);
-            });
-          }
-
-          const educationControl = this.form.get('educationForm');
-          if (educationControl instanceof FormArray) {
-            formData.educationForm.forEach((edu): void => {
-              const eduGroup = new FormGroup({
-                degree: new FormControl(edu.degree, { nonNullable: true }),
-                institution: new FormControl(edu.institution, { nonNullable: true }),
-                location: new FormControl(edu.location, { nonNullable: true }),
-                graduationDate: new FormControl(edu.graduationDate, { nonNullable: true }),
-              });
-              educationControl.push(eduGroup);
-            });
-          }
-
-          const expertiseControl = this.form.get('expertiseForm');
-          if (expertiseControl instanceof FormArray) {
-            formData.expertiseForm.forEach((item): void => {
-              expertiseControl.push(new FormControl(item, { nonNullable: true }));
-            });
-          }
-
-          const strengthsControl = this.form.get('strengthsForm');
-          if (strengthsControl instanceof FormArray) {
-            formData.strengthsForm.forEach((item): void => {
-              strengthsControl.push(new FormControl(item, { nonNullable: true }));
-            });
-          }
-
-          const languagesControl = this.form.get('languagesForm');
-          if (languagesControl instanceof FormArray) {
-            formData.languagesForm.forEach((lang): void => {
-              const langGroup = new FormGroup({
-                name: new FormControl(lang.name, { nonNullable: true }),
-                level: new FormControl(lang.level, { nonNullable: true }),
-              });
-              languagesControl.push(langGroup);
-            });
-          }
-
-          // Handle summary separately since it's a rich text field
-          if (formData.summary) {
-            const summaryControl = this.form.get('summary');
-            if (summaryControl) {
-              summaryControl.setValue(formData.summary);
-              this.richTextInitialValue.next(formData.summary);
-            }
-          }
-
-          this.#cdRef.detectChanges();
+          this.#stateFacade.applyStoredData({
+            form: this.form,
+            formData,
+            richTextInitialValue: this.richTextInitialValue,
+            detectChanges: (): void => this.#cdRef.detectChanges(),
+          });
         });
       } catch (error) {
         console.error('Error loading form data:', error);
-        localStorage.removeItem(this.#STORAGE_KEY);
+        this.#storageAdapter.clear();
       }
     }
   }
@@ -610,15 +432,11 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected openResetFormDialog(): void {
-    this.#dialogRef = this.dialog.open(this.resetDialogTemplate, {
-      width: '400px',
-      disableClose: true,
-    });
+    this.#dialogRef = this.#commandsFacade.openResetDialog(this.dialog, this.resetDialogTemplate);
   }
 
   protected closeResetFormDialog(): void {
-    this.#dialogRef?.close();
-    this.#dialogRef = null;
+    this.#dialogRef = this.#commandsFacade.closeResetDialog(this.#dialogRef);
   }
 
   #onResize(): void {
@@ -634,7 +452,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
       this.sidepanelProvider.clearSidepanel();
       // Force a new form instance
       const formValue = this.form.value;
-      this.form = new FormGroup({});
+      this.form = createCvFormSkeleton();
       this.#loadFormData();
       // Wait for next tick to ensure form is initialized
       setTimeout((): void => {
