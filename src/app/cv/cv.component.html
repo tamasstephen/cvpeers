@@ -1,16 +1,21 @@
 <!-- MINIMAL Template (Default) -->
 @if (selectedTemplate() === templates.MINIMAL) {
-  <div class="cv-preview">
-    @for (page of previewPages(); track $index) {
-      <div class="cv-preview-page">
-        <div class="cv-preview-viewport" [style.height.px]="page.height" style="min-height: 100%">
+  <div class="cv-preview-scroll">
+    <div class="cv-preview" #previewRoot>
+      @for (page of previewPages(); track $index; let isFirst = $first; let isLast = $last) {
+        <div class="cv-preview-page">
           <div
-            class="cv-preview-slice"
-            [style.transform]="'translateY(-' + page.offset + 'px)'"
-            [innerHTML]="previewHtml() ?? ''"></div>
+            class="cv-preview-viewport"
+            [style.min-height.px]="resolvePreviewViewportHeight(page.height, isFirst, isLast)"
+            [style.height.px]="resolvePreviewViewportHeight(page.height, isFirst, isLast)">
+            <div
+              class="cv-preview-slice"
+              [style.top.px]="-resolvePreviewSliceOffset(page.offset, isFirst)"
+              [innerHTML]="previewHtml() ?? ''"></div>
+          </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
   <div style="font-family: 'Geist', sans-serif" class="cv-container cv-raw" id="cv-raw" #cvRaw>
     <!-- Header Section -->
@@ -177,17 +182,22 @@
 
 <!-- MODERN Template (Professional) -->
 @if (selectedTemplate() === templates.CLASSIC) {
-  <div class="cv-preview">
-    @for (page of previewPages(); track $index) {
-      <div class="cv-preview-page">
-        <div class="cv-preview-viewport" [style.height.px]="page.height" style="min-height: 100%">
+  <div class="cv-preview-scroll">
+    <div class="cv-preview" #previewRoot>
+      @for (page of previewPages(); track $index; let isFirst = $first; let isLast = $last) {
+        <div class="cv-preview-page">
           <div
-            class="cv-preview-slice"
-            [style.transform]="'translateY(-' + page.offset + 'px)'"
-            [innerHTML]="previewHtml() ?? ''"></div>
+            class="cv-preview-viewport"
+            [style.min-height.px]="resolvePreviewViewportHeight(page.height, isFirst, isLast)"
+            [style.height.px]="resolvePreviewViewportHeight(page.height, isFirst, isLast)">
+            <div
+              class="cv-preview-slice"
+              [style.top.px]="-resolvePreviewSliceOffset(page.offset, isFirst)"
+              [innerHTML]="previewHtml() ?? ''"></div>
+          </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
   <div
     style="font-family: 'Geist', sans-serif"

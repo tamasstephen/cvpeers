@@ -17,8 +17,15 @@ import { ExperienceFormValues } from '../types/experience-form';
 import { LanguageFormValues } from '../types/language-form';
 import { PersonalDetailsFormValues } from '../types/personal-details-form';
 import { SocialFormValues } from '../types/social';
+import { ensurePreviewFontsReady } from './preview-font-loader.util';
 import { getPageContentHeightPx, measureSemanticBlocks } from './preview-measurement.unit';
 import { resolveSemanticPageSlices } from './preview-pagination.util';
+import {
+  normalizePreviewSlicesForRendering,
+  resolvePreviewSliceOffsetPx,
+  resolvePreviewViewportHeightPx,
+} from './preview-slice-rendering.util';
+import { createPreviewUpdateGuard } from './preview-update-guard';
 
 const placeholderPersonalDetails: PersonalDetailsFormValues = {
   fullName: 'John Doe',
@@ -80,6 +87,8 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
   @Input() public cvForm!: CvForm;
 
   @ViewChild('cvRaw') protected cvRaw?: ElementRef<HTMLElement>;
+
+  @ViewChild('previewRoot') protected previewRoot?: ElementRef<HTMLElement>;
 
   protected templates = Template;
 
@@ -159,6 +168,16 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
 
   #previewUpdateHandle: number | null = null;
 
+  #previewResizeObserver: ResizeObserver | null = null;
+
+  #observedPreviewRoot: HTMLElement | null = null;
+
+  #lastObservedPreviewContentWidthPx = 0;
+
+  #hasCompletedInitialStabilizationPass = false;
+
+  readonly #previewUpdateGuard = createPreviewUpdateGuard();
+
   public constructor() {
     super();
   }
@@ -208,7 +227,41 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
 
   public ngAfterViewInit(): void {
     this.#previewReady = true;
+    this.#ensurePreviewResizeObserver();
     this.#schedulePreviewUpdate();
+  }
+
+  public override ngOnDestroy(): void {
+    if (this.#previewUpdateHandle !== null) {
+      window.cancelAnimationFrame(this.#previewUpdateHandle);
+      this.#previewUpdateHandle = null;
+    }
+    if (this.#previewResizeObserver && this.#observedPreviewRoot) {
+      this.#previewResizeObserver.unobserve(this.#observedPreviewRoot);
+    }
+    this.#previewResizeObserver?.disconnect();
+    this.#previewResizeObserver = null;
+    this.#observedPreviewRoot = null;
+    super.ngOnDestroy();
+  }
+
+  protected resolvePreviewViewportHeight(
+    pageHeight: number,
+    isFirstPage: boolean,
+    isLastPage: boolean
+  ): number {
+    return resolvePreviewViewportHeightPx({
+      sliceHeightPx: pageHeight,
+      isFirstPage,
+      isLastPage,
+    });
+  }
+
+  protected resolvePreviewSliceOffset(pageOffset: number, isFirstPage: boolean): number {
+    return resolvePreviewSliceOffsetPx({
+      sliceOffsetPx: pageOffset,
+      isFirstPage,
+    });
   }
 
   /**
@@ -217,20 +270,25 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
 
   #schedulePreviewUpdate(): void {
     if (!this.#previewReady) return;
+    this.#ensurePreviewResizeObserver();
+    const updateToken = this.#previewUpdateGuard.nextToken();
     if (this.#previewUpdateHandle !== null) {
       window.cancelAnimationFrame(this.#previewUpdateHandle);
     }
     this.#previewUpdateHandle = window.requestAnimationFrame((): void => {
       this.#previewUpdateHandle = null;
-      void this.#updatePreviewPages();
+      void this.#updatePreviewPages(updateToken);
     });
   }
 
-  async #updatePreviewPages(): Promise<void> {
+  async #updatePreviewPages(updateToken: number): Promise<void> {
+    this.#ensurePreviewResizeObserver();
     const raw = this.cvRaw?.nativeElement;
     if (!raw) return;
+    if (!this.#previewUpdateGuard.isCurrent(updateToken)) return;
 
     await this.#waitForAssets(raw);
+    if (!this.#previewUpdateGuard.isCurrent(updateToken)) return;
 
     const previewSource = raw.cloneNode(true) as HTMLElement;
     previewSource.removeAttribute('id');
@@ -248,47 +306,125 @@ export class CvComponent extends ComponentBaseComponent implements OnInit, After
     measureContainer.style.left = '-10000px';
     measureContainer.style.pointerEvents = 'none';
     measureContainer.style.opacity = '0';
-    measureContainer.style.width = `${PREVIEW_PAGE_CONTENT_WIDTH_MM}mm`;
+    const previewContentWidthPx = this.#resolvePreviewContentWidthPx();
+    measureContainer.style.width =
+      previewContentWidthPx > 0 ? `${previewContentWidthPx}px` : `${PREVIEW_PAGE_CONTENT_WIDTH_MM}mm`;
     measureContainer.appendChild(previewSource);
     document.body.appendChild(measureContainer);
 
-    await this.#waitForAssets(previewSource);
+    try {
+      await this.#waitForAssets(previewSource);
+      if (!this.#previewUpdateGuard.isCurrent(updateToken)) return;
 
-    const pageContentHeightPx = getPageContentHeightPx({
-      container: measureContainer,
-      pageContentWidthMm: PREVIEW_PAGE_CONTENT_WIDTH_MM,
-      pageContentHeightMm: PREVIEW_PAGE_CONTENT_HEIGHT_MM,
-    });
-    const totalHeight = previewSource.scrollHeight;
-    const semanticBlocks = measureSemanticBlocks({
-      previewSource,
-      selector: PREVIEW_KEEP_TOGETHER_SELECTOR,
-      pageHeightPx: pageContentHeightPx,
-    });
-    const pageSlices = resolveSemanticPageSlices({
-      pageHeight: pageContentHeightPx,
-      totalHeight,
-      blocks: semanticBlocks,
-    });
-    const fallbackSliceHeight = pageContentHeightPx > 0 ? pageContentHeightPx : totalHeight;
+      const pageContentHeightPx = getPageContentHeightPx({
+        container: measureContainer,
+        pageContentWidthMm: PREVIEW_PAGE_CONTENT_WIDTH_MM,
+        pageContentHeightMm: PREVIEW_PAGE_CONTENT_HEIGHT_MM,
+        contentWidthPx: previewContentWidthPx > 0 ? previewContentWidthPx : undefined,
+      });
+      if (previewContentWidthPx > 0) {
+        this.#lastObservedPreviewContentWidthPx = previewContentWidthPx;
+      }
+      const totalHeight = previewSource.scrollHeight;
+      const semanticBlocks = measureSemanticBlocks({
+        previewSource,
+        selector: PREVIEW_KEEP_TOGETHER_SELECTOR,
+        pageHeightPx: pageContentHeightPx,
+      });
+      const pageSlices = resolveSemanticPageSlices({
+        pageHeight: pageContentHeightPx,
+        totalHeight,
+        blocks: semanticBlocks,
+      });
+      const normalizedPageSlices =
+        pageSlices.length > 0
+          ? normalizePreviewSlicesForRendering({
+              slices: pageSlices,
+              totalHeightPx: totalHeight,
+            })
+          : [];
+      const fallbackSliceHeight = pageContentHeightPx > 0 ? pageContentHeightPx : totalHeight;
 
-    this.previewPages.set(
-      pageSlices.length > 0
-        ? pageSlices
-        : [
-            {
-              offset: 0,
-              height: fallbackSliceHeight,
-            },
-          ]
-    );
-    this.previewHtml.set(this.sanitizer.bypassSecurityTrustHtml(previewSource.outerHTML));
+      if (!this.#previewUpdateGuard.isCurrent(updateToken)) return;
 
-    document.body.removeChild(measureContainer);
+      this.previewPages.set(
+        normalizedPageSlices.length > 0
+          ? normalizedPageSlices
+          : [
+              {
+                offset: 0,
+                height: fallbackSliceHeight,
+              },
+            ]
+      );
+      this.previewHtml.set(this.sanitizer.bypassSecurityTrustHtml(previewSource.outerHTML));
+
+      if (!this.#hasCompletedInitialStabilizationPass) {
+        this.#hasCompletedInitialStabilizationPass = true;
+        this.#schedulePreviewUpdate();
+      }
+    } finally {
+      document.body.removeChild(measureContainer);
+    }
+  }
+
+  #ensurePreviewResizeObserver(): void {
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const previewRootElement = this.previewRoot?.nativeElement;
+    if (!previewRootElement) {
+      return;
+    }
+
+    if (this.#previewResizeObserver === null) {
+      this.#previewResizeObserver = new ResizeObserver((): void => {
+        const previewContentWidthPx = this.#resolvePreviewContentWidthPx();
+        if (previewContentWidthPx <= 0) {
+          return;
+        }
+        if (Math.abs(previewContentWidthPx - this.#lastObservedPreviewContentWidthPx) <= 0.5) {
+          return;
+        }
+        this.#lastObservedPreviewContentWidthPx = previewContentWidthPx;
+        this.#schedulePreviewUpdate();
+      });
+    }
+
+    if (this.#observedPreviewRoot && this.#observedPreviewRoot !== previewRootElement) {
+      this.#previewResizeObserver.unobserve(this.#observedPreviewRoot);
+      this.#observedPreviewRoot = null;
+    }
+
+    if (this.#observedPreviewRoot === null) {
+      this.#previewResizeObserver.observe(previewRootElement);
+      this.#observedPreviewRoot = previewRootElement;
+    }
+
+    const previewContentWidthPx = this.#resolvePreviewContentWidthPx();
+    if (previewContentWidthPx > 0) {
+      this.#lastObservedPreviewContentWidthPx = previewContentWidthPx;
+    }
+  }
+
+  #resolvePreviewContentWidthPx(): number {
+    const previewRootElement = this.previewRoot?.nativeElement;
+    if (!previewRootElement) {
+      return 0;
+    }
+
+    const previewViewport = previewRootElement.querySelector('.cv-preview-viewport');
+    if (!(previewViewport instanceof HTMLElement)) {
+      return 0;
+    }
+
+    const previewViewportWidthPx = previewViewport.getBoundingClientRect().width;
+    return previewViewportWidthPx > 0 ? previewViewportWidthPx : 0;
   }
 
   async #waitForAssets(container: HTMLElement): Promise<void> {
-    await document.fonts.ready;
+    await ensurePreviewFontsReady();
     const images = Array.from(container.querySelectorAll('img'));
     await Promise.all(
       images.map(

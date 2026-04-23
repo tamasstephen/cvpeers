@@ -110,4 +110,56 @@ describe('CvFormPersistenceMapper', (): void => {
       mapper.deserialize(serialized);
     }).toThrowError('Invalid startDate value');
   });
+
+  it('normalizes nullable summary values to empty string', (): void => {
+    const serialized = JSON.stringify({
+      personalDetailsForm: {
+        fullName: 'Alex',
+        email: 'alex@example.com',
+        phone: '+1',
+        website: 'https://example.com',
+        headline: 'Engineer',
+      },
+      socialForm: { social: [] },
+      experienceForm: [],
+      educationForm: [],
+      expertiseForm: [],
+      strengthsForm: [],
+      languagesForm: [],
+      summary: null,
+    });
+
+    const deserialized = mapper.deserialize(serialized);
+
+    expect(deserialized.summary).toBe('');
+  });
+
+  it('normalizes nullable personal detail strings to empty strings', (): void => {
+    const serialized = JSON.stringify({
+      personalDetailsForm: {
+        fullName: null,
+        email: null,
+        phone: null,
+        website: null,
+        headline: null,
+      },
+      socialForm: { social: [] },
+      experienceForm: [],
+      educationForm: [],
+      expertiseForm: [],
+      strengthsForm: [],
+      languagesForm: [],
+      summary: '<p>Summary</p>',
+    });
+
+    const deserialized = mapper.deserialize(serialized);
+
+    expect(deserialized.personalDetailsForm).toEqual({
+      fullName: '',
+      email: '',
+      phone: '',
+      website: '',
+      headline: '',
+    });
+  });
 });

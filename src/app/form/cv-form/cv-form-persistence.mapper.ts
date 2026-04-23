@@ -31,6 +31,18 @@ const parseNullableString = (value: unknown): string | null => {
   throw new Error('Invalid string value');
 };
 
+const normalizeString = (value: unknown): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  if (value === null || value === undefined) {
+    return '';
+  }
+
+  throw new Error('Invalid string value');
+};
+
 const parseRequiredString = (value: unknown): string => {
   if (typeof value === 'string') {
     return value;
@@ -90,7 +102,7 @@ export class CvFormPersistenceMapper {
       expertiseForm: this.#parseStringArray(parsedData['expertiseForm']),
       strengthsForm: this.#parseStringArray(parsedData['strengthsForm']),
       languagesForm: this.#parseLanguagesForm(parsedData['languagesForm']),
-      summary: parseRequiredString(parsedData['summary']),
+      summary: normalizeString(parsedData['summary']),
     };
   }
 
@@ -100,11 +112,11 @@ export class CvFormPersistenceMapper {
     }
 
     return {
-      fullName: parseNullableString(value['fullName']),
-      email: parseNullableString(value['email']),
-      phone: parseNullableString(value['phone']),
-      website: parseNullableString(value['website']),
-      headline: parseNullableString(value['headline']),
+      fullName: normalizeString(value['fullName']),
+      email: normalizeString(value['email']),
+      phone: normalizeString(value['phone']),
+      website: normalizeString(value['website']),
+      headline: normalizeString(value['headline']),
     };
   }
 

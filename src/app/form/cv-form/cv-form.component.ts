@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { CvComponent } from '../../cv/cv.component';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
@@ -238,7 +238,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected currentDate = new Date();
 
-  protected richTextInitialValue = new Subject<string | null>();
+  protected richTextInitialValue = new ReplaySubject<string | null>(1);
 
   protected richTextInitialValue$ = this.richTextInitialValue.asObservable();
 
@@ -265,9 +265,6 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     // Add resize listener
     window.addEventListener('resize', this.#onResize.bind(this));
 
-    // Load form data from localStorage if exists
-    this.#loadFormData();
-
     // Subscribe to form changes to save to localStorage
     this.form.valueChanges.subscribe((value): void => {
       if (this.#stateFacade.hasMeaningfulValues(value)) {
@@ -282,13 +279,18 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Initialize sidepanel if not in mobile mode
     if (!this.isMobile()) {
-      this.sidepanelProvider.openSidepanel({
-        component: CvComponent,
-        data: {
-          cvForm: this.form,
-        },
+      this.#loadFormData((): void => {
+        this.sidepanelProvider.openSidepanel({
+          component: CvComponent,
+          data: {
+            cvForm: this.form,
+          },
+        });
       });
+      return;
     }
+
+    this.#loadFormData();
   }
 
   public ngAfterViewInit(): void {
@@ -346,7 +348,7 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  #loadFormData(): void {
+  #loadFormData(onHydrated?: () => void): void {
     const savedData = this.#storageAdapter.load();
     if (savedData) {
       try {
@@ -359,12 +361,17 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
             richTextInitialValue: this.richTextInitialValue,
             detectChanges: (): void => this.#cdRef.detectChanges(),
           });
+          onHydrated?.();
         });
       } catch (error) {
         console.error('Error loading form data:', error);
         this.#storageAdapter.clear();
+        onHydrated?.();
       }
+      return;
     }
+
+    onHydrated?.();
   }
 
   protected showToast(): void {
@@ -453,10 +460,8 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
       // Force a new form instance
       const formValue = this.form.value;
       this.form = createCvFormSkeleton();
-      this.#loadFormData();
-      // Wait for next tick to ensure form is initialized
-      setTimeout((): void => {
-        this.form.patchValue(formValue);
+      this.#loadFormData((): void => {
+        this.#applyLiveFormValue(formValue);
         this.sidepanelProvider.openSidepanel({
           component: CvComponent,
           data: {
@@ -470,5 +475,16 @@ export class CvFormComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.sidepanelProvider.displaySidepanel();
     }
+  }
+
+  #applyLiveFormValue(formValue: unknown): void {
+    const serializedValue = this.#persistenceMapper.serialize(formValue);
+    const normalizedValue = this.#persistenceMapper.deserialize(serializedValue);
+    this.#stateFacade.applyStoredData({
+      form: this.form,
+      formData: normalizedValue,
+      richTextInitialValue: this.richTextInitialValue,
+      detectChanges: (): void => this.#cdRef.detectChanges(),
+    });
   }
 }

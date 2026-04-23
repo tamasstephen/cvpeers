@@ -17,4 +17,18 @@ describe('transformSummaryHtml', (): void => {
   it('returns empty input as is', (): void => {
     expect(transformSummaryHtml('')).toBe('');
   });
+
+  it('sanitizes styles after list and typography transformations', (): void => {
+    const input = '<ol><li data-list="bullet"><strong>Bold</strong> item</li></ol>';
+    const output = transformSummaryHtml(input);
+
+    const container = document.createElement('div');
+    container.innerHTML = output;
+    const spans = Array.from(container.querySelectorAll('span'));
+
+    expect(spans.length).toBeGreaterThan(0);
+    expect(
+      spans.every((span): boolean => span.getAttribute('style')?.includes('color: #323232;') === true)
+    ).toBeTrue();
+  });
 });

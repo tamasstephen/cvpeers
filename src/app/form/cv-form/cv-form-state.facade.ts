@@ -8,6 +8,7 @@ import {
   createLanguageItemFormGroup,
   createSocialItemFormControl,
 } from './cv-form-section-array.factory';
+import { clearFormArray } from './form-array.utils';
 
 interface ApplyStoredDataCommand {
   form: FormGroup;
@@ -38,6 +39,7 @@ export class CvFormStateFacade {
 
     const socialControl = command.form.get('socialForm.social');
     if (socialControl instanceof FormArray) {
+      clearFormArray(socialControl);
       command.formData.socialForm.social.forEach((item): void => {
         socialControl.push(createSocialItemFormControl(item));
       });
@@ -45,6 +47,7 @@ export class CvFormStateFacade {
 
     const experienceControl = command.form.get('experienceForm');
     if (experienceControl instanceof FormArray) {
+      clearFormArray(experienceControl);
       command.formData.experienceForm.forEach((experience): void => {
         experienceControl.push(createExperienceItemFormGroup(experience));
       });
@@ -52,6 +55,7 @@ export class CvFormStateFacade {
 
     const educationControl = command.form.get('educationForm');
     if (educationControl instanceof FormArray) {
+      clearFormArray(educationControl);
       command.formData.educationForm.forEach((education): void => {
         educationControl.push(createEducationItemFormGroup(education));
       });
@@ -59,6 +63,7 @@ export class CvFormStateFacade {
 
     const expertiseControl = command.form.get('expertiseForm');
     if (expertiseControl instanceof FormArray) {
+      clearFormArray(expertiseControl);
       command.formData.expertiseForm.forEach((item): void => {
         expertiseControl.push(new FormControl(item, { nonNullable: true }));
       });
@@ -66,6 +71,7 @@ export class CvFormStateFacade {
 
     const strengthsControl = command.form.get('strengthsForm');
     if (strengthsControl instanceof FormArray) {
+      clearFormArray(strengthsControl);
       command.formData.strengthsForm.forEach((item): void => {
         strengthsControl.push(new FormControl(item, { nonNullable: true }));
       });
@@ -73,6 +79,7 @@ export class CvFormStateFacade {
 
     const languagesControl = command.form.get('languagesForm');
     if (languagesControl instanceof FormArray) {
+      clearFormArray(languagesControl);
       command.formData.languagesForm.forEach((language): void => {
         languagesControl.push(createLanguageItemFormGroup(language));
       });

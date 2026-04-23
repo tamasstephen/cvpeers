@@ -152,4 +152,68 @@ describe('resolveSemanticPageSlices', (): void => {
       expect(slices[index].offset).toBe(slices[index - 1].offset + slices[index - 1].height);
     }
   });
+
+  it('should prefer a stable non-crossing boundary over minimizing trailing whitespace', (): void => {
+    const slices = resolveSemanticPageSlices({
+      pageHeight: 100,
+      totalHeight: 230,
+      blocks: [
+        { top: 20, height: 90 },
+        { top: 86, height: 20 },
+      ],
+    });
+
+    expect(slices[0]).toEqual({ offset: 0, height: 20 });
+    expect(slices[1].offset).toBe(20);
+  });
+
+  it('should round first-page semantic break offsets upward to a full pixel', (): void => {
+    const slices = resolveSemanticPageSlices({
+      pageHeight: 100,
+      totalHeight: 240,
+      blocks: [{ top: 86.8, height: 20 }],
+    });
+
+    expect(slices[0]).toEqual({ offset: 0, height: 87 });
+    expect(slices[1].offset).toBe(87);
+  });
+
+  it('should avoid rounding first-page semantic break downward', (): void => {
+    const slices = resolveSemanticPageSlices({
+      pageHeight: 100,
+      totalHeight: 240,
+      blocks: [{ top: 86.2, height: 20 }],
+    });
+
+    expect(slices[0]).toEqual({ offset: 0, height: 87 });
+    expect(slices[1].offset).toBe(87);
+  });
+
+  it('should prefer an earlier close crossing block to avoid splitting nearby content', (): void => {
+    const slices = resolveSemanticPageSlices({
+      pageHeight: 100,
+      totalHeight: 220,
+      blocks: [
+        { top: 70, height: 40 },
+        { top: 86, height: 20 },
+      ],
+    });
+
+    expect(slices[0]).toEqual({ offset: 0, height: 70 });
+    expect(slices[1].offset).toBe(70);
+  });
+
+  it('should iteratively resolve multiple crossing blocks until the page boundary is stable', (): void => {
+    const slices = resolveSemanticPageSlices({
+      pageHeight: 100,
+      totalHeight: 240,
+      blocks: [
+        { top: 40, height: 80 },
+        { top: 86, height: 20 },
+      ],
+    });
+
+    expect(slices[0]).toEqual({ offset: 0, height: 40 });
+    expect(slices[1].offset).toBe(40);
+  });
 });

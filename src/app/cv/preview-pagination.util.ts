@@ -15,6 +15,7 @@ interface ResolveSemanticPageSlicesOptions {
 }
 
 const PAGE_SLICE_EPSILON = 0.5;
+const PAGE_SLICE_SAFE_PULLBACK_PX = 32;
 
 /**
  * Calculates spacer heights to keep blocks together across fixed-height pages.
@@ -71,13 +72,64 @@ function findCrossingBlock({
   pageEnd: number;
   pageHeight: number;
 }): KeepTogetherBlockMeasurement | undefined {
-  return blocks.find((block): boolean => {
+  const crossingBlocks = blocks.filter((block): boolean => {
     const blockBottom = block.top + block.height;
     const crossesBoundary = block.top < pageEnd - PAGE_SLICE_EPSILON && blockBottom > pageEnd + PAGE_SLICE_EPSILON;
     const isSplittableCandidate = block.height < pageHeight - PAGE_SLICE_EPSILON;
     const canMoveToNextPage = block.top > pageStart + PAGE_SLICE_EPSILON;
     return crossesBoundary && isSplittableCandidate && canMoveToNextPage;
   });
+
+  if (crossingBlocks.length === 0) {
+    return undefined;
+  }
+
+  if (crossingBlocks.length === 1) {
+    return crossingBlocks[0];
+  }
+
+  const earliestCrossingBlock = crossingBlocks[0];
+  const closestCrossingBlock = crossingBlocks[crossingBlocks.length - 1];
+  const pullbackFromHardBoundary = pageEnd - earliestCrossingBlock.top;
+  const shouldPreferEarlierSafeBreak = pullbackFromHardBoundary <= PAGE_SLICE_SAFE_PULLBACK_PX + PAGE_SLICE_EPSILON;
+
+  return shouldPreferEarlierSafeBreak ? earliestCrossingBlock : closestCrossingBlock;
+}
+
+function resolveStablePageEnd({
+  blocks,
+  pageStart,
+  hardPageEnd,
+  pageHeight,
+}: {
+  blocks: KeepTogetherBlockMeasurement[];
+  pageStart: number;
+  hardPageEnd: number;
+  pageHeight: number;
+}): number {
+  let resolvedPageEnd = hardPageEnd;
+  const maxIterations = blocks.length + 4;
+
+  for (let iteration = 0; iteration < maxIterations; iteration += 1) {
+    const crossingBlock = findCrossingBlock({
+      blocks,
+      pageStart,
+      pageEnd: resolvedPageEnd,
+      pageHeight,
+    });
+    if (!crossingBlock) {
+      break;
+    }
+
+    const snappedBoundary = pageStart <= PAGE_SLICE_EPSILON ? Math.ceil(crossingBlock.top) : Math.floor(crossingBlock.top);
+    const nextPageEnd = snappedBoundary > pageStart + PAGE_SLICE_EPSILON ? snappedBoundary : crossingBlock.top;
+    if (nextPageEnd >= resolvedPageEnd - PAGE_SLICE_EPSILON) {
+      break;
+    }
+    resolvedPageEnd = nextPageEnd;
+  }
+
+  return resolvedPageEnd;
 }
 
 export function resolveSemanticPageSlices({
@@ -108,14 +160,14 @@ export function resolveSemanticPageSlices({
     let resolvedPageEnd = hardPageEnd;
 
     if (hardPageEnd < boundedTotalHeight - PAGE_SLICE_EPSILON) {
-      const crossingBlock = findCrossingBlock({
+      const stablePageEnd = resolveStablePageEnd({
         blocks: normalizedBlocks,
         pageStart: currentOffset,
-        pageEnd: hardPageEnd,
+        hardPageEnd,
         pageHeight,
       });
-      if (crossingBlock) {
-        resolvedPageEnd = crossingBlock.top;
+      if (stablePageEnd < resolvedPageEnd - PAGE_SLICE_EPSILON) {
+        resolvedPageEnd = stablePageEnd;
       }
     }
 

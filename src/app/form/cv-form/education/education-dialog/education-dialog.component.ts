@@ -37,10 +37,10 @@ export class EducationDialogComponent extends ComponentBaseComponent implements 
 
   readonly #dialogRef = inject(MatDialogRef<EducationDialogComponent>);
 
-  readonly #data = inject<EducationItemFormValues>(MAT_DIALOG_DATA);
+  readonly #data = inject<EducationItemFormValues | null>(MAT_DIALOG_DATA, { optional: true });
 
   public ngOnInit(): void {
-    if (this.#data.degree) {
+    if (this.#data) {
       this.educationItemForm.patchValue(this.#data);
     }
   }

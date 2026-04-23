@@ -7,7 +7,12 @@ declare module 'jspdf' {
   interface jsPDFAPI {
     html?: (
       source: string | HTMLElement,
-      options?: { callback?: (instance: jsPDF) => void }
+      options?: {
+        callback?: (instance: jsPDF) => void;
+        html2canvas?: {
+          letterRendering?: boolean;
+        };
+      }
     ) => jsPDF;
   }
 }
@@ -26,6 +31,14 @@ describe('PdfGeneratorService', (): void => {
 
   it('should open the generated pdf in a new window after rendering html', async (): Promise<void> => {
     const originalHtml = jsPDF.API.html;
+    let capturedHtmlOptions:
+      | {
+          callback?: (instance: jsPDF) => void;
+          html2canvas?: {
+            letterRendering?: boolean;
+          };
+        }
+      | undefined;
     const htmlMock = jasmine
       .createSpy('html')
       .and.callFake(function (
@@ -33,6 +46,7 @@ describe('PdfGeneratorService', (): void => {
         _source: string | HTMLElement,
         options?: { callback?: (instance: jsPDF) => void }
       ): jsPDF {
+        capturedHtmlOptions = options;
         options?.callback?.(this);
         return this;
       });
@@ -47,6 +61,7 @@ describe('PdfGeneratorService', (): void => {
     await testService.createPdfFromHtml(target);
 
     expect(htmlMock).toHaveBeenCalled();
+    expect(capturedHtmlOptions?.html2canvas?.letterRendering).toBeFalse();
     expect(openSpy).toHaveBeenCalled();
     document.body.removeChild(target);
 

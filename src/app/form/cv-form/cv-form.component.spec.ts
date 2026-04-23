@@ -2,12 +2,14 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CvComponent } from '../../cv/cv.component';
 import { Template } from '../../enums/template.enum';
 import { PdfGeneratorService } from '../../services/pdf-generator/pdf-generator.service';
 import { StructuredDataService } from '../../services/seo/structured-data.service';
 import { SidepanelProviderService } from '../../services/sidepanel-provider/sidepanel-provider.service';
 import { CvFormComponent } from './cv-form.component';
+import { CvFormStateFacade } from './cv-form-state.facade';
 
 describe('CvFormComponent', (): void => {
   let component: CvFormComponent;
@@ -232,6 +234,49 @@ describe('CvFormComponent', (): void => {
     expect(fullNameInput.value).toBe('Stored User');
   }));
 
+  it('should hydrate stored data before opening sidepanel on desktop', fakeAsync((): void => {
+    const storedData = {
+      personalDetailsForm: {
+        fullName: 'Stored User',
+        email: 'stored.user@example.com',
+        phone: '+1 111 111 1111',
+        website: 'https://stored.example.com',
+        headline: 'Stored Headline',
+      },
+      socialForm: { social: [] },
+      experienceForm: [],
+      educationForm: [],
+      expertiseForm: [],
+      strengthsForm: [],
+      languagesForm: [],
+      summary: '<p>Stored summary</p>',
+    };
+    localStorage.setItem('cv_form_data', JSON.stringify(storedData));
+
+    const stateFacade = TestBed.inject(CvFormStateFacade);
+    const originalApplyStoredData = stateFacade.applyStoredData.bind(stateFacade);
+    const callOrder: string[] = [];
+    const applyStoredDataSpy = spyOn(stateFacade, 'applyStoredData').and.callFake((command): void => {
+      callOrder.push('hydrate');
+      originalApplyStoredData(command);
+    });
+    sidepanelProviderSpy.openSidepanel.and.callFake((): void => {
+      callOrder.push('open');
+    });
+
+    createComponent(1440);
+
+    expect(sidepanelProviderSpy.openSidepanel).not.toHaveBeenCalled();
+
+    tick();
+    fixture.detectChanges();
+
+    expect(applyStoredDataSpy).toHaveBeenCalled();
+    expect(sidepanelProviderSpy.openSidepanel).toHaveBeenCalled();
+    expect(callOrder[0]).toBe('hydrate');
+    expect(callOrder[1]).toBe('open');
+  }));
+
   it('should replace persisted data with reset state after reset confirmation', fakeAsync((): void => {
     createComponent();
     component.useDummyDataForTests();
@@ -300,5 +345,136 @@ describe('CvFormComponent', (): void => {
 
     expect(templateForm).toBe(Template.MINIMAL);
     expect(personalDetailsForm.fullName).toBeNull();
+  }));
+
+  it('should keep reset payload in storage and rehydrate safely after reload', fakeAsync((): void => {
+    createComponent();
+    component.useDummyDataForTests();
+    fixture.detectChanges();
+
+    const resetButton = findButtonByText('Reset form');
+    expect(resetButton).not.toBeNull();
+    if (resetButton === null) {
+      fail('reset button not found');
+      return;
+    }
+    resetButton.click();
+    fixture.detectChanges();
+    tick();
+
+    const confirmButton = findButtonByText('Yes');
+    expect(confirmButton).not.toBeNull();
+    if (confirmButton === null) {
+      fail('confirmation button not found');
+      return;
+    }
+    confirmButton.click();
+    fixture.detectChanges();
+    tick();
+
+    const persistedAfterReset = localStorage.getItem('cv_form_data');
+    expect(persistedAfterReset).not.toBeNull();
+    if (persistedAfterReset === null) {
+      fail('expected persisted data after reset');
+      return;
+    }
+
+    fixture.destroy();
+    createComponent();
+    tick();
+    fixture.detectChanges();
+
+    expect(localStorage.getItem('cv_form_data')).not.toBeNull();
+    const fullNameInput = document.querySelector('input[formcontrolname="fullName"]');
+    expect(fullNameInput instanceof HTMLInputElement).toBeTrue();
+    if (!(fullNameInput instanceof HTMLInputElement)) {
+      fail('fullName input not found');
+      return;
+    }
+    expect(fullNameInput.value).toBe('');
+  }));
+
+  it('should preserve in-memory array edits over stale storage on mobile to desktop switch', fakeAsync((): void => {
+    const staleStoredData = {
+      personalDetailsForm: {
+        fullName: 'Storage User',
+        email: 'storage.user@example.com',
+        phone: '+1 111 111 1111',
+        website: 'https://storage.example.com',
+        headline: 'Storage Headline',
+      },
+      socialForm: {
+        social: [
+          {
+            type: 'github',
+            url: 'https://github.com/storage',
+            src: 'assets/images/github-fill.png',
+          },
+        ],
+      },
+      experienceForm: [],
+      educationForm: [],
+      expertiseForm: [],
+      strengthsForm: [],
+      languagesForm: [],
+      summary: '<p>Storage summary</p>',
+    };
+    localStorage.setItem('cv_form_data', JSON.stringify(staleStoredData));
+
+    createComponent(600);
+    tick();
+    fixture.detectChanges();
+
+    const inMemorySocialArray = new FormArray([
+      new FormControl(
+        {
+          type: 'linkedin',
+          url: 'https://linkedin.com/in/in-memory-1',
+          src: 'assets/images/linkedin-box-fill.png',
+        },
+        { nonNullable: true }
+      ),
+      new FormControl(
+        {
+          type: 'github',
+          url: 'https://github.com/in-memory-2',
+          src: 'assets/images/github-fill.png',
+        },
+        { nonNullable: true }
+      ),
+    ]);
+    component['form'].addControl(
+      'socialForm',
+      new FormGroup({
+        social: inMemorySocialArray,
+      })
+    );
+    component['form'].addControl('personalDetailsForm', new FormGroup({}));
+    component['form'].addControl('experienceForm', new FormArray([]));
+    component['form'].addControl('educationForm', new FormArray([]));
+    component['form'].addControl('expertiseForm', new FormArray([]));
+    component['form'].addControl('strengthsForm', new FormArray([]));
+    component['form'].addControl('languagesForm', new FormArray([]));
+    component['form'].addControl('summary', new FormControl(''));
+
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1280,
+    });
+    window.dispatchEvent(new Event('resize'));
+    tick();
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+
+    const rehydratedSocials = component['form'].get('socialForm.social');
+    if (!(rehydratedSocials instanceof FormArray)) {
+      fail('rehydrated social form array missing');
+      return;
+    }
+    const serializedSocials = JSON.stringify(rehydratedSocials.getRawValue());
+    expect(serializedSocials).toContain('https://linkedin.com/in/in-memory-1');
+    expect(serializedSocials).toContain('https://github.com/in-memory-2');
   }));
 });

@@ -68,15 +68,23 @@
     width: 210mm;
   }
 
+  .cv-preview-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
   .cv-preview {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 210mm;
+    min-width: 210mm;
   }
 
   .cv-preview-page {
     width: 210mm;
-    max-width: 100%;
+    max-width: none;
     height: 297mm;
     padding: 10mm;
     background: #fff;
@@ -93,14 +101,19 @@
 
   .cv-preview-viewport {
     width: 100%;
+    position: relative;
     overflow: hidden;
+    isolation: isolate;
   }
 
   .cv-preview-slice {
+    position: absolute;
+    left: 0;
+    right: 0;
     width: 100%;
     box-sizing: border-box;
-    transform-origin: top left;
-    will-change: transform;
+    transform: none;
+    will-change: auto;
   }
 
   .cv-title {

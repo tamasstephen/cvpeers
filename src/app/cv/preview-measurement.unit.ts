@@ -10,6 +10,7 @@ interface GetPageContentHeightPxOptions {
   container: HTMLElement;
   pageContentWidthMm: number;
   pageContentHeightMm: number;
+  contentWidthPx?: number;
 }
 
 export const mmToPx = (mm: number): number => {
@@ -17,11 +18,39 @@ export const mmToPx = (mm: number): number => {
   return Math.round(mm * pxPerMm);
 };
 
+export const resolvePageContentHeightFromWidthPx = ({
+  contentWidthPx,
+  pageContentWidthMm,
+  pageContentHeightMm,
+}: {
+  contentWidthPx: number;
+  pageContentWidthMm: number;
+  pageContentHeightMm: number;
+}): number => {
+  if (contentWidthPx <= 0 || pageContentWidthMm <= 0 || pageContentHeightMm <= 0) {
+    return 0;
+  }
+
+  return contentWidthPx * (pageContentHeightMm / pageContentWidthMm);
+};
+
 export const getPageContentHeightPx = ({
   container,
   pageContentWidthMm,
   pageContentHeightMm,
+  contentWidthPx,
 }: GetPageContentHeightPxOptions): number => {
+  if ((contentWidthPx ?? 0) > 0) {
+    const heightFromWidth = resolvePageContentHeightFromWidthPx({
+      contentWidthPx: contentWidthPx ?? 0,
+      pageContentWidthMm,
+      pageContentHeightMm,
+    });
+    if (heightFromWidth > 0) {
+      return heightFromWidth;
+    }
+  }
+
   const probe = document.createElement('div');
   probe.style.position = 'absolute';
   probe.style.top = '0';

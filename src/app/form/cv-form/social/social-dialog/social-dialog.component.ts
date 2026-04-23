@@ -44,10 +44,10 @@ export class SocialDialogComponent implements OnInit {
 
   #dialogRef = inject(MatDialogRef<SocialDialogComponent>);
 
-  #data = inject<SocialItem>(MAT_DIALOG_DATA);
+  #data = inject<SocialItem | null>(MAT_DIALOG_DATA, { optional: true });
 
   public ngOnInit(): void {
-    if (this.#data.src) {
+    if (this.#data) {
       this.dialogForm.patchValue(this.#data);
     }
   }

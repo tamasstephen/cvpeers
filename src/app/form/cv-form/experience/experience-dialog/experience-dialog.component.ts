@@ -42,7 +42,7 @@ export class ExperienceDialogComponent extends ComponentBaseComponent implements
   #dialogRef = inject(MatDialogRef<ExperienceDialogComponent>);
 
   public ngOnInit(): void {
-    if (this.#data?.title) {
+    if (this.#data) {
       const descriptionArray = this.#createDescriptionArray(this.#data.description);
       this.experienceItemForm.setControl('description', descriptionArray);
       this.experienceItemForm.patchValue({

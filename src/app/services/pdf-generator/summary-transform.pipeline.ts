@@ -10,9 +10,9 @@ export const transformSummaryHtml = (htmlString: string): string => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlString;
 
-  applySummarySanitizerStep(tempDiv);
   applySummaryListNormalizerStep(tempDiv);
   applySummaryTypographyStep(tempDiv);
+  applySummarySanitizerStep(tempDiv);
 
   return tempDiv.innerHTML;
 };

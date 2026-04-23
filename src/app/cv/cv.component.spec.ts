@@ -42,10 +42,25 @@ describe('CvComponent', (): void => {
     expect(previewViewport.styles['height']).not.toBe('0px');
   });
 
-  it('should set min-height to 100% on preview viewport', (): void => {
+  it('should bind preview viewport min-height to resolved slice height', (): void => {
     const previewViewport = fixture.debugElement.query(By.css('.cv-preview-viewport'));
     expect(previewViewport).toBeTruthy();
-    expect(previewViewport.styles['min-height']).toBe('100%');
+    expect(previewViewport.styles['min-height']).toBe(previewViewport.styles['height']);
+    expect(previewViewport.styles['min-height']).not.toBe('100%');
+  });
+
+  it('should position preview slices using top offset without inline transform', (): void => {
+    const previewSlice = fixture.debugElement.query(By.css('.cv-preview-slice'));
+    expect(previewSlice).toBeTruthy();
+    expect(previewSlice.styles['top']).toBe('0px');
+    expect(previewSlice.styles['transform']).toBe('');
+  });
+
+  it('should render preview inside a horizontal scroll container', (): void => {
+    const previewScroll = fixture.debugElement.query(By.css('.cv-preview-scroll'));
+    expect(previewScroll).toBeTruthy();
+    const preview = previewScroll.query(By.css('.cv-preview'));
+    expect(preview).toBeTruthy();
   });
 
   it('should render left column experience without personal details and right-column controls', fakeAsync((): void => {
